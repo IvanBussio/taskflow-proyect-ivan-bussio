@@ -1,246 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taskflow</title>
 
-  
-  }
-<style>
-  :root {
-    --bg-color: #f1f5f9;
-    --primary: #1e3a8a;
-    --primary-light: #3b82f6;
-    --card: #ffffff;
-    --text: #0f172a;
-    --muted: #64748b;
-    --high: #ef4444;
-    --medium: #f59e0b;
-    --low: #10b981;
-    --spacing: 20px;
-    --radius: 14px;
-    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: var(--font);
-  }
-
-  body {
-    display: flex;
-    min-height: 100vh;
-    background: var(--bg-color);
-    color: var(--text);
-  }
-
-  aside {
-    width: 260px;
-    background: linear-gradient(180deg, var(--primary), var(--primary-light));
-    color: white;
-    padding: var(--spacing);
-  }
-
-  aside h2 {
-    margin-bottom: 25px;
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-  }
-
-  aside p {
-    margin-bottom: 12px;
-    opacity: 0.9;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  aside p:hover {
-    opacity: 1;
-    transform: translateX(4px);
-  }
-
-  main {
-    flex: 1;
-    padding: 40px;
-  }
-
-  header h1 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
-
-  section {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .task {
-    background: var(--card);
-    padding: 22px;
-    border-radius: var(--radius);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.25s ease;
-    border: 1px solid #e2e8f0;
-  }
-
-  .task:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  }
-
-  .task-info strong {
-    font-size: 1rem;
-  }
-
-  .task-info span {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .badge {
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: white;
-  }
-
-  .high { background: var(--high); }
-  .medium { background: var(--medium); }
-  .low { background: var(--low); }
-
-  @media (max-width: 768px) {
-    body {
-      flex-direction: column;
-    }
-
-    aside {
-      width: 100%;
-      text-align: center;
-    }
-
-    main {
-      padding: 20px;
-    }
-  }
-</style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: var(--font);
-  }
-
-  body {
-    display: flex;
-    min-height: 100vh;
-    background: var(--bg-color);
-    color: var(--text);
-  }
-
-  /* SIDEBAR */
-  aside {
-    width: 260px;
-    background: linear-gradient(180deg, var(--primary), var(--primary-light));
-    color: white;
-    padding: var(--spacing);
-  }
-
-  aside h2 {
-    margin-bottom: 25px;
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-  }
-
-  aside p {
-    margin-bottom: 12px;
-    opacity: 0.9;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  aside p:hover {
-    opacity: 1;
-    transform: translateX(4px);
-  }
-
-  /* MAIN */
-  main {
-    flex: 1;
-    padding: 40px;
-  }
-
-  header h1 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
-
-  section {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  /* TASK CARD */
-  .task {
-    background: var(--card);
-    padding: 22px;
-    border-radius: var(--radius);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.25s ease;
-    border: 1px solid #e2e8f0;
-  }
-
-  .task:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  }
-
-  .task-info strong {
-    font-size: 1rem;
-  }
-
-  .task-info span {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .badge {
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: white;
-  }
-
-  .high { background: var(--high); }
-  .medium { background: var(--medium); }
-  .low { background: var(--low); }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    body {
-      flex-direction: column;
-    }
-
-    aside {
-      width: 100%;
-      text-align: center;
-    }
-
-    main {
-      padding: 20px;
-    }
-  }
-</style>
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --high: #ef4444;
+      --medium: #f59e0b;
+      --low: #10b981;
+      --spacing: 20px;
+      --radius: 14px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     * {
@@ -258,56 +34,77 @@
     }
 
     aside {
-      width: 250px;
-      background: var(--primary);
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), var(--primary-light));
       color: white;
       padding: var(--spacing);
     }
 
     aside h2 {
-      margin-bottom: var(--spacing);
+      margin-bottom: 25px;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    aside p {
+      margin-bottom: 12px;
+      opacity: 0.9;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    aside p:hover {
+      opacity: 1;
+      transform: translateX(4px);
     }
 
     main {
       flex: 1;
-      padding: var(--spacing);
+      padding: 40px;
     }
 
-    header {
-      margin-bottom: var(--spacing);
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
     }
 
     section {
       display: flex;
       flex-direction: column;
-      gap: var(--spacing);
+      gap: 18px;
     }
 
     .task {
       background: var(--card);
-      padding: var(--spacing);
+      padding: 22px;
       border-radius: var(--radius);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: 0.3s ease;
+      transition: 0.25s ease;
+      border: 1px solid #e2e8f0;
     }
 
     .task:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
 
-    .task-info {
-      display: flex;
-      flex-direction: column;
+    .task-info strong {
+      font-size: 1rem;
+    }
+
+    .task-info span {
+      font-size: 0.85rem;
+      color: var(--muted);
     }
 
     .badge {
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: white;
-      font-size: 0.8rem;
     }
 
     .high { background: var(--high); }
@@ -323,51 +120,10 @@
         width: 100%;
         text-align: center;
       }
+
+      main {
+        padding: 20px;
+      }
     }
   </style>
 </head>
-
-<body>
-
-  <aside>
-    <h2>Categorías</h2>
-    <p>Trabajo</p>
-    <p>Personal</p>
-    <p>Urgente</p>
-  </aside>
-
-  <main>
-    <header>
-      <h1>Lista de Tareas</h1>
-    </header>
-
-    <section>
-      <div class="task">
-        <div class="task-info">
-          <strong>Maquetar aplicación</strong>
-          <span>Trabajo</span>
-        </div>
-        <span class="badge high">Alta</span>
-      </div>
-
-      <div class="task">
-        <div class="task-info">
-          <strong>Subir proyecto a GitHub</strong>
-          <span>Desarrollo</span>
-        </div>
-        <span class="badge medium">Media</span>
-      </div>
-
-      <div class="task">
-        <div class="task-info">
-          <strong>Conectar con Vercel</strong>
-          <span>Deploy</span>
-        </div>
-        <span class="badge low">Baja</span>
-      </div>
-    </section>
-
-  </main>
-
-</body>
-</html>
