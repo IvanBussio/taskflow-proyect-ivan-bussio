@@ -2,6 +2,7 @@ const form = document.getElementById("task-form");
 const input = document.getElementById("task-input");
 const list = document.getElementById("task-list");
 const search = document.getElementById("search");
+const toggle = document.getElementById("dark-toggle");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
@@ -84,6 +85,14 @@ item.style.display="none";
 }
 
 });
+
+});
+
+/* DARK MODE */
+
+toggle.addEventListener("click",()=>{
+
+document.body.classList.toggle("dark-mode");
 
 });
 
