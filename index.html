@@ -9,12 +9,12 @@
 <style>
 
 :root{
---bg-color:#f1f5f9;
---primary:#065f46;
---primary-light:#10b981;
---card:#ffffff;
---text:#0f172a;
---muted:#64748b;
+--bg-color:#0f0f0f;
+--primary:#eab308;
+--primary-light:#facc15;
+--card:#1a1a1a;
+--text:#f9fafb;
+--muted:#9ca3af;
 --spacing:20px;
 --radius:14px;
 --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
@@ -37,10 +37,9 @@ color:var(--text);
 /* DARK MODE */
 
 .dark-mode{
---bg-color:#0f172a;
---card:#1e293b;
---text:#f1f5f9;
---muted:#94a3b8;
+--bg-color:#000000;
+--card:#111111;
+--text:#ffffff;
 }
 
 /* SIDEBAR */
@@ -48,7 +47,7 @@ color:var(--text);
 aside{
 width:260px;
 background:linear-gradient(180deg,var(--primary),var(--primary-light));
-color:white;
+color:#111;
 padding:var(--spacing);
 }
 
@@ -59,12 +58,7 @@ font-size:1.2rem;
 
 aside p{
 margin-bottom:12px;
-opacity:0.9;
 cursor:pointer;
-}
-
-aside p:hover{
-opacity:1;
 }
 
 /* MAIN */
@@ -81,18 +75,6 @@ align-items:center;
 margin-bottom:25px;
 }
 
-.header-controls{
-display:flex;
-gap:10px;
-}
-
-/* THEME SELECTOR */
-
-#theme-selector{
-padding:8px;
-border-radius:6px;
-}
-
 /* FORM */
 
 #task-form{
@@ -105,22 +87,32 @@ margin-bottom:15px;
 padding:12px;
 flex:1;
 border-radius:8px;
-border:1px solid #d1d5db;
-font-size:14px;
+border:1px solid #444;
+background:#222;
+color:white;
 }
 
+/* BOTONES ELEGANTES */
+
 button{
-padding:12px 16px;
+padding:12px 18px;
 border:none;
-border-radius:8px;
-background:var(--primary);
-color:white;
+border-radius:10px;
+background:linear-gradient(135deg,var(--primary),var(--primary-light));
+color:#111;
 cursor:pointer;
 font-weight:600;
+transition:all 0.25s ease;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
 }
 
 button:hover{
-background:var(--primary-light);
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(0,0,0,0.45);
+}
+
+button:active{
+transform:scale(0.96);
 }
 
 /* SEARCH */
@@ -130,7 +122,9 @@ margin-bottom:20px;
 padding:12px;
 width:100%;
 border-radius:8px;
-border:1px solid #d1d5db;
+border:1px solid #444;
+background:#222;
+color:white;
 }
 
 /* TASK LIST */
@@ -149,13 +143,20 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 border-radius:var(--radius);
-border:1px solid #e2e8f0;
+border:1px solid #333;
 transition:0.2s;
 }
 
 #task-list li:hover{
 transform:translateY(-3px);
-box-shadow:0 6px 14px rgba(0,0,0,0.1);
+box-shadow:0 6px 14px rgba(0,0,0,0.4);
+}
+
+/* BOTÓN ELIMINAR */
+
+#task-list button{
+background:#ef4444;
+color:white;
 }
 
 /* RESPONSIVE */
@@ -195,18 +196,7 @@ padding:20px;
 
 <h1>Lista de Tareas (<span id="task-count">0</span>)</h1>
 
-<div class="header-controls">
-
 <button id="dark-toggle">🌙</button>
-
-<select id="theme-selector">
-<option value="#065f46">Verde</option>
-<option value="#1e3a8a">Azul</option>
-<option value="#5b21b6">Morado</option>
-<option value="#c2410c">Naranja</option>
-</select>
-
-</div>
 
 </header>
 
