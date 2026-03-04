@@ -18,11 +18,6 @@
 --spacing:20px;
 --radius:14px;
 --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
-  #theme-selector{
-padding:10px;
-border-radius:6px;
-margin-left:10px;
-}
 }
 
 *{
@@ -84,6 +79,18 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:25px;
+}
+
+.header-controls{
+display:flex;
+gap:10px;
+}
+
+/* THEME SELECTOR */
+
+#theme-selector{
+padding:8px;
+border-radius:6px;
 }
 
 /* FORM */
@@ -188,7 +195,18 @@ padding:20px;
 
 <h1>Lista de Tareas (<span id="task-count">0</span>)</h1>
 
+<div class="header-controls">
+
 <button id="dark-toggle">🌙</button>
+
+<select id="theme-selector">
+<option value="#065f46">Verde</option>
+<option value="#1e3a8a">Azul</option>
+<option value="#5b21b6">Morado</option>
+<option value="#c2410c">Naranja</option>
+</select>
+
+</div>
 
 </header>
 
