@@ -88,6 +88,8 @@ item.style.display="none";
 
 });
 
+/* DARK MODE */
+
 toggle.addEventListener("click",()=>{
 
 document.body.classList.toggle("dark-mode");
