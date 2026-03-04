@@ -3,11 +3,8 @@ const input = document.getElementById("task-input");
 const list = document.getElementById("task-list");
 const search = document.getElementById("search");
 const toggle = document.getElementById("dark-toggle");
-const themeSelector = document.getElementById("theme-selector");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-/* RENDER TASKS */
 
 function renderTasks(){
 
@@ -43,15 +40,11 @@ document.getElementById("task-count").textContent=tasks.length;
 
 }
 
-/* SAVE TASKS */
-
 function saveTasks(){
 
 localStorage.setItem("tasks",JSON.stringify(tasks));
 
 }
-
-/* ADD TASK */
 
 form.addEventListener("submit",(e)=>{
 
@@ -70,8 +63,6 @@ renderTasks();
 input.value="";
 
 });
-
-/* SEARCH TASK */
 
 search.addEventListener("keyup",()=>{
 
@@ -97,38 +88,10 @@ item.style.display="none";
 
 });
 
-/* DARK MODE */
-
 toggle.addEventListener("click",()=>{
 
 document.body.classList.toggle("dark-mode");
 
 });
-
-/* THEME SELECTOR */
-
-const savedTheme=localStorage.getItem("themeColor");
-
-if(savedTheme){
-
-document.documentElement.style.setProperty("--primary",savedTheme);
-document.documentElement.style.setProperty("--primary-light",savedTheme);
-
-if(themeSelector) themeSelector.value=savedTheme;
-
-}
-
-themeSelector.addEventListener("change",(e)=>{
-
-const color=e.target.value;
-
-document.documentElement.style.setProperty("--primary",color);
-document.documentElement.style.setProperty("--primary-light",color);
-
-localStorage.setItem("themeColor",color);
-
-});
-
-/* INIT */
 
 renderTasks();
