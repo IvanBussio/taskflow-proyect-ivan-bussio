@@ -9,12 +9,12 @@
 <style>
 
 :root{
---bg-color:#0f0f0f;
---primary:#eab308;
---primary-light:#facc15;
---card:#1a1a1a;
---text:#f9fafb;
---muted:#9ca3af;
+--bg-color:#f1f5f9;
+--primary:#065f46;
+--primary-light:#10b981;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
 --spacing:20px;
 --radius:14px;
 --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
@@ -37,9 +37,10 @@ color:var(--text);
 /* DARK MODE */
 
 .dark-mode{
---bg-color:#000000;
---card:#111111;
---text:#ffffff;
+--bg-color:#0f172a;
+--card:#1e293b;
+--text:#f1f5f9;
+--muted:#94a3b8;
 }
 
 /* SIDEBAR */
@@ -47,13 +48,12 @@ color:var(--text);
 aside{
 width:260px;
 background:linear-gradient(180deg,var(--primary),var(--primary-light));
-color:#111;
+color:white;
 padding:var(--spacing);
 }
 
 aside h2{
 margin-bottom:25px;
-font-size:1.2rem;
 }
 
 aside p{
@@ -87,32 +87,24 @@ margin-bottom:15px;
 padding:12px;
 flex:1;
 border-radius:8px;
-border:1px solid #444;
-background:#222;
-color:white;
+border:1px solid #ccc;
 }
 
-/* BOTONES ELEGANTES */
+/* BOTONES */
 
 button{
 padding:12px 18px;
 border:none;
 border-radius:10px;
 background:linear-gradient(135deg,var(--primary),var(--primary-light));
-color:#111;
+color:white;
 cursor:pointer;
 font-weight:600;
-transition:all 0.25s ease;
-box-shadow:0 4px 10px rgba(0,0,0,0.3);
+transition:0.25s;
 }
 
 button:hover{
 transform:translateY(-2px);
-box-shadow:0 8px 18px rgba(0,0,0,0.45);
-}
-
-button:active{
-transform:scale(0.96);
 }
 
 /* SEARCH */
@@ -122,9 +114,7 @@ margin-bottom:20px;
 padding:12px;
 width:100%;
 border-radius:8px;
-border:1px solid #444;
-background:#222;
-color:white;
+border:1px solid #ccc;
 }
 
 /* TASK LIST */
@@ -143,20 +133,19 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 border-radius:var(--radius);
-border:1px solid #333;
+border:1px solid #e2e8f0;
 transition:0.2s;
 }
 
 #task-list li:hover{
 transform:translateY(-3px);
-box-shadow:0 6px 14px rgba(0,0,0,0.4);
+box-shadow:0 6px 14px rgba(0,0,0,0.1);
 }
 
 /* BOTÓN ELIMINAR */
 
 #task-list button{
 background:#ef4444;
-color:white;
 }
 
 /* RESPONSIVE */
