@@ -8,19 +8,16 @@
 
 <style>
 
-:root {
---bg-color: #f1f5f9;
---primary: #1e3a8a;
---primary-light: #3b82f6;
---card: #ffffff;
---text: #0f172a;
---muted: #64748b;
---high: #ef4444;
---medium: #f59e0b;
---low: #10b981;
---spacing: 20px;
---radius: 14px;
---font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+:root{
+--bg-color:#f1f5f9;
+--primary:#1e3a8a;
+--primary-light:#3b82f6;
+--card:#ffffff;
+--text:#0f172a;
+--muted:#64748b;
+--spacing:20px;
+--radius:14px;
+--font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 *{
@@ -37,6 +34,8 @@ background:var(--bg-color);
 color:var(--text);
 }
 
+/* SIDEBAR */
+
 aside{
 width:260px;
 background:linear-gradient(180deg,var(--primary),var(--primary-light));
@@ -45,13 +44,21 @@ padding:var(--spacing);
 }
 
 aside h2{
-margin-bottom:20px;
+margin-bottom:25px;
+font-size:1.2rem;
 }
 
 aside p{
-margin-bottom:10px;
+margin-bottom:12px;
+opacity:0.9;
 cursor:pointer;
 }
+
+aside p:hover{
+opacity:1;
+}
+
+/* MAIN */
 
 main{
 flex:1;
@@ -59,42 +66,50 @@ padding:40px;
 }
 
 header{
-margin-bottom:20px;
+margin-bottom:25px;
 }
 
+/* FORM */
+
 #task-form{
-margin-bottom:20px;
 display:flex;
 gap:10px;
+margin-bottom:15px;
 }
 
 #task-input{
-padding:10px;
+padding:12px;
 flex:1;
-border-radius:6px;
-border:1px solid #ccc;
+border-radius:8px;
+border:1px solid #d1d5db;
+font-size:14px;
 }
 
 button{
-padding:10px 14px;
+padding:12px 16px;
 border:none;
-border-radius:6px;
+border-radius:8px;
 background:var(--primary);
 color:white;
 cursor:pointer;
+font-weight:600;
 }
 
 button:hover{
 background:var(--primary-light);
 }
 
+/* SEARCH */
+
 #search{
 margin-bottom:20px;
-padding:10px;
+padding:12px;
 width:100%;
-border-radius:6px;
-border:1px solid #ccc;
+border-radius:8px;
+border:1px solid #d1d5db;
 }
+
+/* TASK LIST */
 
 #task-list{
 list-style:none;
@@ -105,7 +120,7 @@ gap:12px;
 
 #task-list li{
 background:var(--card);
-padding:15px;
+padding:16px;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -118,6 +133,8 @@ transition:0.2s;
 transform:translateY(-3px);
 box-shadow:0 6px 14px rgba(0,0,0,0.1);
 }
+
+/* RESPONSIVE */
 
 @media(max-width:768px){
 
@@ -154,6 +171,8 @@ padding:20px;
 <h1>Lista de Tareas (<span id="task-count">0</span>)</h1>
 </header>
 
+<section>
+
 <form id="task-form">
 <input type="text" id="task-input" placeholder="Escribe una tarea..." required>
 <button type="submit">Añadir</button>
@@ -162,6 +181,8 @@ padding:20px;
 <input type="text" id="search" placeholder="Buscar tarea...">
 
 <ul id="task-list"></ul>
+
+</section>
 
 </main>
 
