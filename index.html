@@ -10,8 +10,8 @@
 
 :root{
 --bg-color:#f1f5f9;
---primary:#1f2937;
---primary-light:#4b5563;
+--primary:#065f46;
+--primary-light:#10b981;
 --card:#ffffff;
 --text:#0f172a;
 --muted:#64748b;
@@ -32,6 +32,15 @@ display:flex;
 min-height:100vh;
 background:var(--bg-color);
 color:var(--text);
+}
+
+/* DARK MODE */
+
+.dark-mode{
+--bg-color:#0f172a;
+--card:#1e293b;
+--text:#f1f5f9;
+--muted:#94a3b8;
 }
 
 /* SIDEBAR */
@@ -66,6 +75,9 @@ padding:40px;
 }
 
 header{
+display:flex;
+justify-content:space-between;
+align-items:center;
 margin-bottom:25px;
 }
 
@@ -167,7 +179,7 @@ padding:20px;
 
 <main>
 
-<header style="display:flex;justify-content:space-between;align-items:center;">
+<header>
 
 <h1>Lista de Tareas (<span id="task-count">0</span>)</h1>
 
