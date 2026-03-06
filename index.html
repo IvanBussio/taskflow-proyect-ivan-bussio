@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TaskFlow Pro</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{box-sizing:border-box}
 
 /* ================= BODY ================= */
@@ -18,7 +20,7 @@ min-height:100vh;
 background:#0f172a;
 color:white;
 overflow-x:hidden;
-transition:background .3s,color .3s;
+transition:color .3s;
 }
 
 /* ===== Elegant Aurora Background ===== */
@@ -44,15 +46,10 @@ z-index:-1;
 100%{transform:translate(0,0) rotate(360deg)}
 }
 
-/* ===== Light mode ===== */
+/* ===== Light mode (same background) ===== */
 
 body.light{
-background:#f5f7fb;
 color:#1f2937;
-}
-
-body.light::before{
-display:none;
 }
 
 /* ================= HEADER ================= */
@@ -289,6 +286,7 @@ opacity:.8;
 <body>
 
 <header>
+
 <h1>TaskFlow Pro</h1>
 <p>Organize your work with a modern Kanban board</p>
 
@@ -305,40 +303,56 @@ opacity:.8;
 <div class="progress" id="progress"></div>
 </div>
 </div>
+
 </header>
 
 <div class="board">
 
 <div class="column" data-column="todo">
+
 <h3>To Do</h3>
+
 <div class="tasks"></div>
 
 <div class="add-task">
+
 <input class="task-input" placeholder="New task">
 
 <div class="task-options">
+
 <input type="date" class="date-picker">
+
 <select class="priority-picker">
 <option value="">Priority</option>
 <option value="Low">Low</option>
 <option value="Medium">Medium</option>
 <option value="High">High</option>
 </select>
+
 </div>
 
 <button class="add-btn" onclick="addTask(this)">+</button>
+
 </div>
+
 </div>
 
 <div class="column" data-column="doing">
+
 <h3>Doing</h3>
+
 <div class="tasks"></div>
+
 </div>
 
 <div class="column" data-column="done">
+
 <h3>Done</h3>
+
 <div class="tasks"></div>
+
 <button class="clear-done" onclick="clearDone()">Clear completed</button>
+
 </div>
 
 </div>
