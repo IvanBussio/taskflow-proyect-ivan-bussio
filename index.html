@@ -9,170 +9,86 @@
 <style>
 *{box-sizing:border-box}
 
-/* ================= BODY ================= */
+/* ================= BASE ================= */
 body{
 margin:0;
 font-family:'Poppins',sans-serif;
 min-height:100vh;
-background:#0f172a;
-color:white;
-overflow-x:hidden;
-transition:background .3s,color .3s;
+background:#111;
+color:#fff;
+transition:background .25s,color .25s;
 }
 
-/* ===== Elegant Aurora Background ===== */
-/* ===== Aurora Background (works for dark & light) ===== */
-
-body::before{
-content:"";
-position:fixed;
-inset:-30%;
-background:
-radial-gradient(circle at 20% 30%, rgba(99,102,241,0.40), transparent 45%),
-radial-gradient(circle at 80% 40%, rgba(56,189,248,0.30), transparent 45%),
-radial-gradient(circle at 60% 80%, rgba(34,197,94,0.25), transparent 45%),
-radial-gradient(circle at 40% 60%, rgba(236,72,153,0.22), transparent 45%);
-filter:blur(90px);
-animation:auroraMove 30s linear infinite;
-opacity:.85;
-z-index:-1;
-}
-
-/* lighter aurora for light theme */
-body.light::before{
-background:
-radial-gradient(circle at 20% 30%, rgba(99,102,241,0.18), transparent 45%),
-radial-gradient(circle at 80% 40%, rgba(56,189,248,0.15), transparent 45%),
-radial-gradient(circle at 60% 80%, rgba(34,197,94,0.12), transparent 45%),
-radial-gradient(circle at 40% 60%, rgba(236,72,153,0.12), transparent 45%);
-}
-
-@keyframes auroraMove{
-0%{transform:translate(0,0) rotate(0deg)}
-50%{transform:translate(120px,-80px) rotate(180deg)}
-100%{transform:translate(0,0) rotate(360deg)}
-}
-50%{transform:translate(120px,-80px) rotate(180deg)}
-100%{transform:translate(0,0) rotate(360deg)}
-}
-
-/* ===== Light mode ===== */
 body.light{
-color:#1f2937;
-}
-
-/* Light mode UI */
-body.light .column{
-background:rgba(255,255,255,0.85);
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
-}
-
-body.light .task{
 background:#ffffff;
-color:#1f2937;
-}
-
-body.light .card{
-background:rgba(255,255,255,0.85);
-color:#1f2937;
-}
-
-body.light .progress-bar{
-background:rgba(0,0,0,0.15);
-}
-
-body.light .theme-toggle{
-background:rgba(255,255,255,0.8);
 color:#111;
 }
-
-
-body.light::before{
-/* keep same animated background in light mode */
-}
-
-body.light .column{background:rgba(0,0,0,0.05)}
-body.light .task{
-background:white;
-color:#2f3640;
-padding:8px 10px;
-border-radius:8px;
-margin-bottom:8px;
-cursor:grab;
-border-left:4px solid transparent;
-font-size:13px;
-line-height:1.3;
-transition:transform .15s ease, box-shadow .15s ease;
-}
-body.light .card{background:rgba(0,0,0,0.06)}
 
 /* ================= HEADER ================= */
 header{
 position:relative;
-display:flex;
-flex-direction:column;
-align-items:center;
-padding:40px 20px 10px;
 text-align:center;
+padding:40px 20px 10px;
 }
 
-header h1{margin:0;font-size:34px}
-header p{opacity:.9;margin-top:6px}
+header h1{margin:0;font-size:32px}
+header p{margin-top:6px;opacity:.8}
 
-/* Theme button */
 .theme-toggle{
 position:absolute;
 top:20px;
 right:20px;
-padding:8px 10px;
 border:none;
 border-radius:8px;
-background:rgba(0,0,0,0.35);
-backdrop-filter:blur(6px);
-color:white;
-cursor:pointer;
+padding:6px 10px;
 font-size:18px;
-transition:transform .25s ease, background .25s;
+cursor:pointer;
+background:#222;
+color:#fff;
 }
 
-.theme-toggle:hover{
-transform:scale(1.15) rotate(8deg);
-background:rgba(0,0,0,0.55);
+body.light .theme-toggle{
+background:#eee;
+color:#111;
 }
 
 /* ================= DASHBOARD ================= */
 .dashboard{
 display:flex;
+justify-content:center;
+flex-wrap:wrap;
 gap:15px;
 margin-top:20px;
-flex-wrap:wrap;
-justify-content:center;
 }
 
 .card{
-background:rgba(255,255,255,0.15);
+background:#222;
 padding:12px 18px;
-border-radius:12px;
-font-size:14px;
+border-radius:10px;
 min-width:120px;
+font-size:14px;
 }
+
+body.light .card{background:#f2f2f2}
 
 .card strong{display:block;font-size:20px}
 
 /* ================= PROGRESS ================= */
-.progress-wrapper{width:260px;margin-top:15px}
+.progress-wrapper{width:260px;margin:15px auto}
 
 .progress-bar{
-height:10px;
-background:rgba(255,255,255,0.3);
+height:8px;
+background:#333;
 border-radius:10px;
 overflow:hidden;
 }
 
+body.light .progress-bar{background:#ddd}
+
 .progress{
 height:100%;
-background:#00e676;
 width:0%;
+background:#2ecc71;
 transition:width .3s;
 }
 
@@ -180,52 +96,42 @@ transition:width .3s;
 .board{
 display:flex;
 justify-content:center;
-gap:30px;
+gap:25px;
 padding:30px;
 flex-wrap:wrap;
 }
 
-/* ================= COLUMN ================= */
 .column{
-background:rgba(255,255,255,0.15);
-border-radius:16px;
-padding:20px;
-width:300px;
-box-shadow:0 10px 30px rgba(0,0,0,0.35);
+background:#1b1b1b;
+padding:18px;
+border-radius:12px;
+width:280px;
 }
 
-/* Column titles */
+body.light .column{background:#f4f4f4}
+
 .column h3{
 text-align:center;
 text-transform:uppercase;
-letter-spacing:1px;
+font-size:14px;
 margin-top:0;
-position:relative;
-padding-bottom:8px;
+letter-spacing:1px;
 }
-
-
 
 /* ================= TASKS ================= */
-.tasks{min-height:80px;margin-bottom:10px;border-radius:8px}
+.tasks{min-height:60px;margin-bottom:10px}
 
 .task{
-background:white;
-color:#2f3640;
-padding:12px;
-border-radius:10px;
-margin-bottom:12px;
+background:#ffffff;
+color:#222;
+padding:8px 10px;
+border-radius:8px;
+margin-bottom:8px;
+font-size:13px;
 cursor:grab;
-border-left:6px solid transparent;
-transition:transform .15s ease, box-shadow .15s ease;
+border-left:4px solid transparent;
 }
 
-.task:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 14px rgba(0,0,0,0.25);
-}
-
-/* Priority colors */
 .task.priority-high{border-left-color:#e74c3c}
 .task.priority-medium{border-left-color:#f1c40f}
 .task.priority-low{border-left-color:#2ecc71}
@@ -233,69 +139,63 @@ box-shadow:0 6px 14px rgba(0,0,0,0.25);
 /* ================= ADD TASK ================= */
 .add-task{display:flex;flex-direction:column;gap:6px}
 
-.add-task input{
-padding:8px;
-border-radius:6px;
-border:none;
-}
-
-.task-options{display:flex;gap:6px}
-
+.add-task input,
 .task-options input,
 .task-options select{
-flex:1;
 padding:6px;
 border-radius:6px;
 border:none;
 font-size:12px;
 }
 
+.task-options{display:flex;gap:6px}
+
 .add-btn{
 padding:6px;
-font-size:13px;
-padding:8px;
-background:#00a8ff;
-color:white;
 border:none;
 border-radius:6px;
+background:#3498db;
+color:white;
 cursor:pointer;
 }
 
-/* Buttons */
+/* ================= BUTTONS ================= */
 button.delete{
-background:#e84118;
-margin-top:8px;
+background:#e74c3c;
+margin-top:6px;
 width:100%;
-padding:8px;
+padding:6px;
 border:none;
 border-radius:6px;
 color:white;
-cursor:pointer;
 }
 
 button.complete{
 background:#2ecc71;
-margin-top:8px;
+margin-top:6px;
 width:100%;
-padding:8px;
+padding:6px;
 border:none;
 border-radius:6px;
 color:white;
-cursor:pointer;
 }
 
 .clear-done{
 margin-top:10px;
 width:100%;
-background:#ff7675;
-padding:10px;
+background:#e74c3c;
+padding:8px;
 border:none;
 border-radius:6px;
 color:white;
-cursor:pointer;
 }
 
-footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
+footer{
+text-align:center;
+padding:20px;
+font-size:14px;
+opacity:.7;
+}
 </style>
 </head>
 
@@ -303,7 +203,7 @@ footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
 
 <header>
 <h1>TaskFlow Pro</h1>
-<p>Organize your work with a modern Kanban board</p>
+<p>Organize your work with a simple Kanban board</p>
 <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
 
 <div class="dashboard">
