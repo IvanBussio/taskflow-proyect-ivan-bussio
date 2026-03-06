@@ -4,52 +4,281 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TaskFlow Pro</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{box-sizing:border-box}
-body{margin:0;font-family:'Poppins',sans-serif;min-height:100vh;background:#0f172a;color:white}
 
-header{display:flex;flex-direction:column;align-items:center;padding:40px 20px 10px;text-align:center}
-header h1{margin:0;font-size:34px}
-header p{opacity:.9;margin-top:6px}
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+min-height:100vh;
+background:#0f172a;
+color:white;
+transition:background .3s,color .3s;
+}
 
-.dashboard{display:flex;gap:15px;margin-top:20px;flex-wrap:wrap;justify-content:center}
-.card{background:rgba(255,255,255,0.15);padding:12px 18px;border-radius:12px;font-size:14px;min-width:120px}
-.card strong{display:block;font-size:20px}
+/* light mode */
 
-.progress-wrapper{width:260px;margin-top:15px}
-.progress-bar{height:10px;background:rgba(255,255,255,0.3);border-radius:10px;overflow:hidden}
-.progress{height:100%;background:#00e676;width:0%;transition:width .3s}
+body.light{
+background:#f5f7fb;
+color:#1f2937;
+}
 
-.board{display:flex;justify-content:center;gap:30px;padding:30px;flex-wrap:wrap}
+body.light .column{
+background:rgba(0,0,0,0.05);
+}
 
-.column{background:rgba(255,255,255,0.15);border-radius:16px;padding:20px;width:300px}
+body.light .task{
+background:white;
+color:#1f2937;
+}
 
-.tasks{min-height:80px;margin-bottom:10px}
+body.light .card{
+background:rgba(0,0,0,0.06);
+}
 
-.task{background:white;color:#2f3640;padding:12px;border-radius:10px;margin-bottom:12px}
+header{
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:40px 20px 10px;
+text-align:center;
+}
 
-.add-task{display:flex;gap:8px;width:100%}
-.add-task input{flex:1;padding:10px;border-radius:6px;border:none}
+header h1{
+margin:0;
+font-size:34px;
+}
 
-button{padding:10px;border:none;border-radius:6px;background:#00a8ff;color:white;font-weight:500;cursor:pointer;width:42px;display:flex;align-items:center;justify-content:center}
+header p{
+opacity:.9;
+margin-top:6px;
+}
 
-button.delete{background:#e84118;margin-top:8px;width:100%}
+/* theme button */
 
-button.complete{background:#2ecc71;margin-top:8px;width:100%}
+.theme-toggle{
+margin-top:15px;
+padding:6px 12px;
+border:none;
+border-radius:6px;
+background:#111827;
+color:white;
+cursor:pointer;
+font-size:18px;
+transition:transform .3s ease;
+}
 
-.clear-done{margin-top:10px;width:100%;background:#ff7675;padding:10px;border:none;border-radius:6px;color:white;cursor:pointer}
+.theme-toggle:hover{
+transform:scale(1.15) rotate(10deg);
+}
 
-.stats{text-align:center;margin-top:10px;font-size:14px}
+/* dashboard */
 
-footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
+.dashboard{
+display:flex;
+gap:15px;
+margin-top:20px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.card{
+background:rgba(255,255,255,0.15);
+padding:12px 18px;
+border-radius:12px;
+font-size:14px;
+min-width:120px;
+}
+
+.card strong{
+display:block;
+font-size:20px;
+}
+
+.progress-wrapper{
+width:260px;
+margin-top:15px;
+}
+
+.progress-bar{
+height:10px;
+background:rgba(255,255,255,0.3);
+border-radius:10px;
+overflow:hidden;
+}
+
+.progress{
+height:100%;
+background:#00e676;
+width:0%;
+transition:width .3s;
+}
+
+/* board */
+
+.board{
+display:flex;
+justify-content:center;
+gap:30px;
+padding:30px;
+flex-wrap:wrap;
+}
+
+.column{
+background:rgba(255,255,255,0.15);
+border-radius:16px;
+padding:20px;
+width:300px;
+}
+
+.column h3{
+text-align:center;
+text-transform:uppercase;
+letter-spacing:1px;
+margin-top:0;
+position:relative;
+padding-bottom:8px;
+}
+
+/* colored underline */
+
+.column[data-column="todo"] h3::after,
+.column[data-column="doing"] h3::after,
+.column[data-column="done"] h3::after{
+content:"";
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+bottom:0;
+width:40px;
+height:3px;
+border-radius:2px;
+}
+
+.column[data-column="todo"] h3::after{background:#3b82f6}
+.column[data-column="doing"] h3::after{background:#f1c40f}
+.column[data-column="done"] h3::after{background:#2ecc71}
+
+/* tasks */
+
+.tasks{
+min-height:80px;
+margin-bottom:10px;
+border-radius:8px;
+}
+
+.task{
+background:white;
+color:#2f3640;
+padding:12px;
+border-radius:10px;
+margin-bottom:12px;
+cursor:grab;
+border-left:6px solid transparent;
+transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.task:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 14px rgba(0,0,0,0.25);
+}
+
+/* priority colors */
+
+.task.priority-high{border-left-color:#e74c3c}
+.task.priority-medium{border-left-color:#f1c40f}
+.task.priority-low{border-left-color:#2ecc71}
+
+/* add task */
+
+.add-task{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.add-task input{
+padding:8px;
+border-radius:6px;
+border:none;
+}
+
+.task-options{
+display:flex;
+gap:6px;
+}
+
+.task-options input,
+.task-options select{
+flex:1;
+padding:6px;
+border-radius:6px;
+border:none;
+font-size:12px;
+}
+
+.add-btn{
+padding:8px;
+background:#00a8ff;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* buttons */
+
+button.delete{
+background:#e84118;
+margin-top:8px;
+width:100%;
+padding:8px;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+button.complete{
+background:#2ecc71;
+margin-top:8px;
+width:100%;
+padding:8px;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+.clear-done{
+margin-top:10px;
+width:100%;
+background:#ff7675;
+padding:10px;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+footer{
+text-align:center;
+padding:20px;
+font-size:14px;
+opacity:.8;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
+
 <h1>TaskFlow Pro</h1>
 <p>Organize your work with a modern Kanban board</p>
 
@@ -65,6 +294,8 @@ footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
 </div>
 </div>
 
+<button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+
 </header>
 
 <div class="board">
@@ -72,46 +303,67 @@ footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
 <div class="column" data-column="todo">
 <h3>📌 To Do</h3>
 <div class="tasks"></div>
+
 <div class="add-task">
-<input class="task-input" placeholder="New task" />
-<button onclick="toggleDate(this)">📅</button>
-<button onclick="togglePriority(this)">⚑</button>
-<button onclick="addTask(this)">+</button>
-<input type="date" class="date-picker" style="display:none" />
-<select class="priority-picker" style="display:none">
+<input class="task-input" placeholder="New task">
+
+<div class="task-options">
+<input type="date" class="date-picker">
+<select class="priority-picker">
+<option value="">Priority</option>
 <option value="Low">Low</option>
-<option value="Medium" selected>Medium</option>
+<option value="Medium">Medium</option>
 <option value="High">High</option>
 </select>
 </div>
-<div class="stats"></div>
+
+<button class="add-btn" onclick="addTask(this)">+</button>
+
+</div>
+
 </div>
 
 <div class="column" data-column="doing">
 <h3>⚙️ Doing</h3>
 <div class="tasks"></div>
-<div class="stats"></div>
 </div>
 
 <div class="column" data-column="done">
 <h3>✅ Done</h3>
 <div class="tasks"></div>
 <button class="clear-done" onclick="clearDone()">Clear completed</button>
-<div class="stats"></div>
 </div>
 
 </div>
 
 <footer>
-© 2026 TaskFlow • Developed by Ivan Bussio • FCT at www.corner-estudios.com • All rights reserved.
+© 2026 TaskFlow • Developed by Ivan Bussio
 </footer>
 
 <script>
 
-let pendingDate = ""
-let pendingPriority = ""
-
 let data = JSON.parse(localStorage.getItem("kanban") || '{"todo":[],"doing":[],"done":[]}')
+
+function toggleTheme(){
+
+const btn=document.getElementById("themeBtn")
+
+document.body.classList.toggle("light")
+
+const isLight=document.body.classList.contains("light")
+
+btn.textContent=isLight?"☀️":"🌙"
+
+localStorage.setItem("theme",isLight?"light":"dark")
+
+}
+
+const savedTheme=localStorage.getItem("theme")
+
+if(savedTheme==="light"){
+document.body.classList.add("light")
+document.getElementById("themeBtn").textContent="☀️"
+}
 
 function save(){
 localStorage.setItem("kanban",JSON.stringify(data))
@@ -120,227 +372,98 @@ render()
 
 function render(){
 
-let total = data.todo.length + data.doing.length + data.done.length
-let progress = total ? (data.done.length / total) * 100 : 0
+document.querySelectorAll(".tasks").forEach(t=>t.innerHTML="")
 
+Object.keys(data).forEach(col=>{
 
-document.getElementById("totalTasks").innerText = total
+const container=document.querySelector(`[data-column="${col}"] .tasks`)
 
-document.getElementById("doneTasks").innerText = data.done.length
-
-document.getElementById("doingTasks").innerText = data.doing.length
-
-document.getElementById("progress").style.width = progress + "%"
-
-
-document.querySelectorAll(".column").forEach(col=>{
-
-const name = col.dataset.column
-const container = col.querySelector(".tasks")
-const stats = col.querySelector(".stats")
-
-container.innerHTML=""
-
-
-data[name].forEach((task,i)=>{
+data[col].forEach((task,i)=>{
 
 const div=document.createElement("div")
+
 div.className="task"
-div.draggable=true
 
-let button=""
+if(task.includes("[High]")) div.classList.add("priority-high")
+else if(task.includes("[Medium]")) div.classList.add("priority-medium")
+else if(task.includes("[Low]")) div.classList.add("priority-low")
 
-if(name==='doing'){
-button=`<button class="complete" onclick="completeTask(${i})">Complete</button>`
+let btn=""
+
+if(col==="doing"){
+btn=`<button class="complete" onclick="completeTask(${i})">Complete</button>`
 }else{
-button=`<button class="delete" onclick="deleteTask('${name}',${i})">Move</button>`
+btn=`<button class="delete" onclick="moveTask('${col}',${i})">Move</button>`
 }
 
-
-div.innerHTML=`
-<span ondblclick="editTask('${name}',${i})">${task}</span>
-${button}
-`
+div.innerHTML=`<span ondblclick="editTask('${col}',${i})">${task}</span>${btn}`
 
 container.appendChild(div)
 
 })
 
-stats.innerText = data[name].length + " tasks"
-
 })
-
-initDrag()
 
 }
 
 function addTask(btn){
 
-const container = btn.parentElement
-const column = btn.closest(".column").dataset.column
-const input = container.querySelector(".task-input")
-const datePicker = container.querySelector('.date-picker')
-const priorityPicker = container.querySelector('.priority-picker')
+const box=btn.closest(".add-task")
 
-const text = input.value.trim()
+const text=box.querySelector(".task-input").value.trim()
+
 if(!text) return
 
-let taskText = text
+const date=box.querySelector(".date-picker").value
+const priority=box.querySelector(".priority-picker").value
 
-if(priorityPicker && priorityPicker.value){
- taskText += " [" + priorityPicker.value + "]"
-}
+let task=text
 
-if(datePicker && datePicker.value){
- taskText += " (" + datePicker.value + ")"
-}
+if(priority) task+=` [${priority}]`
+if(date) task+=` (${date})`
 
-if(!data[column]) data[column] = []
+data.todo.push(task)
 
-data[column].push(taskText)
-
-input.value = ""
-if(datePicker) datePicker.value = ""
+box.querySelector(".task-input").value=""
+box.querySelector(".date-picker").value=""
+box.querySelector(".priority-picker").value=""
 
 save()
 
 }
 
-function toggleDate(btn){
-const container = btn.parentElement
-const picker = container.querySelector('.date-picker')
-picker.style.display = picker.style.display === 'none' ? 'block' : 'none'
-}
+function moveTask(col,i){
 
-function togglePriority(btn){
-const container = btn.parentElement
-const picker = container.querySelector('.priority-picker')
-picker.style.display = picker.style.display === 'none' ? 'block' : 'none'
-}
-
-if(pendingDate){
- text += " (" + pendingDate + ")"
-}
-
- data[column].push(text)
-
- input.value=""
- pendingDate=""
- pendingPriority=""
-
- save()
-
-}
-
-}
-
-function setDate(btn){
-
-const date = prompt("Due date (YYYY-MM-DD)")
-
-if(date){
- pendingDate = date
-}
-
-}
-
-function setPriority(btn){
-
-const priority = prompt("Priority: High, Medium or Low")
-
-if(priority){
- pendingPriority = priority
-}
-
-}
-
-function editTask(column,index){
-
-const newText = prompt("Edit task", data[column][index])
-
-if(newText){data[column][index]=newText}
-
-save()
-
-}
-
-function deleteTask(column,index){
-
-if(column==='todo'){
- const moved = data.todo.splice(index,1)[0]
- data.doing.push(moved)
-}
-else if(column==='doing'){
- const moved = data.doing.splice(index,1)[0]
- data.done.push(moved)
-}
-else{
- data.done.splice(index,1)
+if(col==="todo"){
+data.doing.push(data.todo.splice(i,1)[0])
+}else if(col==="doing"){
+data.done.push(data.doing.splice(i,1)[0])
 }
 
 save()
 
 }
 
-function completeTask(index){
+function completeTask(i){
 
-const moved = data.doing.splice(index,1)[0]
-
-data.done.push(moved)
+data.done.push(data.doing.splice(i,1)[0])
 
 save()
 
 }
 
 function clearDone(){
-
 data.done=[]
-
 save()
-
 }
 
-function initDrag(){
+function editTask(col,i){
 
-let dragged
+const t=prompt("Edit task",data[col][i])
 
-
-document.querySelectorAll(".task").forEach((task,index)=>{
-
-const column = task.closest(".column").dataset.column
-
-
-task.addEventListener("dragstart",()=>{
- dragged={column,index}
-})
-
-})
-
-
-document.querySelectorAll(".tasks").forEach(zone=>{
-
-zone.addEventListener("dragover",e=>{
- e.preventDefault()
-})
-
-zone.addEventListener("drop",()=>{
-
-if(!dragged) return
-
-const newColumn = zone.closest(".column").dataset.column
-
-const moved = data[dragged.column].splice(dragged.index,1)[0]
-
-if(!moved) return
-
-
-data[newColumn].push(moved)
+if(t) data[col][i]=t
 
 save()
-
-})
-
-})
 
 }
 
@@ -350,4 +473,3 @@ render()
 
 </body>
 </html>
-
