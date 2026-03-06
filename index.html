@@ -14,9 +14,15 @@ body{
 margin:0;
 font-family:'Poppins',sans-serif;
 min-height:100vh;
-background:#111;
-color:#fff;
+background:linear-gradient(135deg,#f8fafc,#e2e8f0);
+color:#111;
 transition:background .25s,color .25s;
+}
+
+/* Dark mode */
+body.light{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:#ffffff;
 }
 
 body.light{
@@ -62,14 +68,14 @@ margin-top:20px;
 }
 
 .card{
-background:#222;
+background:#ffffffaa;
 padding:12px 18px;
 border-radius:10px;
 min-width:120px;
 font-size:14px;
 }
 
-body.light .card{background:#f2f2f2}
+body.light .card{background:#1f2937;color:#fff}
 
 .card strong{display:block;font-size:20px}
 
@@ -102,13 +108,13 @@ flex-wrap:wrap;
 }
 
 .column{
-background:#1b1b1b;
+background:#ffffffcc;
 padding:18px;
 border-radius:12px;
 width:280px;
 }
 
-body.light .column{background:#f4f4f4}
+body.light .column{background:#1f2937}
 
 .column h3{
 text-align:center;
