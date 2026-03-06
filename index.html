@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,9 +40,9 @@ body.dark .column{background:#1e293b}
 .task:hover{transform:scale(1.03)}
 
 .priority{font-size:12px;margin-top:6px;font-weight:500}
-.priority.alta{color:#e84118}
-.priority.media{color:#fbc531}
-.priority.baja{color:#2ecc71}
+.priority.high{color:#e84118}
+.priority.medium{color:#fbc531}
+.priority.low{color:#2ecc71}
 
 .date{font-size:12px;margin-top:4px;opacity:.7}
 
@@ -73,12 +73,12 @@ footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
 <header>
 <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
 <h1>TaskFlow Pro</h1>
-<p>Organiza tu trabajo con un tablero Kanban moderno</p>
+<p>Organize your work with a modern Kanban board</p>
 
 <div class="dashboard">
-<div class="card">Total tareas<strong id="totalTasks">0</strong></div>
-<div class="card">Completadas<strong id="doneTasks">0</strong></div>
-<div class="card">En progreso<strong id="doingTasks">0</strong></div>
+<div class="card">Total Tasks<strong id="totalTasks">0</strong></div>
+<div class="card">Completed<strong id="doneTasks">0</strong></div>
+<div class="card">In Progress<strong id="doingTasks">0</strong></div>
 </div>
 
 <div class="progress-wrapper">
@@ -95,7 +95,7 @@ footer{text-align:center;padding:20px;font-size:14px;opacity:.8}
 <h3>📌 To Do</h3>
 <div class="tasks"></div>
 <div class="add-task">
-<input placeholder="Nueva tarea" />
+<input placeholder="New task" />
 <button onclick="addTask(this)">+</button>
 </div>
 <div class="stats"></div>
@@ -122,18 +122,13 @@ TaskFlow Project • HTML • CSS • JavaScript
 
 <script>
 
-/* ----------------------------
-   DATA INITIALIZATION
------------------------------*/
-
 let data = JSON.parse(localStorage.getItem("kanban") || '{"todo":[],"doing":[],"done":[]}')
 
-/* Normalize tasks in case old tasks don't have priority/date */
 function normalizeTasks(){
   ['todo','doing','done'].forEach(col=>{
     data[col] = data[col].map(task=>({
       text: task.text || task,
-      priority: (task.priority || 'Media'),
+      priority: (task.priority || 'Medium'),
       date: task.date || ''
     }))
   })
@@ -148,10 +143,6 @@ localStorage.setItem("kanban",JSON.stringify(data))
 render()
 }
 
-/* ----------------------------
-   RENDER
------------------------------*/
-
 function render(){
 
 let total = data.todo.length + data.doing.length + data.done.length
@@ -159,6 +150,7 @@ let progress = total ? (data.done.length / total) * 100 : 0
 
 document.getElementById("totalTasks").innerText = total
 document.getElementById("doneTasks").innerText = data.done.length
+
 document.getElementById("doingTasks").innerText = data.doing.length
 
 document.getElementById("progress").style.width = progress + "%"
@@ -179,21 +171,21 @@ const div=document.createElement("div")
 div.className="task"
 div.draggable=true
 
-const priority = (task.priority || 'Media').toLowerCase()
+const priority = (task.priority || 'Medium').toLowerCase()
 
 let button=""
 
 if(name==='doing'){
-button=`<button class="complete" onclick="completeTask(${i})">✔ Completar</button>`
+button=`<button class="complete" onclick="completeTask(${i})">✔ Complete</button>`
 }else{
-button=`<button class="delete" onclick="deleteTask('${name}',${i})">Mover</button>`
+button=`<button class="delete" onclick="deleteTask('${name}',${i})">Move</button>`
 }
 
 
 div.innerHTML=`
 <span ondblclick="editTask('${name}',${i})">${task.text}</span>
-<div class="priority ${priority}">Prioridad: ${task.priority || 'Media'}</div>
-<div class="date">📅 ${task.date || 'Sin fecha'}</div>
+<div class="priority ${priority}">Priority: ${task.priority || 'Medium'}</div>
+<div class="date">📅 ${task.date || 'No date'}</div>
 ${button}
 `
 
@@ -201,17 +193,13 @@ container.appendChild(div)
 
 })
 
-stats.innerText = data[name].length + " tareas"
+stats.innerText = data[name].length + " tasks"
 
 })
 
 initDrag()
 
 }
-
-/* ----------------------------
-   TASK OPERATIONS
------------------------------*/
 
 function addTask(btn){
 
@@ -221,8 +209,8 @@ const text = input.value.trim()
 
 if(!text) return
 
-let priority = prompt("Prioridad: Alta, Media o Baja","Media") || "Media"
-let date = prompt("Fecha límite (YYYY-MM-DD)","")
+let priority = prompt("Priority: High, Medium or Low","Medium") || "Medium"
+let date = prompt("Due date (YYYY-MM-DD)","")
 
 const task = {text,priority,date}
 
@@ -234,9 +222,13 @@ save()
 }
 
 function editTask(column,index){
-const newText = prompt("Editar tarea", data[column][index].text)
+
+const newText = prompt("Edit task", data[column][index].text)
+
 if(newText){data[column][index].text=newText}
+
 save()
+
 }
 
 function deleteTask(column,index){
@@ -258,31 +250,34 @@ save()
 }
 
 function completeTask(index){
+
 const moved = data.doing.splice(index,1)[0]
+
 data.done.push(moved)
+
 save()
+
 }
 
 function clearDone(){
-data.done=[]
-save()
-}
 
-/* ----------------------------
-   THEME
------------------------------*/
+data.done=[]
+
+save()
+
+}
 
 function toggleTheme(){
+
 const body=document.body
 const toggle=document.querySelector('.theme-toggle')
+
 body.classList.toggle('dark')
+
 if(body.classList.contains('dark')) toggle.innerText='☀️'
 else toggle.innerText='🌙'
-}
 
-/* ----------------------------
-   DRAG & DROP
------------------------------*/
+}
 
 function initDrag(){
 
