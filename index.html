@@ -12,6 +12,9 @@ body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
 min-height:100vh;
+color:white;
+text-align:center;
+transition:0.4s;
 
 background:linear-gradient(
 to bottom,
@@ -20,19 +23,36 @@ to bottom,
 #2f6f7d,
 #2a8a6b
 );
+}
 
-color:white;
-text-align:center;
+body.light{
+background:#f4f6fb;
+color:#222;
 }
 
 h1{
 margin-top:40px;
-font-size:42px;
+font-size:40px;
 }
 
 .subtitle{
 opacity:0.8;
 margin-bottom:30px;
+}
+
+/* toggle */
+
+.toggle{
+margin:20px auto;
+width:60px;
+height:35px;
+border-radius:20px;
+background:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:18px;
 }
 
 /* stats */
@@ -42,6 +62,7 @@ display:flex;
 justify-content:center;
 gap:20px;
 margin-bottom:20px;
+flex-wrap:wrap;
 }
 
 .card{
@@ -49,6 +70,11 @@ background:rgba(255,255,255,0.2);
 padding:20px;
 border-radius:12px;
 width:140px;
+}
+
+body.light .card{
+background:white;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 /* progress */
@@ -62,6 +88,10 @@ border-radius:10px;
 overflow:hidden;
 }
 
+body.light .progress-container{
+background:#ddd;
+}
+
 .progress-bar{
 height:100%;
 width:0%;
@@ -69,8 +99,26 @@ background:#4dabf7;
 transition:0.3s;
 }
 
-#progressText{
-margin-bottom:30px;
+/* input */
+
+.input-area{
+margin:25px;
+}
+
+input{
+padding:10px;
+border:none;
+border-radius:8px;
+width:200px;
+}
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:#4dabf7;
+color:white;
+cursor:pointer;
 }
 
 /* board */
@@ -91,8 +139,9 @@ width:250px;
 min-height:300px;
 }
 
-.column h3{
-margin-top:0;
+body.light .column{
+background:white;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .task{
@@ -104,40 +153,17 @@ margin-top:10px;
 cursor:pointer;
 }
 
-/* input */
-
-.input-area{
-margin:20px;
-}
-
-input{
-padding:10px;
-border:none;
-border-radius:8px;
-width:200px;
-}
-
-button{
-padding:10px 16px;
-border:none;
-border-radius:8px;
-background:#4dabf7;
-color:white;
-cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
-}
-
 </style>
 </head>
-
 
 <body>
 
 <h1>TaskFlow Pro</h1>
 <p class="subtitle">Organize your work with a modern Kanban board</p>
+
+<div class="toggle" onclick="toggleMode()" id="modeBtn">
+🌙
+</div>
 
 <div class="stats">
 
@@ -158,19 +184,16 @@ opacity:0.9;
 
 </div>
 
-
 <div class="progress-container">
 <div class="progress-bar" id="progressBar"></div>
 </div>
 
 <p id="progressText">0% Completed</p>
 
-
 <div class="input-area">
 <input id="taskInput" placeholder="New task">
 <button onclick="addTask()">Add</button>
 </div>
-
 
 <div class="board">
 
@@ -191,8 +214,24 @@ opacity:0.9;
 
 </div>
 
-
 <script>
+
+function toggleMode(){
+
+const body=document.body
+const btn=document.getElementById("modeBtn")
+
+body.classList.toggle("light")
+
+if(body.classList.contains("light")){
+btn.innerHTML="☀️"
+}else{
+btn.innerHTML="🌙"
+}
+
+}
+
+/* agregar tarea */
 
 function addTask(){
 
@@ -229,7 +268,7 @@ updateStats()
 
 }
 
-
+/* actualizar estadísticas */
 
 function updateStats(){
 
@@ -246,9 +285,7 @@ document.getElementById("progressTasks").innerText=progress
 let percent=0
 
 if(total>0){
-
 percent=Math.round((done/total)*100)
-
 }
 
 document.getElementById("progressBar").style.width=percent+"%"
