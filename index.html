@@ -41,8 +41,6 @@ animation:auroraMove 15s ease infinite;
 100%{background-position:0% 50%;}
 }
 
-/* modo claro aurora pastel */
-
 body.light{
 color:#222;
 
@@ -66,7 +64,7 @@ opacity:0.8;
 margin-bottom:20px;
 }
 
-/* demo swipe */
+/* swipe demo */
 
 .swipe-demo{
 display:flex;
@@ -235,7 +233,11 @@ transform:scale(1.04);
 box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* feedback movimiento */
+.dragging{
+opacity:0.5;
+}
+
+/* feedback */
 
 .move-feedback{
 animation:moveFeedback 0.25s ease;
@@ -245,10 +247,6 @@ animation:moveFeedback 0.25s ease;
 0%{transform:scale(1);}
 50%{transform:scale(1.08);}
 100%{transform:scale(1);}
-}
-
-.dragging{
-opacity:0.5;
 }
 
 /* móvil */
@@ -347,12 +345,9 @@ width:85%;
 
 function toggleMode(){
 
-const body=document.body
-const btn=document.getElementById("modeBtn")
+document.body.classList.toggle("light")
 
-body.classList.toggle("light")
-
-btn.innerHTML=body.classList.contains("light")?"☀️":"🌙"
+modeBtn.innerHTML=document.body.classList.contains("light")?"☀️":"🌙"
 
 }
 
@@ -384,13 +379,7 @@ guardar()
 updateStats()
 })
 
-task.addEventListener("click",()=>{
-
-moveForward(task)
-
-})
-
-/* swipe móvil */
+task.addEventListener("click",()=>moveForward(task))
 
 let startX=0
 
@@ -402,13 +391,8 @@ task.addEventListener("touchend",(e)=>{
 
 let endX=e.changedTouches[0].clientX
 
-if(endX-startX>80){
-moveBack(task)
-}
-
-if(startX-endX>80){
-moveForward(task)
-}
+if(endX-startX>80) moveBack(task)
+if(startX-endX>80) moveForward(task)
 
 })
 
@@ -443,13 +427,8 @@ function moveForward(task){
 
 const parent=task.parentElement.id
 
-if(parent==="todo"){
-progress.appendChild(task)
-}
-
-else if(parent==="progress"){
-done.appendChild(task)
-}
+if(parent==="todo") progress.appendChild(task)
+else if(parent==="progress") done.appendChild(task)
 
 feedback(task)
 guardar()
@@ -461,13 +440,8 @@ function moveBack(task){
 
 const parent=task.parentElement.id
 
-if(parent==="done"){
-progress.appendChild(task)
-}
-
-else if(parent==="progress"){
-todo.appendChild(task)
-}
+if(parent==="done") progress.appendChild(task)
+else if(parent==="progress") todo.appendChild(task)
 
 feedback(task)
 guardar()
@@ -477,45 +451,56 @@ updateStats()
 
 function addTask(){
 
-const input=document.getElementById("taskInput")
-const text=input.value.trim()
+const text=taskInput.value.trim()
 
-if(text==="") return
+if(!text) return
 
 createTask(text,"todo")
 
-input.value=""
+taskInput.value=""
 
 guardar()
 updateStats()
 
 }
 
-taskInput.addEventListener("keypress",function(e){
+taskInput.addEventListener("keypress",(e)=>{
+if(e.key==="Enter") addTask()
+})
 
-if(e.key==="Enter"){
-addTask()
-}
+document.querySelectorAll(".column").forEach(column=>{
+
+column.addEventListener("dragover",(e)=>e.preventDefault())
+
+column.addEventListener("drop",()=>{
+
+const dragging=document.querySelector(".dragging")
+
+if(!dragging) return
+
+column.querySelector("div").appendChild(dragging)
+
+feedback(dragging)
+guardar()
+updateStats()
+
+})
 
 })
 
 function updateStats(){
 
-const todo=document.querySelectorAll("#todo .task").length
-const progress=document.querySelectorAll("#progress .task").length
-const done=document.querySelectorAll("#done .task").length
+const todoCount=document.querySelectorAll("#todo .task").length
+const progressCount=document.querySelectorAll("#progress .task").length
+const doneCount=document.querySelectorAll("#done .task").length
 
-const total=todo+progress+done
+const total=todoCount+progressCount+doneCount
 
 totalTasks.innerText=total
-completedTasks.innerText=done
-progressTasks.innerText=progress
+completedTasks.innerText=doneCount
+progressTasks.innerText=progressCount
 
-let percent=0
-
-if(total>0){
-percent=Math.round((done/total)*100)
-}
+let percent=total?Math.round(doneCount/total*100):0
 
 progressBar.style.width=percent+"%"
 progressText.innerText=percent+"% completado"
@@ -549,14 +534,7 @@ updateStats()
 }
 
 setTimeout(()=>{
-
-const demo=document.querySelector(".swipe-demo")
-
-if(demo){
-demo.style.opacity="0"
-demo.style.transition="0.6s"
-}
-
+document.querySelector(".swipe-demo").style.opacity="0"
 },6000)
 
 cargar()
