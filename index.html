@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>TaskFlow Pro</title>
 
 <style>
@@ -16,8 +15,6 @@ min-height:100vh;
 color:white;
 text-align:center;
 transition:0.4s;
-
-/* fondo aurora */
 
 background:
 radial-gradient(circle at 20% 20%, #4f46e5, transparent 40%),
@@ -41,8 +38,6 @@ opacity:0.8;
 margin-bottom:30px;
 }
 
-/* toggle */
-
 .toggle{
 margin:20px auto;
 width:60px;
@@ -55,8 +50,6 @@ justify-content:center;
 cursor:pointer;
 font-size:18px;
 }
-
-/* stats */
 
 .stats{
 display:flex;
@@ -78,8 +71,6 @@ background:white;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* progress */
-
 .progress-container{
 width:70%;
 height:10px;
@@ -100,8 +91,6 @@ background:#4dabf7;
 transition:0.3s;
 }
 
-/* input */
-
 .input-area{
 margin:25px;
 }
@@ -121,8 +110,6 @@ background:#4dabf7;
 color:white;
 cursor:pointer;
 }
-
-/* board */
 
 .board{
 display:flex;
@@ -155,8 +142,6 @@ cursor:pointer;
 transition:0.2s;
 }
 
-/* efecto hover */
-
 .task:hover{
 transform:scale(1.05);
 }
@@ -167,26 +152,24 @@ transform:scale(1.05);
 <body>
 
 <h1>TaskFlow Pro</h1>
-<p class="subtitle">Organiza tu trabajo con un tablero Kanban moderno</p>
+<p class="subtitle">Organiza tu trabajo con un tablero Kanban</p>
 
-<div class="toggle" onclick="toggleMode()" id="modeBtn">
-🌙
-</div>
+<div class="toggle" onclick="toggleMode()" id="modeBtn">🌙</div>
 
 <div class="stats">
 
 <div class="card">
-<p>Total Tasks</p>
+<p>Tareas Totales</p>
 <h2 id="totalTasks">0</h2>
 </div>
 
 <div class="card">
-<p>Completed</p>
+<p>Completadas</p>
 <h2 id="completedTasks">0</h2>
 </div>
 
 <div class="card">
-<p>In Progress</p>
+<p>En Progreso</p>
 <h2 id="progressTasks">0</h2>
 </div>
 
@@ -196,7 +179,7 @@ transform:scale(1.05);
 <div class="progress-bar" id="progressBar"></div>
 </div>
 
-<p id="progressText">0% Completed</p>
+<p id="progressText">0% completado</p>
 
 <div class="input-area">
 <input id="taskInput" placeholder="Nueva tarea">
@@ -206,23 +189,25 @@ transform:scale(1.05);
 <div class="board">
 
 <div class="column">
-<h3>📌 TO DO</h3>
+<h3>📌 POR HACER</h3>
 <div id="todo"></div>
 </div>
 
 <div class="column">
-<h3>⚙️ IN PROGRESS</h3>
+<h3>⚙️ EN PROGRESO</h3>
 <div id="progress"></div>
 </div>
 
 <div class="column">
-<h3>✅ DONE</h3>
+<h3>✅ COMPLETADO</h3>
 <div id="done"></div>
 </div>
 
 </div>
 
 <script>
+
+/* modo claro / oscuro */
 
 function toggleMode(){
 
@@ -231,20 +216,32 @@ const btn=document.getElementById("modeBtn")
 
 body.classList.toggle("light")
 
-if(body.classList.contains("light")){
-btn.innerHTML="☀️"
-}else{
-btn.innerHTML="🌙"
-}
+btn.innerHTML=body.classList.contains("light") ? "☀️" : "🌙"
 
 }
+
+/* agregar tarea */
 
 function addTask(){
 
 const input=document.getElementById("taskInput")
-const text=input.value
+const text=input.value.trim()
 
 if(text==="") return
+
+createTask(text,"todo")
+
+input.value=""
+
+guardar()
+
+updateStats()
+
+}
+
+/* crear tarea */
+
+function createTask(text,column){
 
 const task=document.createElement("div")
 task.className="task"
@@ -252,27 +249,28 @@ task.innerText=text
 
 task.onclick=function(){
 
-if(task.parentElement.id==="todo"){
+const parent=task.parentElement.id
 
+if(parent==="todo"){
 document.getElementById("progress").appendChild(task)
 
-}else if(task.parentElement.id==="progress"){
-
+}else if(parent==="progress"){
 document.getElementById("done").appendChild(task)
 
+}else if(parent==="done"){
+document.getElementById("progress").appendChild(task)
 }
 
+guardar()
 updateStats()
 
 }
 
-document.getElementById("todo").appendChild(task)
-
-input.value=""
-
-updateStats()
+document.getElementById(column).appendChild(task)
 
 }
+
+/* estadísticas */
 
 function updateStats(){
 
@@ -293,9 +291,41 @@ percent=Math.round((done/total)*100)
 }
 
 document.getElementById("progressBar").style.width=percent+"%"
-document.getElementById("progressText").innerText=percent+"% Completed"
+document.getElementById("progressText").innerText=percent+"% completado"
 
 }
+
+/* guardar en localStorage */
+
+function guardar(){
+
+const data={
+todo:[...document.querySelectorAll("#todo .task")].map(t=>t.innerText),
+progress:[...document.querySelectorAll("#progress .task")].map(t=>t.innerText),
+done:[...document.querySelectorAll("#done .task")].map(t=>t.innerText)
+}
+
+localStorage.setItem("taskflow",JSON.stringify(data))
+
+}
+
+/* cargar tareas */
+
+function cargar(){
+
+const data=JSON.parse(localStorage.getItem("taskflow"))
+
+if(!data) return
+
+data.todo.forEach(t=>createTask(t,"todo"))
+data.progress.forEach(t=>createTask(t,"progress"))
+data.done.forEach(t=>createTask(t,"done"))
+
+updateStats()
+
+}
+
+cargar()
 
 </script>
 
