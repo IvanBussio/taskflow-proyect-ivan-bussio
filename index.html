@@ -41,7 +41,7 @@ animation:auroraMove 15s ease infinite;
 100%{background-position:0% 50%;}
 }
 
-/* AURORA PASTEL MODO CLARO */
+/* modo claro aurora pastel */
 
 body.light{
 color:#222;
@@ -63,8 +63,38 @@ font-size:40px;
 
 .subtitle{
 opacity:0.8;
-margin-bottom:30px;
+margin-bottom:20px;
 }
+
+/* demo swipe */
+
+.swipe-demo{
+display:flex;
+justify-content:center;
+margin-bottom:20px;
+}
+
+.swipe-card{
+background:white;
+color:black;
+padding:12px 18px;
+border-radius:10px;
+font-weight:500;
+animation:swipeDemo 2.5s ease-in-out infinite;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+@keyframes swipeDemo{
+
+0%{transform:translateX(0);}
+25%{transform:translateX(40px);}
+50%{transform:translateX(-40px);}
+75%{transform:translateX(20px);}
+100%{transform:translateX(0);}
+
+}
+
+/* toggle */
 
 .toggle{
 margin:20px auto;
@@ -78,6 +108,8 @@ justify-content:center;
 cursor:pointer;
 font-size:18px;
 }
+
+/* stats */
 
 .stats{
 display:flex;
@@ -105,6 +137,8 @@ background:white;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
+/* progress */
+
 .progress-container{
 width:70%;
 height:10px;
@@ -124,6 +158,8 @@ width:0%;
 background:#4dabf7;
 transition:0.3s;
 }
+
+/* input */
 
 .input-area{
 margin:25px;
@@ -152,6 +188,8 @@ transform:translateY(-3px);
 box-shadow:0 8px 20px rgba(0,0,0,0.25);
 }
 
+/* board */
+
 .board{
 display:flex;
 justify-content:center;
@@ -179,6 +217,8 @@ background:white;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
+/* task */
+
 .task{
 background:white;
 color:black;
@@ -193,6 +233,18 @@ transition:0.2s;
 .task:hover{
 transform:scale(1.04);
 box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* feedback movimiento */
+
+.move-feedback{
+animation:moveFeedback 0.25s ease;
+}
+
+@keyframes moveFeedback{
+0%{transform:scale(1);}
+50%{transform:scale(1.08);}
+100%{transform:scale(1);}
 }
 
 .dragging{
@@ -235,6 +287,10 @@ width:85%;
 
 <h1>TaskFlow Pro</h1>
 <p class="subtitle">Organiza tu trabajo con un tablero Kanban</p>
+
+<div class="swipe-demo">
+<div class="swipe-card">Desliza tareas ↔</div>
+</div>
 
 <div class="toggle" onclick="toggleMode()" id="modeBtn">🌙</div>
 
@@ -289,8 +345,6 @@ width:85%;
 
 <script>
 
-/* modo claro oscuro */
-
 function toggleMode(){
 
 const body=document.body
@@ -302,7 +356,15 @@ btn.innerHTML=body.classList.contains("light")?"☀️":"🌙"
 
 }
 
-/* crear tarea */
+function feedback(task){
+
+task.classList.add("move-feedback")
+
+setTimeout(()=>{
+task.classList.remove("move-feedback")
+},250)
+
+}
 
 function createTask(text,column){
 
@@ -311,8 +373,6 @@ const task=document.createElement("div")
 task.className="task"
 task.innerText=text
 task.draggable=true
-
-/* drag PC */
 
 task.addEventListener("dragstart",()=>{
 task.classList.add("dragging")
@@ -324,24 +384,9 @@ guardar()
 updateStats()
 })
 
-/* tap mover */
-
 task.addEventListener("click",()=>{
 
-const parent=task.parentElement.id
-
-if(parent==="todo"){
-document.getElementById("progress").appendChild(task)
-
-}else if(parent==="progress"){
-document.getElementById("done").appendChild(task)
-
-}else{
-document.getElementById("progress").appendChild(task)
-}
-
-guardar()
-updateStats()
+moveForward(task)
 
 })
 
@@ -367,8 +412,6 @@ moveForward(task)
 
 })
 
-/* editar */
-
 task.addEventListener("dblclick",()=>{
 
 const nuevo=prompt("Editar tarea:",task.innerText)
@@ -379,8 +422,6 @@ guardar()
 }
 
 })
-
-/* eliminar */
 
 task.addEventListener("contextmenu",(e)=>{
 
@@ -405,10 +446,12 @@ const parent=task.parentElement.id
 if(parent==="todo"){
 progress.appendChild(task)
 }
+
 else if(parent==="progress"){
 done.appendChild(task)
 }
 
+feedback(task)
 guardar()
 updateStats()
 
@@ -421,10 +464,12 @@ const parent=task.parentElement.id
 if(parent==="done"){
 progress.appendChild(task)
 }
+
 else if(parent==="progress"){
 todo.appendChild(task)
 }
 
+feedback(task)
 guardar()
 updateStats()
 
@@ -446,32 +491,11 @@ updateStats()
 
 }
 
-document.getElementById("taskInput").addEventListener("keypress",function(e){
+taskInput.addEventListener("keypress",function(e){
 
 if(e.key==="Enter"){
 addTask()
 }
-
-})
-
-document.querySelectorAll(".column").forEach(column=>{
-
-column.addEventListener("dragover",(e)=>{
-e.preventDefault()
-})
-
-column.addEventListener("drop",()=>{
-
-const dragging=document.querySelector(".dragging")
-
-if(!dragging) return
-
-column.querySelector("div").appendChild(dragging)
-
-guardar()
-updateStats()
-
-})
 
 })
 
@@ -523,6 +547,17 @@ data.done.forEach(t=>createTask(t,"done"))
 updateStats()
 
 }
+
+setTimeout(()=>{
+
+const demo=document.querySelector(".swipe-demo")
+
+if(demo){
+demo.style.opacity="0"
+demo.style.transition="0.6s"
+}
+
+},6000)
 
 cargar()
 
