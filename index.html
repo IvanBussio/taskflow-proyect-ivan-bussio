@@ -12,16 +12,12 @@
 
 <style>
 
-/* RESET */
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:'Inter',sans-serif;
 }
-
-/* BODY */
 
 body{
 
@@ -65,7 +61,7 @@ animation:auroraMove 15s ease infinite;
 
 }
 
-/* TITULOS */
+/* TITULO */
 
 h1{
 margin-top:40px;
@@ -192,15 +188,14 @@ body.light .column{
 background:#e5e7eb;
 }
 
-/* TAREAS */
+/* TAREAS MODO OSCURO */
 
 .task{
 
-background:#4b5563;
+background:#374151;
 color:white;
 
 padding:12px;
-
 border-radius:10px;
 
 margin-top:10px;
@@ -221,7 +216,16 @@ transition:all 0.2s ease;
 
 }
 
-/* HOVER PROFESIONAL */
+/* TAREAS MODO CLARO */
+
+body.light .task{
+
+background:#e5e7eb;
+color:#111;
+
+}
+
+/* HOVER */
 
 .task:hover{
 
@@ -231,7 +235,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.35);
 
 }
 
-/* BOTON VOLVER */
+/* BOTON VOLVER OSCURO */
 
 .back-btn{
 
@@ -241,10 +245,12 @@ border-radius:6px;
 cursor:pointer;
 font-size:12px;
 
-background:rgba(0,0,0,0.4);
+background:#1f2937;
 color:white;
 
 }
+
+/* BOTON VOLVER CLARO */
 
 body.light .back-btn{
 
