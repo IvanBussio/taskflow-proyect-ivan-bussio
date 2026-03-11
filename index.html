@@ -20,9 +20,7 @@ font-family:'Inter',sans-serif;
 }
 
 body{
-
 text-transform:uppercase;
-
 min-height:100vh;
 color:white;
 text-align:center;
@@ -35,7 +33,6 @@ radial-gradient(circle at 40% 80%, #9333ea, transparent 40%),
 
 background-size:200% 200%;
 animation:auroraMove 15s ease infinite;
-
 }
 
 @keyframes auroraMove{
@@ -45,7 +42,6 @@ animation:auroraMove 15s ease infinite;
 }
 
 body.light{
-
 color:#222;
 
 background:
@@ -56,7 +52,6 @@ radial-gradient(circle at 40% 80%, #7dd3fc, transparent 40%),
 
 background-size:200% 200%;
 animation:auroraMove 15s ease infinite;
-
 }
 
 h1{
@@ -91,12 +86,10 @@ flex-wrap:wrap;
 }
 
 .card{
-
 background:rgba(255,255,255,0.2);
 padding:20px;
 border-radius:12px;
 width:150px;
-
 }
 
 body.light .card{
@@ -104,14 +97,12 @@ background:white;
 }
 
 .progress-container{
-
 width:70%;
 height:10px;
 background:rgba(255,255,255,0.3);
 margin:20px auto;
 border-radius:10px;
 overflow:hidden;
-
 }
 
 body.light .progress-container{
@@ -129,43 +120,35 @@ margin:25px;
 }
 
 input{
-
 padding:10px;
 border:none;
 border-radius:8px;
 width:220px;
-
 }
 
 button{
-
 padding:10px 16px;
 border:none;
 border-radius:8px;
 background:#4dabf7;
 color:white;
 cursor:pointer;
-
 }
 
 .board{
-
 display:flex;
 justify-content:center;
 gap:30px;
 flex-wrap:wrap;
 padding-bottom:50px;
-
 }
 
 .column{
-
 background:rgba(255,255,255,0.1);
 padding:20px;
 border-radius:18px;
 width:260px;
 min-height:300px;
-
 }
 
 body.light .column{
@@ -173,60 +156,42 @@ background:#e5e7eb;
 }
 
 .task{
-
 background:#374151;
 color:white;
-
 padding:12px;
 border-radius:10px;
-
 margin-top:10px;
-
 display:flex;
 justify-content:space-between;
 align-items:center;
-
 cursor:pointer;
-
 box-shadow:0 5px 15px rgba(0,0,0,0.25);
-
 transition:all 0.2s ease;
-
 }
 
 body.light .task{
-
 background:#e5e7eb;
 color:#111;
-
 }
 
 .task:hover{
-
 transform:translateY(-4px) scale(1.02);
-
 box-shadow:0 10px 25px rgba(0,0,0,0.35);
-
 }
 
 .back-btn{
-
 border:none;
 padding:4px 8px;
 border-radius:6px;
 cursor:pointer;
 font-size:12px;
-
 background:#1f2937;
 color:white;
-
 }
 
 body.light .back-btn{
-
 background:#d1d5db;
 color:#111;
-
 }
 
 @media (max-width:768px){
@@ -278,11 +243,6 @@ width:85%;
 <h2 id="completedTasks">0</h2>
 </div>
 
-<div class="card">
-<p>EN CURSO</p>
-<h2 id="progressTasks">0</h2>
-</div>
-
 </div>
 
 <div class="progress-container">
@@ -318,17 +278,9 @@ width:85%;
 <script>
 
 function toggleMode(){
-
 document.body.classList.toggle("light")
-
 const btn=document.getElementById("modeBtn")
-
-if(document.body.classList.contains("light")){
-btn.innerHTML="☀️"
-}else{
-btn.innerHTML="🌙"
-}
-
+btn.innerHTML=document.body.classList.contains("light")?"☀️":"🌙"
 }
 
 function createTask(text,column){
@@ -342,7 +294,6 @@ label.innerText=text
 task.appendChild(label)
 
 if(column!=="todo"){
-
 const back=document.createElement("button")
 back.innerText="← VOLVER"
 back.className="back-btn"
@@ -353,32 +304,25 @@ moveBack(task)
 }
 
 task.appendChild(back)
-
 }
 
 task.onclick=()=>moveForward(task)
 
 label.ondblclick=()=>{
-
 const nuevo=prompt("EDITAR TAREA:",label.innerText)
-
 if(nuevo){
 label.innerText=nuevo.toUpperCase()
 guardar()
 }
-
 }
 
 task.oncontextmenu=(e)=>{
-
 e.preventDefault()
-
 if(confirm("ELIMINAR TAREA?")){
 task.remove()
 guardar()
 updateStats()
 }
-
 }
 
 document.getElementById(column).appendChild(task)
@@ -444,7 +388,6 @@ const total=todoCount+progressCount+doneCount
 
 totalTasks.innerText=total
 completedTasks.innerText=doneCount
-progressTasks.innerText=progressCount
 
 let percent=total?Math.round(doneCount/total*100):0
 
