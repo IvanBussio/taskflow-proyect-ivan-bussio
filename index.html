@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TaskFlow Dashboard</title>
+<title>TaskFlow</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -19,63 +20,134 @@ font-family:'Inter',sans-serif;
 }
 
 body{
-background:#0f172a;
+
 color:white;
 min-height:100vh;
+
+/* FONDO ANIMADO */
+
+background:
+radial-gradient(circle at 20% 20%, #4f46e5, transparent 40%),
+radial-gradient(circle at 80% 30%, #06b6d4, transparent 40%),
+radial-gradient(circle at 40% 80%, #9333ea, transparent 40%),
+#020617;
+
+background-size:200% 200%;
+animation:auroraMove 15s ease infinite;
+
+}
+
+/* ANIMACION */
+
+@keyframes auroraMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* MODO CLARO */
+
+body.light{
+
+color:#222;
+
+background:
+radial-gradient(circle at 20% 20%, #86efac, transparent 40%),
+radial-gradient(circle at 80% 30%, #f9a8d4, transparent 40%),
+radial-gradient(circle at 40% 80%, #7dd3fc, transparent 40%),
+#f8fafc;
+
 }
 
 /* NAVBAR */
 
 .navbar{
+
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 40px;
-background:#020617;
-border-bottom:1px solid #1e293b;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+
 }
 
 .logo{
+
 font-size:22px;
 font-weight:600;
 color:#60a5fa;
+
 }
 
 .menu a{
+
 margin:0 10px;
-color:#94a3b8;
+color:#cbd5f5;
 text-decoration:none;
+
 }
 
 .menu a:hover{
+
 color:white;
+
+}
+
+/* BOTON MODO */
+
+.mode-toggle{
+
+display:flex;
+gap:10px;
+
+}
+
+.mode-toggle button{
+
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+
 }
 
 /* CONTENEDOR */
 
 .container{
+
 max-width:900px;
 margin:40px auto;
 padding:20px;
+
 }
 
 /* CARDS */
 
 .card{
-background:#1e293b;
+
+background:rgba(30,41,59,0.9);
 padding:25px;
 border-radius:12px;
 margin-bottom:20px;
 box-shadow:0 10px 25px rgba(0,0,0,0.3);
+
+}
+
+body.light .card{
+background:white;
 }
 
 .card h2{
+
 margin-bottom:10px;
+
 }
 
-/* INPUT */
+/* INPUTS */
 
-input, textarea{
+input,textarea{
+
 width:100%;
 padding:12px;
 margin-top:10px;
@@ -83,9 +155,21 @@ border:none;
 border-radius:8px;
 background:#334155;
 color:white;
+
 }
 
+body.light input,
+body.light textarea{
+
+background:#e2e8f0;
+color:#111;
+
+}
+
+/* BOTONES */
+
 button{
+
 margin-top:10px;
 padding:10px 16px;
 border:none;
@@ -93,15 +177,19 @@ border-radius:8px;
 background:#3b82f6;
 color:white;
 cursor:pointer;
+
 }
 
 button:hover{
+
 background:#2563eb;
+
 }
 
 /* TAREAS */
 
 .task{
+
 background:#334155;
 padding:12px;
 border-radius:8px;
@@ -109,15 +197,24 @@ margin-top:10px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+
+}
+
+body.light .task{
+background:#e2e8f0;
 }
 
 .task.completed{
+
 background:#16a34a;
+
 }
 
 .actions button{
+
 margin-left:5px;
 padding:5px 10px;
+
 }
 
 </style>
@@ -128,12 +225,17 @@ padding:5px 10px;
 
 <div class="navbar">
 
-<div class="logo">TaskFlow</div>
+<div class="logo">TaskFlow Project</div>
 
 <div class="menu">
 <a href="#">Inicio</a>
 <a href="#">Tareas</a>
 <a href="#">Perfil</a>
+</div>
+
+<div class="mode-toggle">
+<button onclick="setDark()">🌙</button>
+<button onclick="setLight()">☀️</button>
 </div>
 
 </div>
@@ -144,7 +246,7 @@ padding:5px 10px;
 
 <h2>Bienvenido a TaskFlow</h2>
 
-<p>Organiza tus tareas y mantén tu productividad bajo control.</p>
+<p>Gestiona tus tareas, organiza tu flujo de trabajo y mantén todo bajo control con una interfaz clara y moderna.</p>
 
 </div>
 
@@ -172,6 +274,22 @@ padding:5px 10px;
 
 <script>
 
+/* MODOS */
+
+function setLight(){
+
+document.body.classList.add("light")
+
+}
+
+function setDark(){
+
+document.body.classList.remove("light")
+
+}
+
+/* TAREAS */
+
 function addTask(){
 
 const title=document.getElementById("title").value
@@ -183,15 +301,21 @@ const task=document.createElement("div")
 task.className="task"
 
 task.innerHTML=`
+
 <div>
+
 <strong>${title}</strong>
 <p>${desc}</p>
+
 </div>
 
 <div class="actions">
+
 <button onclick="completeTask(this)">✔</button>
 <button onclick="deleteTask(this)">🗑</button>
+
 </div>
+
 `
 
 document.getElementById("tasks").appendChild(task)
