@@ -25,47 +25,46 @@ localStorage.setItem("tasks", JSON.stringify(tasks));
 
 function render(){
 
-list.innerHTML = "";
+list.innerHTML="";
 
-let filtered = [...tasks];
+let filtered=[...tasks];
 
-if(filter === "pending") filtered = filtered.filter(t => !t.completed);
-if(filter === "done") filtered = filtered.filter(t => t.completed);
+if(filter==="pending") filtered=filtered.filter(t=>!t.completed);
+if(filter==="done") filtered=filtered.filter(t=>t.completed);
 
-const query = search.value.toLowerCase();
+const query=search.value.toLowerCase();
 
-filtered = filtered.filter(t => t.title.toLowerCase().includes(query));
+filtered=filtered.filter(t=>t.title.toLowerCase().includes(query));
 
 filtered.forEach((task,index)=>{
 
-const li = document.createElement("li");
+const li=document.createElement("li");
 
-li.className =
-"flex justify-between items-center bg-white/90 dark:bg-gray-700 p-3 rounded shadow";
+li.className="flex justify-between items-center bg-white/90 dark:bg-gray-700 p-3 rounded shadow";
 
-const text = document.createElement("span");
+const text=document.createElement("span");
 
-text.textContent = task.title;
+text.textContent=task.title;
 
 if(task.completed) text.classList.add("completed");
 
-const actions = document.createElement("div");
+const actions=document.createElement("div");
 
-const complete = document.createElement("button");
-complete.textContent = "✔";
+const complete=document.createElement("button");
+complete.textContent="✔";
 complete.className="bg-green-500 text-white px-2 py-1 rounded";
 
-complete.onclick = () => {
+complete.onclick=()=>{
 task.completed=!task.completed;
 saveTasks();
 render();
 };
 
-const del = document.createElement("button");
+const del=document.createElement("button");
 del.textContent="🗑";
 del.className="bg-red-500 text-white px-2 py-1 rounded ml-2";
 
-del.onclick = () => {
+del.onclick=()=>{
 tasks.splice(index,1);
 saveTasks();
 render();
@@ -89,10 +88,10 @@ updateStats();
 
 function updateStats(){
 
-const total = tasks.length;
-const done = tasks.filter(t=>t.completed).length;
+const total=tasks.length;
+const done=tasks.filter(t=>t.completed).length;
 
-stats.textContent = `Completadas ${done} de ${total}`;
+stats.textContent=`Completadas ${done} de ${total}`;
 
 }
 
@@ -100,7 +99,7 @@ stats.textContent = `Completadas ${done} de ${total}`;
 
 addBtn.addEventListener("click",()=>{
 
-const title = input.value.trim();
+const title=input.value.trim();
 
 if(title==="") return;
 
@@ -120,7 +119,7 @@ tasks.sort((a,b)=>a.title.localeCompare(b.title));
 render();
 });
 
-/* FILTERS */
+/* FILTER */
 
 document.getElementById("filterAll").onclick=()=>{filter="all";render();}
 document.getElementById("filterPending").onclick=()=>{filter="pending";render();}
@@ -132,13 +131,13 @@ search.addEventListener("input",render);
 
 /* DARK MODE */
 
-const toggle = document.getElementById("themeToggle");
+const toggle=document.getElementById("themeToggle");
 
 function loadTheme(){
-const saved = localStorage.getItem("theme");
+const saved=localStorage.getItem("theme");
 if(saved){
-document.body.className = saved;
-toggle.textContent = saved==="dark"?"☀️":"🌙";
+document.body.className=saved;
+toggle.textContent=saved==="dark"?"☀️":"🌙";
 }
 }
 
