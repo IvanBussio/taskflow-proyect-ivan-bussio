@@ -4,28 +4,23 @@
 
 Este documento recopila diferentes prompts utilizados durante el desarrollo del proyecto TaskFlow.
 
-El objetivo es experimentar con distintas técnicas de prompt engineering para analizar cómo influyen en la calidad de las respuestas generadas por la inteligencia artificial.
+El objetivo es analizar cómo la forma en que se formulan las preguntas a la inteligencia artificial afecta la calidad de las respuestas generadas.
 
-Se probaron diferentes tipos de prompts, incluyendo:
-
-- prompts con rol definido
-- prompts con ejemplos (few-shot prompting)
-- prompts que piden razonamiento paso a paso
-- prompts con restricciones claras
+Se probaron distintas técnicas de prompt engineering, como definir roles, proporcionar ejemplos, pedir razonamiento paso a paso y establecer restricciones claras.
 
 ---
 
 # Prompts utilizados
 
-## Prompt 1 – Rol de desarrollador senior
+## Prompt 1 – Definir un rol
 
 Prompt:
 
-Actúa como un desarrollador senior de JavaScript. Refactoriza la siguiente función para mejorar su legibilidad y eficiencia.
+Actúa como un desarrollador senior de JavaScript. Refactoriza la siguiente función para mejorar su legibilidad.
 
 Por qué funciona:
 
-Definir un rol ayuda a la IA a generar respuestas más profesionales y estructuradas.
+Al definir un rol, la IA genera respuestas más estructuradas y profesionales.
 
 ---
 
@@ -37,19 +32,19 @@ Create a JavaScript function that filters completed tasks from an array of tasks
 
 Por qué funciona:
 
-Es un prompt claro y directo que permite generar rápidamente una función útil para el proyecto.
+Es un prompt claro y específico que genera rápidamente una función útil para el proyecto.
 
 ---
 
-## Prompt 3 – Explicación de código
+## Prompt 3 – Explicación paso a paso
 
 Prompt:
 
-Explain what this JavaScript function does step by step.
+Explain step by step how this JavaScript function works.
 
 Por qué funciona:
 
-Pedir una explicación paso a paso facilita entender mejor el funcionamiento del código.
+Pedir razonamiento paso a paso ayuda a comprender mejor el funcionamiento del código.
 
 ---
 
@@ -61,7 +56,7 @@ Find the bug in this JavaScript function and explain why it happens.
 
 Por qué funciona:
 
-Permite utilizar la IA para detectar errores y comprender mejor los problemas en el código.
+Permite usar la IA como herramienta para detectar errores en el código.
 
 ---
 
@@ -69,26 +64,27 @@ Permite utilizar la IA para detectar errores y comprender mejor los problemas en
 
 Prompt:
 
-Improve this JavaScript function by making it more readable and adding comments.
+Improve this JavaScript function and add comments explaining the code.
 
 Por qué funciona:
 
-La IA puede ayudar a mejorar la calidad del código y añadir documentación.
+La IA puede mejorar la legibilidad del código y añadir documentación.
 
 ---
 
-## Prompt 6 – Restricciones claras
+## Prompt 6 – Restricciones
 
 Prompt:
 
-Create a JavaScript function to sort tasks alphabetically.  
+Create a JavaScript function to sort tasks alphabetically.
+
 Constraints:
-- use modern JavaScript
-- maximum 15 lines of code
+- Use modern JavaScript
+- Maximum 15 lines
 
 Por qué funciona:
 
-Las restricciones ayudan a obtener respuestas más específicas.
+Las restricciones ayudan a obtener respuestas más precisas.
 
 ---
 
@@ -96,11 +92,11 @@ Las restricciones ayudan a obtener respuestas más específicas.
 
 Prompt:
 
-Write a JSDoc comment for this function.
+Write a JSDoc comment for this JavaScript function.
 
 Por qué funciona:
 
-Permite generar documentación clara para el código.
+Permite generar documentación automáticamente.
 
 ---
 
@@ -112,11 +108,11 @@ Explain what the JavaScript event loop is in simple terms.
 
 Por qué funciona:
 
-Permite comprender conceptos complejos de forma sencilla.
+Ayuda a comprender conceptos complejos de programación.
 
 ---
 
-## Prompt 9 – Generación de nuevas funcionalidades
+## Prompt 9 – Ideas de mejora
 
 Prompt:
 
@@ -124,7 +120,7 @@ Suggest new features for a task management application.
 
 Por qué funciona:
 
-Ayuda a generar ideas para mejorar el proyecto.
+Permite generar ideas para ampliar el proyecto.
 
 ---
 
@@ -132,8 +128,8 @@ Ayuda a generar ideas para mejorar el proyecto.
 
 Prompt:
 
-Refactor this code to follow better JavaScript practices.
+Refactor this code to follow best JavaScript practices.
 
 Por qué funciona:
 
-Permite mejorar la estructura del código y aplicar buenas prácticas.
+Permite mejorar la calidad del código y aplicar buenas prácticas.
