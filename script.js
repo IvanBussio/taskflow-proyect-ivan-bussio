@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 let tasks = [];
 
 const input = document.getElementById("taskInput");
@@ -7,26 +9,21 @@ const list = document.getElementById("taskList");
 /* cargar tareas */
 
 function loadTasks(){
-
 const saved = localStorage.getItem("tasks");
-
 if(saved){
 tasks = JSON.parse(saved);
 }
-
 }
 
 /* guardar */
 
 function saveTasks(){
-
 localStorage.setItem("tasks", JSON.stringify(tasks));
-
 }
 
-/* render */
+/* renderizar */
 
-function renderTasks(){
+function render(){
 
 list.innerHTML = "";
 
@@ -35,7 +32,7 @@ tasks.forEach((task,index)=>{
 const li = document.createElement("li");
 
 li.className =
-"flex justify-between items-center bg-white/80 p-3 rounded-lg shadow";
+"flex justify-between items-center bg-white/80 p-3 rounded shadow";
 
 const text = document.createElement("span");
 
@@ -45,48 +42,46 @@ if(task.completed){
 text.classList.add("line-through","text-red-500");
 }
 
-/* botones */
-
-const actions = document.createElement("div");
-
 /* completar */
 
-const completeBtn = document.createElement("button");
+const complete = document.createElement("button");
 
-completeBtn.textContent = "✔";
+complete.textContent = "✔";
 
-completeBtn.className =
+complete.className =
 "bg-green-500 text-white px-2 py-1 rounded";
 
-completeBtn.onclick = ()=>{
+complete.onclick = () => {
 
 task.completed = !task.completed;
 
 saveTasks();
-renderTasks();
+render();
 
 };
 
 /* eliminar */
 
-const deleteBtn = document.createElement("button");
+const del = document.createElement("button");
 
-deleteBtn.textContent = "🗑";
+del.textContent = "🗑";
 
-deleteBtn.className =
+del.className =
 "bg-red-500 text-white px-2 py-1 rounded ml-2";
 
-deleteBtn.onclick = ()=>{
+del.onclick = () => {
 
 tasks.splice(index,1);
 
 saveTasks();
-renderTasks();
+render();
 
 };
 
-actions.appendChild(completeBtn);
-actions.appendChild(deleteBtn);
+const actions = document.createElement("div");
+
+actions.appendChild(complete);
+actions.appendChild(del);
 
 li.appendChild(text);
 li.appendChild(actions);
@@ -99,7 +94,7 @@ list.appendChild(li);
 
 /* añadir tarea */
 
-button.addEventListener("click",()=>{
+button.addEventListener("click", () => {
 
 const title = input.value.trim();
 
@@ -113,11 +108,13 @@ completed:false
 input.value = "";
 
 saveTasks();
-renderTasks();
+render();
 
 });
 
 /* iniciar */
 
 loadTasks();
-renderTasks();
+render();
+
+});
