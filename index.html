@@ -11,8 +11,6 @@
 
 <style>
 
-/* aurora background */
-
 body.light{
 background:linear-gradient(270deg,#74ebd5,#ACB6E5,#74ebd5);
 background-size:600% 600%;
@@ -47,9 +45,7 @@ animation:bg 18s ease infinite;
 
 <div class="w-full max-w-3xl space-y-6">
 
-<!-- Crear tarea -->
-
-<div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
+<div class="bg-white/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
 
 <h2 class="text-xl font-semibold mb-4">Crear nueva tarea</h2>
 
@@ -68,9 +64,7 @@ Añadir tarea
 
 </div>
 
-<!-- Lista -->
-
-<div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
+<div class="bg-white/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
 
 <h2 class="text-xl font-semibold mb-4">Tus tareas</h2>
 
@@ -82,15 +76,15 @@ class="w-full p-2 rounded-lg border border-gray-300 mb-4"
 
 <div class="flex gap-2 mb-4 flex-wrap">
 
-<button onclick="filterTasks('all',this)" class="px-3 py-1 bg-gray-200 rounded-lg">
+<button onclick="filterTasks('all')" class="px-3 py-1 bg-gray-200 rounded-lg">
 Todas
 </button>
 
-<button onclick="filterTasks('pending',this)" class="px-3 py-1 bg-gray-200 rounded-lg">
+<button onclick="filterTasks('pending')" class="px-3 py-1 bg-gray-200 rounded-lg">
 Pendientes
 </button>
 
-<button onclick="filterTasks('completed',this)" class="px-3 py-1 bg-gray-200 rounded-lg">
+<button onclick="filterTasks('completed')" class="px-3 py-1 bg-gray-200 rounded-lg">
 Completadas
 </button>
 
@@ -106,206 +100,7 @@ Orden A-Z
 
 </div>
 
-<script>
-
-let tasks = [];
-let currentFilter = "all";
-
-/* STORAGE */
-
-function saveTasks(){
-localStorage.setItem("tasks",JSON.stringify(tasks));
-}
-
-function loadTasks(){
-
-const saved = localStorage.getItem("tasks");
-
-if(saved){
-tasks = JSON.parse(saved);
-}
-
-}
-
-loadTasks();
-
-/* ADD TASK */
-
-function addTask(){
-
-const title = document.getElementById("taskTitle").value.trim();
-
-if(title==="") return;
-
-tasks.push({
-title:title,
-completed:false
-});
-
-document.getElementById("taskTitle").value="";
-
-saveTasks();
-renderTasks();
-
-}
-
-/* RENDER */
-
-function renderTasks(){
-
-const list = document.getElementById("taskList");
-list.innerHTML="";
-
-let filtered=[...tasks];
-
-if(currentFilter==="completed"){
-filtered=filtered.filter(t=>t.completed);
-}
-
-if(currentFilter==="pending"){
-filtered=filtered.filter(t=>!t.completed);
-}
-
-const search=document.getElementById("searchTask").value.toLowerCase();
-
-filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
-
-filtered.forEach((task,index)=>{
-
-const div=document.createElement("div");
-
-div.className="flex justify-between items-center p-3 rounded-lg bg-white/60 shadow";
-
-const text=document.createElement("span");
-
-text.textContent=task.title;
-
-if(task.completed){
-text.classList.add("line-through","text-red-500");
-}
-
-/* BOTONES */
-
-const actions=document.createElement("div");
-
-const completeBtn=document.createElement("button");
-
-completeBtn.textContent=task.completed?"↩":"✔";
-
-completeBtn.className="bg-green-500 text-white px-2 py-1 rounded";
-
-completeBtn.onclick=()=>{
-
-task.completed=!task.completed;
-
-saveTasks();
-renderTasks();
-
-};
-
-const editBtn=document.createElement("button");
-
-editBtn.textContent="✏️";
-
-editBtn.className="bg-yellow-400 text-white px-2 py-1 rounded ml-2";
-
-editBtn.onclick=()=>{
-
-const newText=prompt("Editar tarea:",task.title);
-
-if(newText){
-
-task.title=newText;
-
-saveTasks();
-renderTasks();
-
-}
-
-};
-
-const deleteBtn=document.createElement("button");
-
-deleteBtn.textContent="🗑";
-
-deleteBtn.className="bg-red-500 text-white px-2 py-1 rounded ml-2";
-
-deleteBtn.onclick=()=>{
-
-tasks.splice(index,1);
-
-saveTasks();
-renderTasks();
-
-};
-
-actions.appendChild(completeBtn);
-actions.appendChild(editBtn);
-actions.appendChild(deleteBtn);
-
-div.appendChild(text);
-div.appendChild(actions);
-
-list.appendChild(div);
-
-});
-
-}
-
-/* SEARCH */
-
-document.getElementById("searchTask").addEventListener("input",renderTasks);
-
-/* FILTER */
-
-function filterTasks(type){
-
-currentFilter=type;
-
-renderTasks();
-
-}
-
-/* SORT */
-
-function sortTasks(){
-
-tasks.sort((a,b)=>a.title.localeCompare(b.title));
-
-saveTasks();
-renderTasks();
-
-}
-
-/* THEME */
-
-const toggle=document.getElementById("themeToggle");
-
-toggle.onclick=()=>{
-
-const body=document.body;
-
-if(body.classList.contains("light")){
-
-body.classList.remove("light");
-body.classList.add("dark");
-
-toggle.textContent="☀️";
-
-}else{
-
-body.classList.remove("dark");
-body.classList.add("light");
-
-toggle.textContent="🌙";
-
-}
-
-};
-
-renderTasks();
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>

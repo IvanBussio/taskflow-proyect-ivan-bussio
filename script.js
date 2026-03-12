@@ -1,12 +1,10 @@
 let tasks = [];
 let currentFilter = "all";
 
-/* ============================= */
-/* LOCAL STORAGE */
-/* ============================= */
+/* STORAGE */
 
 function saveTasks(){
-localStorage.setItem("tasks", JSON.stringify(tasks));
+localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
 function loadTasks(){
@@ -19,125 +17,132 @@ tasks = JSON.parse(saved);
 
 }
 
-/* ============================= */
-/* INICIO */
-/* ============================= */
-
 loadTasks();
 
-/* ============================= */
-/* CREAR TAREA */
-/* ============================= */
+/* ADD TASK */
 
 function addTask(){
 
-const title = document.getElementById("taskTitle").value.trim();
+const input = document.getElementById("taskTitle");
+
+const title = input.value.trim();
 
 if(title === "") return;
 
-tasks.push({
+const newTask = {
+id: Date.now(),
 title: title,
-completed: false
-});
+completed:false
+};
 
-document.getElementById("taskTitle").value = "";
+tasks.push(newTask);
+
+input.value="";
 
 saveTasks();
+
 renderTasks();
 
 }
 
-/* ============================= */
-/* RENDER TAREAS */
-/* ============================= */
+/* RENDER */
 
 function renderTasks(){
 
 const list = document.getElementById("taskList");
-list.innerHTML = "";
 
-let filtered = [...tasks];
+list.innerHTML="";
 
-if(currentFilter === "completed"){
-filtered = filtered.filter(t => t.completed);
+let filtered=[...tasks];
+
+if(currentFilter==="completed"){
+filtered=filtered.filter(t=>t.completed);
 }
 
-if(currentFilter === "pending"){
-filtered = filtered.filter(t => !t.completed);
+if(currentFilter==="pending"){
+filtered=filtered.filter(t=>!t.completed);
 }
 
-const search = document.getElementById("searchTask").value.toLowerCase();
+const search=document.getElementById("searchTask").value.toLowerCase();
 
-filtered = filtered.filter(t =>
-t.title.toLowerCase().includes(search)
-);
+filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
 
-filtered.forEach((task,index)=>{
+filtered.forEach((task)=>{
 
-const div = document.createElement("div");
-div.className = "task";
+const div=document.createElement("div");
 
-const text = document.createElement("span");
-text.textContent = task.title;
+div.className="flex justify-between items-center p-3 rounded-lg bg-white/60 shadow";
+
+const text=document.createElement("span");
+
+text.textContent=task.title;
 
 if(task.completed){
-text.classList.add("completed");
+text.classList.add("line-through","text-red-500");
 }
 
-/* BOTONES */
+const actions=document.createElement("div");
 
-const actions = document.createElement("div");
+/* COMPLETE */
 
-/* COMPLETAR */
+const completeBtn=document.createElement("button");
 
-const completeBtn = document.createElement("button");
+completeBtn.textContent=task.completed?"↩":"✔";
 
-completeBtn.textContent = task.completed ? "↩" : "✔";
-completeBtn.style.background = task.completed ? "#6b7280" : "#22c55e";
+completeBtn.className="bg-green-500 text-white px-2 py-1 rounded";
 
-completeBtn.onclick = () => {
+completeBtn.onclick=()=>{
 
-task.completed = !task.completed;
+const target=tasks.find(t=>t.id===task.id);
+
+target.completed=!target.completed;
 
 saveTasks();
+
 renderTasks();
 
 };
 
-/* EDITAR */
+/* EDIT */
 
-const editBtn = document.createElement("button");
+const editBtn=document.createElement("button");
 
-editBtn.textContent = "✏️";
-editBtn.style.background = "#eab308";
+editBtn.textContent="✏️";
 
-editBtn.onclick = () => {
+editBtn.className="bg-yellow-400 text-white px-2 py-1 rounded ml-2";
 
-const newText = prompt("Editar tarea:", task.title);
+editBtn.onclick=()=>{
+
+const newText=prompt("Editar tarea:",task.title);
 
 if(newText){
 
-task.title = newText;
+const target=tasks.find(t=>t.id===task.id);
+
+target.title=newText;
 
 saveTasks();
+
 renderTasks();
 
 }
 
 };
 
-/* ELIMINAR */
+/* DELETE */
 
-const deleteBtn = document.createElement("button");
+const deleteBtn=document.createElement("button");
 
-deleteBtn.textContent = "🗑";
-deleteBtn.style.background = "#ef4444";
+deleteBtn.textContent="🗑";
 
-deleteBtn.onclick = () => {
+deleteBtn.className="bg-red-500 text-white px-2 py-1 rounded ml-2";
 
-tasks.splice(index,1);
+deleteBtn.onclick=()=>{
+
+tasks=tasks.filter(t=>t.id!==task.id);
 
 saveTasks();
+
 renderTasks();
 
 };
@@ -155,76 +160,58 @@ list.appendChild(div);
 
 }
 
-/* ============================= */
-/* BUSCAR */
-/* ============================= */
+/* SEARCH */
 
-document.getElementById("searchTask").addEventListener("input",renderTasks);
+document
+.getElementById("searchTask")
+.addEventListener("input",renderTasks);
 
-/* ============================= */
-/* FILTROS */
-/* ============================= */
+/* FILTER */
 
-function filterTasks(type,btn){
+function filterTasks(type){
 
-currentFilter = type;
-
-document.querySelectorAll(".filters button").forEach(b =>
-b.classList.remove("active")
-);
-
-btn.classList.add("active");
+currentFilter=type;
 
 renderTasks();
 
 }
 
-/* ============================= */
-/* ORDENAR */
-/* ============================= */
+/* SORT */
 
 function sortTasks(){
 
-tasks.sort((a,b)=>
-a.title.localeCompare(b.title)
-);
+tasks.sort((a,b)=>a.title.localeCompare(b.title));
 
 saveTasks();
+
 renderTasks();
 
 }
 
-/* ============================= */
-/* TEMA OSCURO / CLARO */
-/* ============================= */
+/* THEME */
 
-const toggle = document.getElementById("themeToggle");
+const toggle=document.getElementById("themeToggle");
 
-toggle.onclick = () => {
+toggle.onclick=()=>{
 
-const body = document.body;
+const body=document.body;
 
 if(body.classList.contains("light")){
 
 body.classList.remove("light");
 body.classList.add("dark");
 
-toggle.textContent = "☀️";
+toggle.textContent="☀️";
 
-}
-else{
+}else{
 
 body.classList.remove("dark");
 body.classList.add("light");
 
-toggle.textContent = "🌙";
+toggle.textContent="🌙";
 
 }
 
 };
-
-/* ============================= */
-/* CARGAR TAREAS */
-/* ============================= */
 
 renderTasks();
