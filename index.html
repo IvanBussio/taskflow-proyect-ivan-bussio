@@ -1,81 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TaskFlow</title>
+<title>TaskFlow Project</title>
 
 <style>
 
 body{
-font-family: Arial, sans-serif;
 margin:0;
-padding:0;
+font-family:Arial, Helvetica, sans-serif;
 min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
 transition:0.3s;
 }
 
 /* fondo animado */
 
 body.light{
-background: linear-gradient(270deg,#74ebd5,#acb6e5,#74ebd5);
+background:linear-gradient(270deg,#0f2027,#203a43,#2c5364);
 background-size:600% 600%;
-animation:gradient 12s ease infinite;
-color:black;
-}
-
-body.dark{
-background: linear-gradient(270deg,#1f1c2c,#928dab,#1f1c2c);
-background-size:600% 600%;
-animation:gradient 12s ease infinite;
+animation:bg 15s ease infinite;
 color:white;
 }
 
-@keyframes gradient{
+body.dark{
+background:linear-gradient(270deg,#000000,#232526,#414345);
+background-size:600% 600%;
+animation:bg 15s ease infinite;
+color:white;
+}
+
+@keyframes bg{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
 
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+font-size:22px;
+font-weight:bold;
+}
+
 .container{
-background:rgba(255,255,255,0.2);
-backdrop-filter:blur(10px);
-padding:30px;
-border-radius:12px;
-width:400px;
-text-align:center;
+max-width:700px;
+margin:40px auto;
 }
 
-.dark .container{
-background:rgba(0,0,0,0.4);
+.card{
+background:rgba(20,30,40,0.8);
+padding:25px;
+border-radius:10px;
+margin-bottom:20px;
 }
 
-input{
-padding:8px;
-margin:5px;
-width:70%;
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+border:none;
+background:#3a4452;
+color:white;
 }
 
 button{
-padding:6px 10px;
-margin:3px;
+padding:8px 14px;
+border:none;
+border-radius:6px;
 cursor:pointer;
+margin-top:10px;
 }
 
-ul{
-list-style:none;
-padding:0;
+.primary{
+background:#3b82f6;
+color:white;
 }
 
-li{
+.filters button{
+background:#4b5563;
+color:white;
+margin-right:5px;
+}
+
+.filters button.active{
+background:#3b82f6;
+}
+
+.task{
 display:flex;
 justify-content:space-between;
-padding:6px;
-border-bottom:1px solid rgba(0,0,0,0.2);
+padding:8px;
+border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
 .completed{
@@ -84,11 +105,8 @@ opacity:0.6;
 }
 
 .toggle{
-position:absolute;
-top:20px;
-right:20px;
-font-size:22px;
 cursor:pointer;
+font-size:20px;
 }
 
 </style>
@@ -97,67 +115,117 @@ cursor:pointer;
 
 <body class="light">
 
+<header>
+
+TaskFlow Project
+
 <div class="toggle" id="themeToggle">🌙</div>
+
+</header>
 
 <div class="container">
 
-<h2>TaskFlow</h2>
+<div class="card">
 
-<input id="taskInput" placeholder="Add a new task...">
-<button onclick="addTask()">Add</button>
+<h3>Bienvenido a TaskFlow</h3>
+<p>Gestiona tus tareas, organiza tu flujo de trabajo y mantén todo bajo control con una interfaz clara y moderna.</p>
 
-<br>
+</div>
 
-<input id="searchTask" placeholder="Search tasks...">
+<div class="card">
 
-<br>
+<h3>Crear nueva tarea</h3>
 
-<button onclick="filterTasks('all')">All</button>
-<button onclick="filterTasks('completed')">Completed</button>
-<button onclick="filterTasks('pending')">Pending</button>
+<input id="taskTitle" placeholder="Título de la tarea">
 
-<button onclick="sortTasks()">Sort A-Z</button>
+<textarea id="taskDescription" placeholder="Descripción"></textarea>
 
-<ul id="taskList"></ul>
+<button class="primary" onclick="addTask()">Añadir tarea</button>
+
+</div>
+
+<div class="card">
+
+<h3>Tus tareas</h3>
+
+<input id="searchTask" placeholder="Buscar tareas...">
+
+<div class="filters">
+
+<button onclick="filterTasks('all')" class="active">Todas</button>
+<button onclick="filterTasks('pending')">Pendientes</button>
+<button onclick="filterTasks('completed')">Completadas</button>
+
+<button onclick="sortTasks()">Orden A-Z</button>
+
+</div>
+
+<div id="taskList"></div>
+
+</div>
 
 </div>
 
 <script>
 
 let tasks=[];
+let currentFilter="all";
 
 function addTask(){
 
-const input=document.getElementById("taskInput");
-const text=input.value.trim();
+const title=document.getElementById("taskTitle").value.trim();
+const desc=document.getElementById("taskDescription").value.trim();
 
-if(text==="") return;
+if(title==="") return;
 
-tasks.push({text,completed:false});
-input.value="";
+tasks.push({
+title,
+desc,
+completed:false
+});
+
+document.getElementById("taskTitle").value="";
+document.getElementById("taskDescription").value="";
+
 renderTasks();
+
 }
 
-function renderTasks(list=tasks){
+function renderTasks(){
 
-const ul=document.getElementById("taskList");
-ul.innerHTML="";
+const list=document.getElementById("taskList");
+list.innerHTML="";
 
-list.forEach((task,index)=>{
+let filtered=[...tasks];
 
-const li=document.createElement("li");
+if(currentFilter==="completed"){
+filtered=filtered.filter(t=>t.completed);
+}
 
-const span=document.createElement("span");
-span.textContent=task.text;
+if(currentFilter==="pending"){
+filtered=filtered.filter(t=>!t.completed);
+}
+
+const search=document.getElementById("searchTask").value.toLowerCase();
+
+filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
+
+filtered.forEach((task,index)=>{
+
+const div=document.createElement("div");
+div.className="task";
+
+const text=document.createElement("span");
+text.textContent=task.title;
 
 if(task.completed){
-span.classList.add("completed");
+text.classList.add("completed");
 }
 
-span.onclick=()=>{
+text.onclick=()=>{
 task.completed=!task.completed;
 renderTasks();
-}
+};
 
 const del=document.createElement("button");
 del.textContent="X";
@@ -165,53 +233,40 @@ del.textContent="X";
 del.onclick=()=>{
 tasks.splice(index,1);
 renderTasks();
-}
+};
 
-li.appendChild(span);
-li.appendChild(del);
+div.appendChild(text);
+div.appendChild(del);
 
-ul.appendChild(li);
-
-});
-
-}
-
-document.getElementById("searchTask").addEventListener("input",function(){
-
-const q=this.value.toLowerCase();
-
-const filtered=tasks.filter(t=>
-t.text.toLowerCase().includes(q)
-);
-
-renderTasks(filtered);
+list.appendChild(div);
 
 });
+
+}
+
+document.getElementById("searchTask").addEventListener("input",renderTasks);
 
 function filterTasks(type){
 
-if(type==="completed"){
-renderTasks(tasks.filter(t=>t.completed));
-}
+currentFilter=type;
 
-else if(type==="pending"){
-renderTasks(tasks.filter(t=>!t.completed));
-}
+document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
 
-else{
+event.target.classList.add("active");
+
 renderTasks();
-}
 
 }
 
 function sortTasks(){
 
-tasks.sort((a,b)=>a.text.localeCompare(b.text));
+tasks.sort((a,b)=>a.title.localeCompare(b.title));
+
 renderTasks();
 
 }
 
-/* modo oscuro / claro */
+/* dark / light toggle */
 
 const toggle=document.getElementById("themeToggle");
 
@@ -224,7 +279,6 @@ body.classList.remove("light");
 body.classList.add("dark");
 toggle.textContent="☀️";
 }
-
 else{
 body.classList.remove("dark");
 body.classList.add("light");
