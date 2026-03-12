@@ -11,19 +11,6 @@ La comparación incluirá:
 - generación de funciones en JavaScript
 
 El objetivo es analizar qué asistente proporciona explicaciones más claras, mejor calidad de código y respuestas más útiles para el desarrollo de software.
-# Comparación de IA: ChatGPT vs Claude
-
-## Objetivo
-
-En este documento voy a comparar dos asistentes de inteligencia artificial (ChatGPT y Claude) al realizar tareas relacionadas con programación.
-
-La comparación incluirá:
-
-- explicación de conceptos técnicos
-- detección de errores (bugs) en código
-- generación de funciones en JavaScript
-
-El objetivo es analizar qué asistente proporciona explicaciones más claras, mejor calidad de código y respuestas más útiles para el desarrollo de software.
 
 ---
 
