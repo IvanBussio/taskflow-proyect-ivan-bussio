@@ -6,7 +6,9 @@ const input = document.getElementById("taskInput");
 const button = document.getElementById("addTaskBtn");
 const list = document.getElementById("taskList");
 
-/* cargar tareas */
+/* ======================
+   STORAGE TAREAS
+====================== */
 
 function loadTasks(){
 const saved = localStorage.getItem("tasks");
@@ -15,13 +17,13 @@ tasks = JSON.parse(saved);
 }
 }
 
-/* guardar */
-
 function saveTasks(){
 localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-/* renderizar */
+/* ======================
+   RENDER
+====================== */
 
 function render(){
 
@@ -32,17 +34,17 @@ tasks.forEach((task,index)=>{
 const li = document.createElement("li");
 
 li.className =
-"flex justify-between items-center bg-white/80 p-3 rounded shadow";
+"flex justify-between items-center bg-white/90 p-3 rounded shadow hover:shadow-lg transition";
 
 const text = document.createElement("span");
 
 text.textContent = task.title;
 
 if(task.completed){
-text.classList.add("line-through","text-red-500");
+text.classList.add("completed");
 }
 
-/* completar */
+/* BOTÓN COMPLETAR */
 
 const complete = document.createElement("button");
 
@@ -60,7 +62,7 @@ render();
 
 };
 
-/* eliminar */
+/* BOTÓN ELIMINAR */
 
 const del = document.createElement("button");
 
@@ -92,7 +94,9 @@ list.appendChild(li);
 
 }
 
-/* añadir tarea */
+/* ======================
+   AÑADIR TAREA
+====================== */
 
 button.addEventListener("click", () => {
 
@@ -112,9 +116,53 @@ render();
 
 });
 
-/* iniciar */
+/* ======================
+   MODO OSCURO / CLARO
+====================== */
+
+const toggle = document.getElementById("themeToggle");
+
+function loadTheme(){
+
+const savedTheme = localStorage.getItem("theme");
+
+if(savedTheme){
+document.body.className = savedTheme;
+toggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+}
+
+}
+
+toggle.addEventListener("click", () => {
+
+if(document.body.classList.contains("light")){
+
+document.body.classList.remove("light");
+document.body.classList.add("dark");
+
+toggle.textContent = "☀️";
+
+localStorage.setItem("theme","dark");
+
+}else{
+
+document.body.classList.remove("dark");
+document.body.classList.add("light");
+
+toggle.textContent = "🌙";
+
+localStorage.setItem("theme","light");
+
+}
+
+});
+
+/* ======================
+   INIT
+====================== */
 
 loadTasks();
+loadTheme();
 render();
 
 });
