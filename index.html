@@ -7,307 +7,100 @@
 
 <title>TaskFlow</title>
 
+<script src="https://cdn.tailwindcss.com"></script>
+
 <style>
 
-/* BASE */
-
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-min-height:100vh;
-transition:0.6s;
-overflow-x:hidden;
-}
-
-/* AURORA BACKGROUND */
-
-.aurora-background{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-overflow:hidden;
-}
-
-.aurora{
-position:absolute;
-width:120%;
-height:120%;
-filter:blur(120px);
-animation:auroraMove 20s infinite alternate ease-in-out;
-}
-
-@keyframes auroraMove{
-
-0%{transform:translate(-20%,-20%) scale(1);}
-50%{transform:translate(20%,10%) scale(1.2);}
-100%{transform:translate(-10%,20%) scale(1);}
-
-}
-
-/* PARTICLES */
-
-.particles::before,
-.particles::after{
-
-content:"";
-position:absolute;
-width:200%;
-height:200%;
-
-background-image:
-radial-gradient(2px 2px at 20% 30%,white,transparent),
-radial-gradient(2px 2px at 60% 70%,white,transparent),
-radial-gradient(2px 2px at 80% 20%,white,transparent),
-radial-gradient(2px 2px at 40% 80%,white,transparent);
-
-animation:particlesMove 60s linear infinite;
-
-opacity:0.35;
-
-}
-
-@keyframes particlesMove{
-
-from{transform:translateY(0);}
-to{transform:translateY(-800px);}
-
-}
-
-/* LIGHT MODE */
+/* aurora background */
 
 body.light{
-background:#f7f9fc;
-color:#1f2937;
+background:linear-gradient(270deg,#74ebd5,#ACB6E5,#74ebd5);
+background-size:600% 600%;
+animation:bg 18s ease infinite;
 }
-
-body.light .aurora:nth-child(1){
-background:radial-gradient(circle,rgba(255,182,193,0.4),transparent);
-}
-
-body.light .aurora:nth-child(2){
-background:radial-gradient(circle,rgba(173,216,230,0.4),transparent);
-}
-
-body.light .aurora:nth-child(3){
-background:radial-gradient(circle,rgba(221,160,221,0.4),transparent);
-}
-
-/* DARK MODE */
 
 body.dark{
-background:#0f172a;
-color:white;
+background:linear-gradient(270deg,#0f2027,#203a43,#2c5364);
+background-size:600% 600%;
+animation:bg 18s ease infinite;
 }
 
-body.dark .aurora:nth-child(1){
-background:radial-gradient(circle,rgba(0,255,200,0.35),transparent);
-}
-
-body.dark .aurora:nth-child(2){
-background:radial-gradient(circle,rgba(0,150,255,0.35),transparent);
-}
-
-body.dark .aurora:nth-child(3){
-background:radial-gradient(circle,rgba(140,0,255,0.35),transparent);
-}
-
-/* HEADER */
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 40px;
-font-size:22px;
-font-weight:bold;
-}
-
-.toggle{
-cursor:pointer;
-font-size:22px;
-transition:0.3s;
-}
-
-.toggle:hover{
-transform:rotate(20deg) scale(1.1);
-}
-
-/* CONTAINER */
-
-.container{
-max-width:700px;
-margin:40px auto;
-}
-
-/* CARDS */
-
-.card{
-
-padding:25px;
-border-radius:14px;
-margin-bottom:20px;
-
-backdrop-filter:blur(14px);
-
-transition:0.3s;
-
-}
-
-body.light .card{
-background:rgba(255,255,255,0.75);
-color:#111;
-box-shadow:0 10px 30px rgba(0,0,0,0.15);
-}
-
-body.dark .card{
-background:rgba(20,30,40,0.7);
-color:white;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
-}
-
-.card:hover{
-transform:translateY(-5px);
-}
-
-/* INPUT */
-
-input,textarea{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:6px;
-border:none;
-}
-
-/* BUTTON */
-
-button{
-padding:8px 14px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-margin-top:10px;
-transition:0.25s;
-}
-
-button:hover{
-transform:translateY(-2px) scale(1.02);
-}
-
-.primary{
-background:linear-gradient(135deg,#3b82f6,#6366f1);
-color:white;
-}
-
-/* TASK */
-
-.task{
-display:flex;
-justify-content:space-between;
-padding:8px;
-border-bottom:1px solid rgba(255,255,255,0.1);
-}
-
-.completed{
-text-decoration:line-through;
-opacity:0.6;
-}
-
-/* INTRO */
-
-#intro{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-z-index:10;
-}
-
-#intro h1{
-font-size:60px;
-}
-
-#intro button{
-padding:12px 24px;
-font-size:18px;
-background:#3b82f6;
-color:white;
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 </style>
 
 </head>
 
-<body class="light">
+<body class="light min-h-screen flex flex-col items-center p-10 transition-all">
 
-<div class="aurora-background">
-<div class="aurora"></div>
-<div class="aurora"></div>
-<div class="aurora"></div>
-<div class="particles"></div>
-</div>
+<header class="w-full max-w-3xl flex justify-between items-center mb-8">
 
-<div id="intro">
+<h1 class="text-3xl font-bold">TaskFlow</h1>
 
-<h1>TaskFlow</h1>
-<p>Organiza tus tareas y mantén el control de tu flujo de trabajo</p>
-
-<button onclick="startApp()">Comenzar</button>
-
-</div>
-
-<div id="app" style="display:none;">
-
-<header>
-
-TaskFlow
-
-<div class="toggle" id="themeToggle">🌙</div>
+<div id="themeToggle" class="cursor-pointer text-2xl">🌙</div>
 
 </header>
 
-<div class="container">
+<div class="w-full max-w-3xl space-y-6">
 
-<div class="card">
+<!-- Crear tarea -->
 
-<h3>Crear nueva tarea</h3>
+<div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
 
-<input id="taskTitle" placeholder="Título de la tarea">
+<h2 class="text-xl font-semibold mb-4">Crear nueva tarea</h2>
 
-<textarea id="taskDescription" placeholder="Descripción"></textarea>
+<input
+id="taskTitle"
+placeholder="Título de la tarea"
+class="w-full p-2 rounded-lg border border-gray-300 mb-3"
+/>
 
-<button class="primary" onclick="addTask()">Añadir tarea</button>
-
-</div>
-
-<div class="card">
-
-<h3>Tus tareas</h3>
-
-<input id="searchTask" placeholder="Buscar tareas...">
-
-<div class="filters">
-
-<button onclick="filterTasks('all',this)" class="active">Todas</button>
-<button onclick="filterTasks('pending',this)">Pendientes</button>
-<button onclick="filterTasks('completed',this)">Completadas</button>
-
-<button onclick="sortTasks()">Orden A-Z</button>
+<button
+onclick="addTask()"
+class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:scale-105 transition"
+>
+Añadir tarea
+</button>
 
 </div>
 
-<div id="taskList"></div>
+<!-- Lista -->
+
+<div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
+
+<h2 class="text-xl font-semibold mb-4">Tus tareas</h2>
+
+<input
+id="searchTask"
+placeholder="Buscar tareas..."
+class="w-full p-2 rounded-lg border border-gray-300 mb-4"
+/>
+
+<div class="flex gap-2 mb-4 flex-wrap">
+
+<button onclick="filterTasks('all',this)" class="px-3 py-1 bg-gray-200 rounded-lg">
+Todas
+</button>
+
+<button onclick="filterTasks('pending',this)" class="px-3 py-1 bg-gray-200 rounded-lg">
+Pendientes
+</button>
+
+<button onclick="filterTasks('completed',this)" class="px-3 py-1 bg-gray-200 rounded-lg">
+Completadas
+</button>
+
+<button onclick="sortTasks()" class="px-3 py-1 bg-indigo-500 text-white rounded-lg">
+Orden A-Z
+</button>
 
 </div>
+
+<div id="taskList" class="space-y-2"></div>
 
 </div>
 
@@ -315,23 +108,32 @@ TaskFlow
 
 <script>
 
-let tasks=[];
-let currentFilter="all";
+let tasks = [];
+let currentFilter = "all";
 
-/* START APP */
+/* STORAGE */
 
-function startApp(){
+function saveTasks(){
+localStorage.setItem("tasks",JSON.stringify(tasks));
+}
 
-document.getElementById("intro").style.display="none";
-document.getElementById("app").style.display="block";
+function loadTasks(){
+
+const saved = localStorage.getItem("tasks");
+
+if(saved){
+tasks = JSON.parse(saved);
+}
 
 }
+
+loadTasks();
 
 /* ADD TASK */
 
 function addTask(){
 
-const title=document.getElementById("taskTitle").value.trim();
+const title = document.getElementById("taskTitle").value.trim();
 
 if(title==="") return;
 
@@ -341,6 +143,8 @@ completed:false
 });
 
 document.getElementById("taskTitle").value="";
+
+saveTasks();
 renderTasks();
 
 }
@@ -349,7 +153,7 @@ renderTasks();
 
 function renderTasks(){
 
-const list=document.getElementById("taskList");
+const list = document.getElementById("taskList");
 list.innerHTML="";
 
 let filtered=[...tasks];
@@ -369,30 +173,78 @@ filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
 filtered.forEach((task,index)=>{
 
 const div=document.createElement("div");
-div.className="task";
+
+div.className="flex justify-between items-center p-3 rounded-lg bg-white/60 shadow";
 
 const text=document.createElement("span");
+
 text.textContent=task.title;
 
 if(task.completed){
-text.classList.add("completed");
+text.classList.add("line-through","text-red-500");
 }
 
-text.onclick=()=>{
+/* BOTONES */
+
+const actions=document.createElement("div");
+
+const completeBtn=document.createElement("button");
+
+completeBtn.textContent=task.completed?"↩":"✔";
+
+completeBtn.className="bg-green-500 text-white px-2 py-1 rounded";
+
+completeBtn.onclick=()=>{
+
 task.completed=!task.completed;
+
+saveTasks();
 renderTasks();
+
 };
 
-const del=document.createElement("button");
-del.textContent="X";
+const editBtn=document.createElement("button");
 
-del.onclick=()=>{
+editBtn.textContent="✏️";
+
+editBtn.className="bg-yellow-400 text-white px-2 py-1 rounded ml-2";
+
+editBtn.onclick=()=>{
+
+const newText=prompt("Editar tarea:",task.title);
+
+if(newText){
+
+task.title=newText;
+
+saveTasks();
+renderTasks();
+
+}
+
+};
+
+const deleteBtn=document.createElement("button");
+
+deleteBtn.textContent="🗑";
+
+deleteBtn.className="bg-red-500 text-white px-2 py-1 rounded ml-2";
+
+deleteBtn.onclick=()=>{
+
 tasks.splice(index,1);
+
+saveTasks();
 renderTasks();
+
 };
+
+actions.appendChild(completeBtn);
+actions.appendChild(editBtn);
+actions.appendChild(deleteBtn);
 
 div.appendChild(text);
-div.appendChild(del);
+div.appendChild(actions);
 
 list.appendChild(div);
 
@@ -400,17 +252,15 @@ list.appendChild(div);
 
 }
 
+/* SEARCH */
+
 document.getElementById("searchTask").addEventListener("input",renderTasks);
 
 /* FILTER */
 
-function filterTasks(type,btn){
+function filterTasks(type){
 
 currentFilter=type;
-
-document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
-
-btn.classList.add("active");
 
 renderTasks();
 
@@ -422,6 +272,7 @@ function sortTasks(){
 
 tasks.sort((a,b)=>a.title.localeCompare(b.title));
 
+saveTasks();
 renderTasks();
 
 }
@@ -435,17 +286,24 @@ toggle.onclick=()=>{
 const body=document.body;
 
 if(body.classList.contains("light")){
+
 body.classList.remove("light");
 body.classList.add("dark");
+
 toggle.textContent="☀️";
-}
-else{
+
+}else{
+
 body.classList.remove("dark");
 body.classList.add("light");
+
 toggle.textContent="🌙";
+
 }
 
 };
+
+renderTasks();
 
 </script>
 
