@@ -91,7 +91,7 @@ list.appendChild(li);
 
 }
 
-/* AÑADIR TAREA */
+/* AÑADIR */
 
 button.addEventListener("click", () => {
 
@@ -122,7 +122,7 @@ render();
 
 });
 
-/* MODO OSCURO */
+/* DARK MODE */
 
 const toggle = document.getElementById("themeToggle");
 

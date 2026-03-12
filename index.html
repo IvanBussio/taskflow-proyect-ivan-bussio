@@ -17,27 +17,98 @@ darkMode: "class"
 
 <style>
 
-/* FONDO AURORA */
+/* BASE */
 
-body.light{
-background:linear-gradient(270deg,#74ebd5,#ACB6E5,#74ebd5);
-background-size:600% 600%;
-animation:bg 18s ease infinite;
+body{
+transition:background 0.6s ease,color 0.6s ease;
+min-height:100vh;
+overflow-x:hidden;
 }
 
-body.dark{
-background:linear-gradient(270deg,#0f2027,#203a43,#2c5364);
-background-size:600% 600%;
-animation:bg 18s ease infinite;
+/* AURORA */
+
+.aurora{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+overflow:hidden;
 }
 
-@keyframes bg{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+.aurora div{
+position:absolute;
+width:120%;
+height:120%;
+filter:blur(120px);
+animation:auroraMove 20s infinite alternate ease-in-out;
 }
 
-/* PRESENTACIÓN */
+/* CLARO */
+
+body.light .aurora div:nth-child(1){
+background:radial-gradient(circle,rgba(255,182,193,0.4),transparent);
+}
+
+body.light .aurora div:nth-child(2){
+background:radial-gradient(circle,rgba(173,216,230,0.4),transparent);
+animation-duration:22s;
+}
+
+body.light .aurora div:nth-child(3){
+background:radial-gradient(circle,rgba(221,160,221,0.35),transparent);
+animation-duration:25s;
+}
+
+/* OSCURO */
+
+body.dark .aurora div:nth-child(1){
+background:radial-gradient(circle,rgba(0,255,200,0.35),transparent);
+}
+
+body.dark .aurora div:nth-child(2){
+background:radial-gradient(circle,rgba(0,150,255,0.35),transparent);
+}
+
+body.dark .aurora div:nth-child(3){
+background:radial-gradient(circle,rgba(140,0,255,0.35),transparent);
+}
+
+/* ANIMACIÓN */
+
+@keyframes auroraMove{
+
+0%{transform:translate(-20%,-20%) scale(1);}
+50%{transform:translate(20%,10%) scale(1.2);}
+100%{transform:translate(-10%,20%) scale(1);}
+
+}
+
+/* TARJETAS */
+
+.card{
+padding:20px;
+border-radius:14px;
+backdrop-filter:blur(16px);
+transition:0.3s;
+}
+
+body.light .card{
+background:rgba(255,255,255,0.75);
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+body.dark .card{
+background:rgba(20,30,40,0.65);
+box-shadow:0 10px 25px rgba(0,0,0,0.6);
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+/* INTRO */
 
 #intro{
 position:fixed;
@@ -49,7 +120,7 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,0.4);
+background:rgba(0,0,0,0.5);
 backdrop-filter:blur(10px);
 z-index:100;
 }
@@ -73,6 +144,8 @@ transition:0.3s;
 transform:scale(1.05);
 }
 
+/* TAREA COMPLETADA */
+
 .completed{
 text-decoration:line-through;
 color:#ef4444;
@@ -82,7 +155,15 @@ color:#ef4444;
 
 </head>
 
-<body class="light min-h-screen flex flex-col items-center p-10 transition-all">
+<body class="light flex flex-col items-center p-10">
+
+<!-- AURORA -->
+
+<div class="aurora">
+<div></div>
+<div></div>
+<div></div>
+</div>
 
 <!-- INTRO -->
 
@@ -104,9 +185,9 @@ color:#ef4444;
 
 <div class="w-full max-w-xl mx-auto space-y-4">
 
-<!-- CREAR TAREA -->
+<!-- CREAR -->
 
-<div class="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow">
+<div class="card">
 
 <h2 class="text-xl mb-3 font-semibold">Crear nueva tarea</h2>
 
@@ -126,7 +207,7 @@ Añadir tarea
 
 <!-- LISTA -->
 
-<div class="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow">
+<div class="card">
 
 <h2 class="text-xl mb-3 font-semibold">Tus tareas</h2>
 
@@ -145,11 +226,9 @@ Ordenar A-Z
 <script src="script.js"></script>
 
 <script>
-
 function startApp(){
 document.getElementById("intro").style.display="none";
 }
-
 </script>
 
 </body>
