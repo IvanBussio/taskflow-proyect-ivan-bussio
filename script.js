@@ -1,176 +1,123 @@
-document.addEventListener("DOMContentLoaded", () => {
-
 let tasks = [];
-let currentFilter = "all";
 
-const taskInput = document.getElementById("taskTitle");
-const taskList = document.getElementById("taskList");
-const searchInput = document.getElementById("searchTask");
-const addButton = document.getElementById("addTaskBtn");
+const input = document.getElementById("taskInput");
+const button = document.getElementById("addTaskBtn");
+const list = document.getElementById("taskList");
 
-/* STORAGE */
-
-function saveTasks(){
-localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+/* cargar tareas */
 
 function loadTasks(){
+
 const saved = localStorage.getItem("tasks");
+
 if(saved){
 tasks = JSON.parse(saved);
 }
+
 }
 
-/* ADD TASK */
+/* guardar */
 
-function addTask(){
+function saveTasks(){
 
-const title = taskInput.value.trim();
+localStorage.setItem("tasks", JSON.stringify(tasks));
 
-if(title === "") return;
-
-const newTask = {
-id: Date.now(),
-title: title,
-completed: false
-};
-
-tasks.push(newTask);
-
-taskInput.value = "";
-
-saveTasks();
-renderTasks();
 }
 
-/* BOTÓN */
-
-addButton.addEventListener("click", addTask);
-
-/* RENDER */
+/* render */
 
 function renderTasks(){
 
-taskList.innerHTML = "";
+list.innerHTML = "";
 
-let filtered = [...tasks];
+tasks.forEach((task,index)=>{
 
-if(currentFilter === "completed"){
-filtered = filtered.filter(t => t.completed);
-}
+const li = document.createElement("li");
 
-if(currentFilter === "pending"){
-filtered = filtered.filter(t => !t.completed);
-}
-
-const search = searchInput.value.toLowerCase();
-
-filtered = filtered.filter(t =>
-t.title.toLowerCase().includes(search)
-);
-
-filtered.forEach(task => {
-
-const div = document.createElement("div");
-
-div.className =
-"flex justify-between items-center p-3 rounded-lg bg-white/60 shadow";
+li.className =
+"flex justify-between items-center bg-white/80 p-3 rounded-lg shadow";
 
 const text = document.createElement("span");
+
 text.textContent = task.title;
 
 if(task.completed){
 text.classList.add("line-through","text-red-500");
 }
 
+/* botones */
+
 const actions = document.createElement("div");
 
-/* COMPLETE */
+/* completar */
 
 const completeBtn = document.createElement("button");
 
-completeBtn.textContent = task.completed ? "↩" : "✔";
-completeBtn.className = "bg-green-500 text-white px-2 py-1 rounded";
+completeBtn.textContent = "✔";
 
-completeBtn.onclick = () => {
+completeBtn.className =
+"bg-green-500 text-white px-2 py-1 rounded";
 
-const target = tasks.find(t => t.id === task.id);
-target.completed = !target.completed;
+completeBtn.onclick = ()=>{
 
-saveTasks();
-renderTasks();
-};
-
-/* EDIT */
-
-const editBtn = document.createElement("button");
-
-editBtn.textContent = "✏️";
-editBtn.className = "bg-yellow-400 text-white px-2 py-1 rounded ml-2";
-
-editBtn.onclick = () => {
-
-const newText = prompt("Editar tarea:", task.title);
-
-if(newText){
-
-const target = tasks.find(t => t.id === task.id);
-target.title = newText;
+task.completed = !task.completed;
 
 saveTasks();
 renderTasks();
-}
+
 };
 
-/* DELETE */
+/* eliminar */
 
 const deleteBtn = document.createElement("button");
 
 deleteBtn.textContent = "🗑";
-deleteBtn.className = "bg-red-500 text-white px-2 py-1 rounded ml-2";
 
-deleteBtn.onclick = () => {
+deleteBtn.className =
+"bg-red-500 text-white px-2 py-1 rounded ml-2";
 
-tasks = tasks.filter(t => t.id !== task.id);
+deleteBtn.onclick = ()=>{
+
+tasks.splice(index,1);
 
 saveTasks();
 renderTasks();
+
 };
 
 actions.appendChild(completeBtn);
-actions.appendChild(editBtn);
 actions.appendChild(deleteBtn);
 
-div.appendChild(text);
-div.appendChild(actions);
+li.appendChild(text);
+li.appendChild(actions);
 
-taskList.appendChild(div);
+list.appendChild(li);
 
 });
+
 }
 
-/* SEARCH */
+/* añadir tarea */
 
-searchInput.addEventListener("input", renderTasks);
+button.addEventListener("click",()=>{
 
-/* FILTER */
+const title = input.value.trim();
 
-window.filterTasks = function(type){
-currentFilter = type;
-renderTasks();
-};
+if(title === "") return;
 
-/* SORT */
+tasks.push({
+title:title,
+completed:false
+});
 
-window.sortTasks = function(){
-tasks.sort((a,b)=>a.title.localeCompare(b.title));
+input.value = "";
+
 saveTasks();
 renderTasks();
-};
 
-/* INIT */
+});
+
+/* iniciar */
 
 loadTasks();
 renderTasks();
-
-});

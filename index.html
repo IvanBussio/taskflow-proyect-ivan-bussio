@@ -45,12 +45,14 @@ animation:bg 18s ease infinite;
 
 <div class="w-full max-w-3xl space-y-6">
 
+<!-- crear tarea -->
+
 <div class="bg-white/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
 
 <h2 class="text-xl font-semibold mb-4">Crear nueva tarea</h2>
 
 <input
-id="taskTitle"
+id="taskInput"
 placeholder="Título de la tarea"
 class="w-full p-2 rounded-lg border border-gray-300 mb-3"
 />
@@ -64,37 +66,13 @@ Añadir tarea
 
 </div>
 
+<!-- lista -->
+
 <div class="bg-white/70 backdrop-blur-lg p-6 rounded-xl shadow-lg">
 
 <h2 class="text-xl font-semibold mb-4">Tus tareas</h2>
 
-<input
-id="searchTask"
-placeholder="Buscar tareas..."
-class="w-full p-2 rounded-lg border border-gray-300 mb-4"
-/>
-
-<div class="flex gap-2 mb-4 flex-wrap">
-
-<button onclick="filterTasks('all')" class="px-3 py-1 bg-gray-200 rounded-lg">
-Todas
-</button>
-
-<button onclick="filterTasks('pending')" class="px-3 py-1 bg-gray-200 rounded-lg">
-Pendientes
-</button>
-
-<button onclick="filterTasks('completed')" class="px-3 py-1 bg-gray-200 rounded-lg">
-Completadas
-</button>
-
-<button onclick="sortTasks()" class="px-3 py-1 bg-indigo-500 text-white rounded-lg">
-Orden A-Z
-</button>
-
-</div>
-
-<div id="taskList" class="space-y-2"></div>
+<ul id="taskList" class="space-y-2"></ul>
 
 </div>
 
