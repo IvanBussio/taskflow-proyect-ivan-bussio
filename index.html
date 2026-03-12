@@ -7,22 +7,19 @@
 
 <title>TaskFlow</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
-tailwind.config = {
-darkMode: "class"
-}
+tailwind.config = { darkMode: "class" }
 </script>
 
 <style>
 
-/* BASE */
-
 body{
-transition:background 0.6s ease,color 0.6s ease;
-min-height:100vh;
-overflow-x:hidden;
+font-family:"Inter",sans-serif;
+transition:background 0.5s ease,color 0.5s ease;
 }
 
 /* AURORA */
@@ -33,7 +30,7 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-z-index:-1;
+z-index:-2;
 overflow:hidden;
 }
 
@@ -42,109 +39,71 @@ position:absolute;
 width:120%;
 height:120%;
 filter:blur(120px);
-animation:auroraMove 20s infinite alternate ease-in-out;
+animation:auroraMove 22s infinite alternate ease-in-out;
 }
 
-/* CLARO */
-
 body.light .aurora div:nth-child(1){
-background:radial-gradient(circle,rgba(255,182,193,0.4),transparent);
+background:radial-gradient(circle,#ffb6c1,transparent);
 }
 
 body.light .aurora div:nth-child(2){
-background:radial-gradient(circle,rgba(173,216,230,0.4),transparent);
-animation-duration:22s;
+background:radial-gradient(circle,#87cefa,transparent);
 }
 
 body.light .aurora div:nth-child(3){
-background:radial-gradient(circle,rgba(221,160,221,0.35),transparent);
-animation-duration:25s;
+background:radial-gradient(circle,#c084fc,transparent);
 }
 
-/* OSCURO */
-
 body.dark .aurora div:nth-child(1){
-background:radial-gradient(circle,rgba(0,255,200,0.35),transparent);
+background:radial-gradient(circle,#00ffc8,transparent);
 }
 
 body.dark .aurora div:nth-child(2){
-background:radial-gradient(circle,rgba(0,150,255,0.35),transparent);
+background:radial-gradient(circle,#00aaff,transparent);
 }
 
 body.dark .aurora div:nth-child(3){
-background:radial-gradient(circle,rgba(140,0,255,0.35),transparent);
+background:radial-gradient(circle,#7c3aed,transparent);
 }
 
-/* ANIMACIÓN */
-
 @keyframes auroraMove{
-
 0%{transform:translate(-20%,-20%) scale(1);}
 50%{transform:translate(20%,10%) scale(1.2);}
 100%{transform:translate(-10%,20%) scale(1);}
+}
 
+/* PARTICULAS */
+
+.particles{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+background-image:
+radial-gradient(2px 2px at 20% 30%,white,transparent),
+radial-gradient(2px 2px at 70% 80%,white,transparent),
+radial-gradient(2px 2px at 40% 60%,white,transparent);
+opacity:0.15;
 }
 
 /* TARJETAS */
 
 .card{
-padding:20px;
-border-radius:14px;
+padding:24px;
+border-radius:16px;
 backdrop-filter:blur(16px);
 transition:0.3s;
 }
 
 body.light .card{
-background:rgba(255,255,255,0.75);
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
+background:rgba(255,255,255,0.85);
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
 }
 
 body.dark .card{
 background:rgba(20,30,40,0.65);
-box-shadow:0 10px 25px rgba(0,0,0,0.6);
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
-
-.card:hover{
-transform:translateY(-4px);
-}
-
-/* INTRO */
-
-#intro{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,0.5);
-backdrop-filter:blur(10px);
-z-index:100;
-}
-
-#intro h1{
-font-size:48px;
-color:white;
-margin-bottom:20px;
-}
-
-#intro button{
-background:#3b82f6;
-color:white;
-padding:12px 24px;
-border-radius:8px;
-cursor:pointer;
-transition:0.3s;
-}
-
-#intro button:hover{
-transform:scale(1.05);
-}
-
-/* TAREA COMPLETADA */
 
 .completed{
 text-decoration:line-through;
@@ -157,65 +116,53 @@ color:#ef4444;
 
 <body class="light flex flex-col items-center p-10">
 
-<!-- AURORA -->
-
 <div class="aurora">
 <div></div>
 <div></div>
 <div></div>
 </div>
 
-<!-- INTRO -->
+<div class="particles"></div>
 
-<div id="intro">
-
-<h1>TaskFlow</h1>
-
-<button onclick="startApp()">Comenzar</button>
-
+<div id="themeToggle" class="fixed top-6 right-6 text-2xl cursor-pointer">
+🌙
 </div>
 
-<header class="w-full max-w-xl flex justify-between mb-6">
+<h1 class="text-4xl font-bold mb-8">TaskFlow</h1>
 
-<h1 class="text-3xl font-bold">TaskFlow</h1>
-
-<div id="themeToggle" class="cursor-pointer text-xl">🌙</div>
-
-</header>
-
-<div class="w-full max-w-xl mx-auto space-y-4">
-
-<!-- CREAR -->
+<div class="w-full max-w-xl space-y-6">
 
 <div class="card">
 
-<h2 class="text-xl mb-3 font-semibold">Crear nueva tarea</h2>
+<input id="taskInput" placeholder="Nueva tarea..." class="w-full border rounded p-2 mb-3">
 
-<input
-id="taskInput"
-placeholder="Título de la tarea"
-class="w-full border rounded p-2 mb-3"
-/>
-
-<button
-id="addTaskBtn"
-class="bg-blue-500 text-white px-4 py-2 rounded hover:scale-105 transition">
+<button id="addTaskBtn" class="bg-blue-500 text-white px-4 py-2 rounded">
 Añadir tarea
 </button>
 
 </div>
 
-<!-- LISTA -->
-
 <div class="card">
 
-<h2 class="text-xl mb-3 font-semibold">Tus tareas</h2>
+<div class="flex justify-between items-center mb-3">
 
-<button
-id="sortBtn"
-class="bg-indigo-500 text-white px-3 py-1 rounded mb-3">
-Ordenar A-Z
+<input id="searchInput" placeholder="Buscar tarea..." class="border rounded p-2 w-2/3">
+
+<button id="sortBtn" class="bg-indigo-500 text-white px-3 py-1 rounded">
+Ordenar
 </button>
+
+</div>
+
+<div class="flex gap-2 mb-3">
+
+<button id="filterAll" class="bg-gray-300 px-2 py-1 rounded">Todas</button>
+<button id="filterPending" class="bg-yellow-400 px-2 py-1 rounded">Pendientes</button>
+<button id="filterDone" class="bg-green-400 px-2 py-1 rounded">Completadas</button>
+
+</div>
+
+<div class="text-sm mb-2" id="taskStats"></div>
 
 <ul id="taskList" class="space-y-2"></ul>
 
@@ -224,12 +171,6 @@ Ordenar A-Z
 </div>
 
 <script src="script.js"></script>
-
-<script>
-function startApp(){
-document.getElementById("intro").style.display="none";
-}
-</script>
 
 </body>
 </html>
