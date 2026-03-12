@@ -1,46 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskFlow</title>
+
+<style>
+body{
+font-family: Arial, sans-serif;
+background:#f5f5f5;
+}
+
+.task-container{
+max-width:600px;
+margin:40px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input{
+padding:8px;
+margin:5px 0;
+}
+
+button{
+padding:6px 10px;
+margin:3px;
+cursor:pointer;
+}
+
+ul{
+list-style:none;
+padding:0;
+}
+
+li{
+padding:8px;
+border-bottom:1px solid #ddd;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.completed{
+text-decoration:line-through;
+color:gray;
+}
+</style>
+
+</head>
+
+<body>
+
 <div class="task-container">
 
-  <input
-    id="taskInput"
-    type="text"
-    placeholder="Add a new task..."
-    aria-label="Task input"
-  />
+<h2>TaskFlow</h2>
 
-  <button id="addTaskButton">
-    Add Task
-  </button>
+<input id="taskInput" type="text" placeholder="Add a new task..." />
+<button id="addTaskButton">Add Task</button>
 
-  <!-- Search -->
-  <input
-    type="text"
-    id="searchTask"
-    placeholder="Search tasks..."
-  />
+<br>
 
-  <!-- Filters -->
-  <div>
+<input type="text" id="searchTask" placeholder="Search tasks..." />
 
-    <button id="filter-all">
-      All
-    </button>
+<br>
 
-    <button id="filter-completed">
-      Completed
-    </button>
+<div>
+<button id="filter-all">All</button>
+<button id="filter-completed">Completed</button>
+<button id="filter-pending">Pending</button>
+</div>
 
-    <button id="filter-pending">
-      Pending
-    </button>
+<button id="sortTasks">Sort A-Z</button>
 
-  </div>
-
-  <!-- Sort -->
-  <button id="sortTasks">
-    Sort A-Z
-  </button>
-
-  <!-- Task list -->
-  <ul id="task-list"></ul>
+<ul id="task-list"></ul>
 
 </div>
+
+<script>
+
+let tasks = [];
+
+const taskInput = document.getElementById("taskInput");
+const addTaskButton = document.getElementById("addTaskButton");
+const taskList = document.getElementById("task-list");
+
+addTaskButton.addEventListener("click", addTask);
+
+function addTask(){
+
+const text = taskInput.value.trim();
+
+if(text === "") return;
+
+tasks.push({
+text:text,
+completed:false
+});
+
+taskInput.value="";
+renderTasks();
+}
+
+function renderTasks(list = tasks){
+
+taskList.innerHTML="";
+
+list.forEach((task,index)=>{
+
+const li = document.createElement("li");
+
+const span = document.createElement("span");
+span.textContent = task.text;
+
+if(task.completed){
+span.classList.add("completed");
+}
+
+span.addEventListener("click",()=>{
+task.completed = !task.completed;
+renderTasks();
+});
+
+const deleteBtn = document.createElement("button");
+deleteBtn.textContent="Delete";
+
+deleteBtn.addEventListener("click",()=>{
+tasks.splice(index,1);
+renderTasks();
+});
+
+li.appendChild(span);
+li.appendChild(deleteBtn);
+
+taskList.appendChild(li);
+
+});
+
+}
+
+const searchInput = document.getElementById("searchTask");
+
+searchInput.addEventListener("input",function(){
+
+const query = this.value.toLowerCase();
+
+const filtered = tasks.filter(task =>
+task.text.toLowerCase().includes(query)
+);
+
+renderTasks(filtered);
+
+});
+
+document.getElementById("filter-all").addEventListener("click",()=>{
+renderTasks();
+});
+
+document.getElementById("filter-completed").addEventListener("click",()=>{
+renderTasks(tasks.filter(task=>task.completed));
+});
+
+document.getElementById("filter-pending").addEventListener("click",()=>{
+renderTasks(tasks.filter(task=>!task.completed));
+});
+
+document.getElementById("sortTasks").addEventListener("click",()=>{
+
+tasks.sort((a,b)=>a.text.localeCompare(b.text));
+renderTasks();
+
+});
+
+</script>
+
+</body>
+</html>
