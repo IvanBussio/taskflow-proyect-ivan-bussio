@@ -52,6 +52,26 @@ color:#e5e7eb;
 100%{background-position:0% 50%;}
 }
 
+/* ---------- INPUTS ---------- */
+
+input{
+background:rgba(255,255,255,0.95);
+color:#1f2937;
+border-radius:10px;
+padding:10px;
+border:1px solid rgba(0,0,0,0.1);
+}
+
+input::placeholder{
+color:#6b7280;
+}
+
+input:focus{
+outline:none;
+border:1px solid #8b5cf6;
+box-shadow:0 0 0 2px rgba(139,92,246,.3);
+}
+
 /* ---------- TARJETAS ---------- */
 
 .card{
@@ -98,6 +118,29 @@ background:rgba(255,255,255,.25);
 .completed{
 text-decoration:line-through;
 opacity:.5;
+}
+
+/* ---------- BOTONES DE ACCIONES ---------- */
+
+.action-btn{
+width:34px;
+height:34px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+background:rgba(255,255,255,0.25);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.35);
+font-size:16px;
+transition:all .25s ease;
+cursor:pointer;
+}
+
+.action-btn:hover{
+transform:scale(1.15);
+background:rgba(255,255,255,0.45);
+box-shadow:0 6px 14px rgba(0,0,0,.2);
 }
 
 /* ---------- WELCOME ---------- */
@@ -195,7 +238,7 @@ TaskFlow
 
 <input id="taskInput"
 placeholder="Escribe una tarea..."
-class="w-full p-2 rounded-lg border"/>
+class="w-full"/>
 
 <div class="flex gap-2 flex-wrap">
 
@@ -213,7 +256,7 @@ class="w-full p-2 rounded-lg border"/>
 
 <input id="searchInput"
 placeholder="Buscar tarea..."
-class="flex-1 p-2 rounded-lg border"/>
+class="flex-1"/>
 
 <button onclick="sortTasks()">Ordenar</button>
 
@@ -311,9 +354,9 @@ div.innerHTML=`
 
 <div class="flex gap-2">
 
-<button onclick="toggleTask(${task.id})">✔</button>
-<button onclick="editTask(${task.id})">✏</button>
-<button onclick="deleteTask(${task.id})">🗑</button>
+<button class="action-btn" onclick="toggleTask(${task.id})">✔</button>
+<button class="action-btn" onclick="editTask(${task.id})">✏</button>
+<button class="action-btn" onclick="deleteTask(${task.id})">🗑</button>
 
 </div>
 `
@@ -448,10 +491,8 @@ localStorage.setItem("theme","light")
 }
 
 function startApp(){
-
 document.getElementById("welcomeScreen").style.display="none"
 localStorage.setItem("visited","true")
-
 }
 
 if(localStorage.getItem("visited")){
