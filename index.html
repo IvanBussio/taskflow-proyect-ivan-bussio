@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 
 <meta charset="UTF-8">
@@ -10,7 +9,7 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
@@ -21,127 +20,122 @@ display:flex;
 justify-content:center;
 align-items:flex-start;
 padding:80px 20px;
-transition:all .5s ease;
+transition:all .6s ease;
 }
 
 /* ---------- MODO CLARO ---------- */
 
 body.light{
-
 background:linear-gradient(135deg,#fbcfe8,#e9d5ff,#ddd6fe);
 background-size:400% 400%;
-
-animation:pastelMove 15s ease infinite;
-
+animation:lightFlow 18s ease infinite;
 }
 
-@keyframes pastelMove{
-
+@keyframes lightFlow{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
-
 }
 
 /* ---------- MODO OSCURO ---------- */
 
 body.dark{
-
-background:radial-gradient(circle at 20% 20%,#1e1b4b,#020617 60%);
+background:linear-gradient(135deg,#020617,#1e1b4b,#020617);
+background-size:400% 400%;
+animation:darkFlow 22s ease infinite;
 color:#e5e7eb;
-
 }
 
-/* estrellas */
+@keyframes darkFlow{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
 
-body.dark::before{
+/* ---------- TARJETAS ---------- */
 
-content:"";
+.card{
+background:rgba(255,255,255,.18);
+backdrop-filter:blur(18px);
+border-radius:18px;
+padding:24px;
+box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+/* ---------- BOTONES ---------- */
+
+button{
+background:rgba(255,255,255,.2);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,.25);
+color:white;
+padding:8px 16px;
+border-radius:10px;
+transition:all .25s ease;
+}
+
+button:hover{
+transform:translateY(-2px) scale(1.05);
+background:rgba(255,255,255,.3);
+box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+button:active{
+transform:scale(.95);
+}
+
+/* ---------- TAREAS ---------- */
+
+.task{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px;
+border-radius:12px;
+background:rgba(255,255,255,.25);
+}
+
+.completed{
+text-decoration:line-through;
+opacity:.5;
+}
+
+/* ---------- WELCOME ---------- */
+
+.welcome-screen{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-
-background-image:radial-gradient(white 1px,transparent 1px);
-
-background-size:3px 3px;
-
-opacity:.2;
-
-animation:stars 70s linear infinite;
-
-}
-
-@keyframes stars{
-
-from{transform:translateY(0);}
-to{transform:translateY(-2000px);}
-
-}
-
-/* tarjeta */
-
-.card{
-
-background:rgba(255,255,255,.18);
-
-backdrop-filter:blur(18px);
-
-border-radius:18px;
-
-box-shadow:0 15px 40px rgba(0,0,0,.15);
-
-padding:24px;
-
-}
-
-/* botones */
-
-button{
-
-background:#8b5cf6;
-
-color:white;
-
-padding:8px 16px;
-
-border-radius:10px;
-
-transition:all .25s ease;
-
-}
-
-button:hover{
-
-transform:translateY(-2px) scale(1.05);
-
-box-shadow:0 6px 18px rgba(0,0,0,.2);
-
-}
-
-/* tareas */
-
-.task{
-
 display:flex;
-justify-content:space-between;
 align-items:center;
-
-padding:10px;
-
-border-radius:10px;
-
-background:rgba(255,255,255,.3);
-
+justify-content:center;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(20px);
+z-index:999;
 }
 
-.completed{
+.welcome-card{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(20px);
+padding:40px;
+border-radius:20px;
+max-width:500px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
 
-text-decoration:line-through;
+.welcome-title{
+font-size:34px;
+font-weight:600;
+margin-bottom:10px;
+}
 
-opacity:.5;
-
+.welcome-about{
+font-size:14px;
+opacity:.85;
+margin:20px 0;
 }
 
 </style>
@@ -154,55 +148,74 @@ opacity:.5;
 🌙
 </div>
 
+<!-- pantalla bienvenida -->
+
+<div id="welcomeScreen" class="welcome-screen">
+
+<div class="welcome-card">
+
+<h1 class="welcome-title">
+Bienvenido a TaskFlow
+</h1>
+
+<p>
+Organiza tus tareas de forma simple y elegante.
+</p>
+
+<div class="welcome-about">
+
+<h2 class="font-semibold mb-1">Quiénes somos</h2>
+
+<p>
+TaskFlow es una aplicación minimalista creada para
+organizar tus tareas diarias de forma clara y rápida.
+Nuestro objetivo es ayudarte a mantener el control
+de tu productividad con una interfaz simple y moderna.
+</p>
+
+</div>
+
+<button onclick="startApp()">
+Empezar
+</button>
+
+</div>
+
+</div>
+
+<!-- APP -->
+
 <div class="w-full max-w-xl space-y-6">
 
 <h1 class="text-4xl font-bold text-center">
 TaskFlow
 </h1>
 
-<!-- crear tarea -->
-
 <div class="card space-y-4">
 
-<input
-id="taskInput"
+<input id="taskInput"
 placeholder="Escribe una tarea..."
-class="w-full p-2 rounded-lg border"
-/>
+class="w-full p-2 rounded-lg border"/>
 
 <div class="flex gap-2 flex-wrap">
 
-<button onclick="addTask()">
-Añadir
-</button>
-
-<button onclick="completeAll()">
-Completar todas
-</button>
-
-<button onclick="deleteCompleted()">
-Borrar completadas
-</button>
+<button onclick="addTask()">Añadir</button>
+<button onclick="completeAll()">Completar todas</button>
+<button onclick="deleteCompleted()">Borrar completadas</button>
 
 </div>
 
 </div>
-
-<!-- lista -->
 
 <div class="card space-y-4">
 
 <div class="flex gap-2">
 
-<input
-id="searchInput"
+<input id="searchInput"
 placeholder="Buscar tarea..."
-class="flex-1 p-2 rounded-lg border"
-/>
+class="flex-1 p-2 rounded-lg border"/>
 
-<button onclick="sortTasks()">
-Ordenar
-</button>
+<button onclick="sortTasks()">Ordenar</button>
 
 </div>
 
@@ -228,51 +241,44 @@ Ordenar
 
 <script>
 
-let tasks=[];
-let filter="all";
+let tasks=[]
+let filter="all"
 
-const taskInput=document.getElementById("taskInput");
-const taskList=document.getElementById("taskList");
-const searchInput=document.getElementById("searchInput");
+const taskInput=document.getElementById("taskInput")
+const taskList=document.getElementById("taskList")
+const searchInput=document.getElementById("searchInput")
 
 /* STORAGE */
 
 function saveTasks(){
-localStorage.setItem("tasks",JSON.stringify(tasks));
+localStorage.setItem("tasks",JSON.stringify(tasks))
 }
 
 function loadTasks(){
-
-const saved=localStorage.getItem("tasks");
-
-if(saved){
-tasks=JSON.parse(saved);
+const saved=localStorage.getItem("tasks")
+if(saved){tasks=JSON.parse(saved)}
 }
 
-}
-
-loadTasks();
+loadTasks()
 
 /* ADD */
 
 function addTask(){
 
-const title=taskInput.value.trim();
+const title=taskInput.value.trim()
 
-if(!title)return;
+if(!title)return
 
 tasks.push({
-
 id:Date.now(),
 title,
 completed:false
+})
 
-});
+taskInput.value=""
 
-taskInput.value="";
-
-saveTasks();
-renderTasks();
+saveTasks()
+renderTasks()
 
 }
 
@@ -280,28 +286,24 @@ renderTasks();
 
 function renderTasks(){
 
-taskList.innerHTML="";
+taskList.innerHTML=""
 
-let filtered=[...tasks];
+let filtered=[...tasks]
 
-if(filter==="completed")
-filtered=filtered.filter(t=>t.completed);
+if(filter==="completed")filtered=filtered.filter(t=>t.completed)
+if(filter==="pending")filtered=filtered.filter(t=>!t.completed)
 
-if(filter==="pending")
-filtered=filtered.filter(t=>!t.completed);
+const search=searchInput.value.toLowerCase()
 
-const search=searchInput.value.toLowerCase();
-
-filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
+filtered=filtered.filter(t=>t.title.toLowerCase().includes(search))
 
 filtered.forEach(task=>{
 
-const div=document.createElement("div");
+const div=document.createElement("div")
 
-div.className="task";
+div.className="task"
 
-if(task.completed)
-div.classList.add("completed");
+if(task.completed)div.classList.add("completed")
 
 div.innerHTML=`
 
@@ -314,57 +316,47 @@ div.innerHTML=`
 <button onclick="deleteTask(${task.id})">🗑</button>
 
 </div>
+`
 
-`;
+taskList.appendChild(div)
 
-taskList.appendChild(div);
+})
 
-});
-
-updateStats();
+updateStats()
 
 }
 
 /* TOGGLE */
 
 function toggleTask(id){
-
 tasks=tasks.map(t=>{
-if(t.id===id)t.completed=!t.completed;
-return t;
-});
-
-saveTasks();
-renderTasks();
-
+if(t.id===id)t.completed=!t.completed
+return t
+})
+saveTasks()
+renderTasks()
 }
 
 /* DELETE */
 
 function deleteTask(id){
-
-tasks=tasks.filter(t=>t.id!==id);
-
-saveTasks();
-renderTasks();
-
+tasks=tasks.filter(t=>t.id!==id)
+saveTasks()
+renderTasks()
 }
 
 /* EDIT */
 
 function editTask(id){
 
-const task=tasks.find(t=>t.id===id);
+const task=tasks.find(t=>t.id===id)
 
-const newTitle=prompt("Editar tarea",task.title);
+const newTitle=prompt("Editar tarea",task.title)
 
 if(newTitle){
-
-task.title=newTitle;
-
-saveTasks();
-renderTasks();
-
+task.title=newTitle
+saveTasks()
+renderTasks()
 }
 
 }
@@ -372,82 +364,67 @@ renderTasks();
 /* COMPLETE ALL */
 
 function completeAll(){
-
-tasks=tasks.map(t=>({...t,completed:true}));
-
-saveTasks();
-renderTasks();
-
+tasks=tasks.map(t=>({...t,completed:true}))
+saveTasks()
+renderTasks()
 }
 
 /* DELETE COMPLETED */
 
 function deleteCompleted(){
-
-tasks=tasks.filter(t=>!t.completed);
-
-saveTasks();
-renderTasks();
-
+tasks=tasks.filter(t=>!t.completed)
+saveTasks()
+renderTasks()
 }
 
 /* FILTER */
 
 function setFilter(type){
-
-filter=type;
-renderTasks();
-
+filter=type
+renderTasks()
 }
 
 /* SEARCH */
 
-searchInput.addEventListener("input",renderTasks);
+searchInput.addEventListener("input",renderTasks)
 
 /* SORT */
 
 function sortTasks(){
-
-tasks.sort((a,b)=>a.title.localeCompare(b.title));
-
-saveTasks();
-renderTasks();
-
+tasks.sort((a,b)=>a.title.localeCompare(b.title))
+saveTasks()
+renderTasks()
 }
 
 /* STATS */
 
 function updateStats(){
 
-const total=tasks.length;
-const completed=tasks.filter(t=>t.completed).length;
+const total=tasks.length
+const completed=tasks.filter(t=>t.completed).length
 
 document.getElementById("stats").innerHTML=
-`Completadas ${completed} de ${total}`;
+`Completadas ${completed} de ${total}`
 
-const progress=total?completed/total*100:0;
+const progress=total?completed/total*100:0
 
-document.getElementById("progressBar").style.width=progress+"%";
+document.getElementById("progressBar").style.width=progress+"%"
 
 }
 
 /* DARK MODE */
 
-const toggle=document.getElementById("themeToggle");
+const toggle=document.getElementById("themeToggle")
 
 function loadTheme(){
 
-const saved=localStorage.getItem("theme");
+const saved=localStorage.getItem("theme")
 
 if(saved){
-
-document.body.className=saved;
-toggle.textContent=saved==="dark"?"☀️":"🌙";
-
+document.body.className=saved
+toggle.textContent=saved==="dark"?"☀️":"🌙"
 }else{
-
-document.body.classList.add("light");
-
+document.body.classList.add("light")
 }
 
 }
@@ -456,23 +433,33 @@ toggle.onclick=()=>{
 
 if(document.body.classList.contains("light")){
 
-document.body.classList.replace("light","dark");
-toggle.textContent="☀️";
-localStorage.setItem("theme","dark");
+document.body.classList.replace("light","dark")
+toggle.textContent="☀️"
+localStorage.setItem("theme","dark")
 
 }else{
 
-document.body.classList.replace("dark","light");
-toggle.textContent="🌙";
-localStorage.setItem("theme","light");
+document.body.classList.replace("dark","light")
+toggle.textContent="🌙"
+localStorage.setItem("theme","light")
 
 }
 
-};
+}
 
-loadTheme();
+function startApp(){
 
-renderTasks();
+document.getElementById("welcomeScreen").style.display="none"
+localStorage.setItem("visited","true")
+
+}
+
+if(localStorage.getItem("visited")){
+document.getElementById("welcomeScreen").style.display="none"
+}
+
+loadTheme()
+renderTasks()
 
 </script>
 
