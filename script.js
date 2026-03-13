@@ -53,7 +53,7 @@ text.style.opacity=".6";
 }
 
 const actions=document.createElement("div");
-actions.className="flex gap-2 flex-wrap";
+actions.className="flex gap-2";
 
 const done=document.createElement("button");
 done.textContent="✔";
@@ -103,8 +103,7 @@ function updateStats(){
 const total=tasks.length;
 const completed=tasks.filter(t=>t.completed).length;
 
-document.getElementById("stats").textContent=
-`Completadas ${completed} de ${total}`;
+document.getElementById("stats").textContent=`Completadas ${completed} de ${total}`;
 
 const percent=total?completed/total*100:0;
 
@@ -137,17 +136,12 @@ save();
 render();
 }
 
-/* dark mode */
-
 const toggle=document.getElementById("themeToggle");
 
 toggle.onclick=()=>{
-
 document.body.classList.toggle("dark");
 document.body.classList.toggle("light");
-
 toggle.textContent=document.body.classList.contains("dark")?"☀":"🌙";
-
 };
 
 function openWelcome(){

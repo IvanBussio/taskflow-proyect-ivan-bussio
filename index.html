@@ -19,7 +19,7 @@ font-family:'Poppins',sans-serif;
 transition:background .6s;
 }
 
-/* fondo claro pastel */
+/* modo claro */
 
 body.light{
 background:linear-gradient(120deg,#ffd1dc,#f1c0e8,#e0c3fc);
@@ -27,7 +27,7 @@ background-size:300% 300%;
 animation:bgmove 20s infinite alternate;
 }
 
-/* fondo oscuro */
+/* modo oscuro */
 
 body.dark{
 background:linear-gradient(120deg,#0f172a,#020617,#1e293b);
@@ -52,7 +52,7 @@ box-shadow:0 15px 35px rgba(0,0,0,.15);
 }
 
 .dark .glass{
-background:rgba(30,41,59,.65);
+background:rgba(30,41,59,.7);
 }
 
 /* botones */
@@ -62,12 +62,10 @@ padding:10px 18px;
 border-radius:10px;
 background:rgba(255,255,255,.4);
 transition:.25s;
-font-size:14px;
-min-height:38px;
 }
 
 .btn:hover{
-transform:translateY(-3px) scale(1.05);
+transform:translateY(-3px);
 background:rgba(255,255,255,.65);
 }
 
@@ -77,34 +75,34 @@ background:rgba(255,255,255,.1);
 
 /* tareas */
 
+#taskList{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:10px;
+}
+
 .task{
 background:rgba(255,255,255,.55);
 padding:14px;
 border-radius:12px;
-
 display:flex;
-flex-wrap:wrap;
 justify-content:space-between;
 align-items:center;
-
 gap:10px;
-
-transition:.25s;
-}
-
-.task span{
-flex:1;
-min-width:140px;
-word-break:break-word;
-}
-
-.task:hover{
-transform:translateY(-2px);
-box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
 .dark .task{
 background:rgba(30,41,59,.7);
+}
+
+.task span{
+color:#111827;
+font-weight:500;
+}
+
+.dark .task span{
+color:white;
 }
 
 /* barra progreso */
@@ -161,8 +159,6 @@ color:white;
 
 <button onclick="openWelcome()" class="btn mb-6">ℹ Sobre TaskFlow</button>
 
-<!-- NUEVA TAREA -->
-
 <div class="glass w-full max-w-3xl mb-6">
 
 <h2 class="text-xl mb-3">Nueva tarea</h2>
@@ -182,8 +178,6 @@ class="w-full p-2 rounded mb-3 text-black"
 </div>
 
 </div>
-
-<!-- LISTA -->
 
 <div class="glass w-full max-w-3xl">
 
@@ -213,11 +207,9 @@ class="flex-1 p-2 rounded text-black"
 <div id="progressBar" class="progressbar"></div>
 </div>
 
-<div id="taskList" class="space-y-3"></div>
+<div id="taskList"></div>
 
 </div>
-
-<!-- MODAL -->
 
 <div id="welcomeModal" class="modal hidden">
 
@@ -226,26 +218,18 @@ class="flex-1 p-2 rounded text-black"
 <h2 class="text-3xl mb-4">Bienvenido a TaskFlow</h2>
 
 <p class="mb-4">
-TaskFlow es una aplicación diseñada para ayudarte a organizar tus tareas
-diarias de forma clara, simple y visual.
+TaskFlow te ayuda a organizar tus tareas de forma simple y visual.
 </p>
 
-<h3 class="text-xl mt-6 mb-2">¿Qué puedes hacer?</h3>
-
 <p class="mb-4">
-✔ Crear tareas  
-✔ Marcar tareas completadas  
-✔ Buscar y filtrar tareas  
-✔ Ordenar alfabéticamente  
-✔ Mantener tu productividad bajo control
+Puedes crear tareas, filtrarlas, completarlas y mantener tu productividad bajo control.
 </p>
 
 <h3 class="text-xl mt-6 mb-2">Quiénes somos</h3>
 
 <p>
-TaskFlow es un proyecto creado durante un bootcamp de desarrollo web
-para aprender JavaScript, diseño de interfaces modernas y gestión
-de datos en aplicaciones reales.
+Este proyecto fue creado como parte de un bootcamp de desarrollo web
+para aprender JavaScript, diseño moderno y gestión de datos.
 </p>
 
 <button onclick="closeWelcome()" class="btn mt-6">Cerrar</button>
