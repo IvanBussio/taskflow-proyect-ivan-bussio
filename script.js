@@ -5,8 +5,6 @@ function save(){
 localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
-/* añadir */
-
 function addTask(){
 
 const input=document.getElementById("taskInput");
@@ -26,8 +24,6 @@ save();
 render();
 
 }
-
-/* render */
 
 function render(){
 
@@ -57,7 +53,7 @@ text.style.opacity=".6";
 }
 
 const actions=document.createElement("div");
-actions.className="flex gap-2";
+actions.className="flex gap-2 flex-wrap";
 
 const done=document.createElement("button");
 done.textContent="✔";
@@ -102,8 +98,6 @@ updateStats();
 
 }
 
-/* estadísticas */
-
 function updateStats(){
 
 const total=tasks.length;
@@ -118,18 +112,12 @@ document.getElementById("progressBar").style.width=percent+"%";
 
 }
 
-/* filtros */
-
 function setFilter(type){
 filter=type;
 render();
 }
 
-/* buscar */
-
 document.getElementById("search").addEventListener("input",render);
-
-/* ordenar */
 
 function sortTasks(){
 tasks.sort((a,b)=>a.title.localeCompare(b.title));
@@ -137,15 +125,11 @@ save();
 render();
 }
 
-/* completar todas */
-
 function completeAll(){
 tasks.forEach(t=>t.completed=true);
 save();
 render();
 }
-
-/* borrar completadas */
 
 function deleteCompleted(){
 tasks=tasks.filter(t=>!t.completed);
@@ -153,7 +137,7 @@ save();
 render();
 }
 
-/* modo oscuro */
+/* dark mode */
 
 const toggle=document.getElementById("themeToggle");
 
@@ -165,8 +149,6 @@ document.body.classList.toggle("light");
 toggle.textContent=document.body.classList.contains("dark")?"☀":"🌙";
 
 };
-
-/* modal */
 
 function openWelcome(){
 document.getElementById("welcomeModal").classList.remove("hidden");

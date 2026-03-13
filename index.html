@@ -41,7 +41,7 @@ color:white;
 100%{background-position:100% 50%;}
 }
 
-/* tarjetas glass */
+/* tarjetas */
 
 .glass{
 background:rgba(255,255,255,.35);
@@ -58,10 +58,12 @@ background:rgba(30,41,59,.65);
 /* botones */
 
 .btn{
-padding:8px 16px;
+padding:10px 18px;
 border-radius:10px;
 background:rgba(255,255,255,.4);
 transition:.25s;
+font-size:14px;
+min-height:38px;
 }
 
 .btn:hover{
@@ -79,10 +81,21 @@ background:rgba(255,255,255,.1);
 background:rgba(255,255,255,.55);
 padding:14px;
 border-radius:12px;
+
 display:flex;
+flex-wrap:wrap;
 justify-content:space-between;
 align-items:center;
+
+gap:10px;
+
 transition:.25s;
+}
+
+.task span{
+flex:1;
+min-width:140px;
+word-break:break-word;
 }
 
 .task:hover{
@@ -136,7 +149,7 @@ color:white;
 
 </head>
 
-<body class="light min-h-screen flex flex-col items-center p-8">
+<body class="light min-h-screen flex flex-col items-center px-4 py-6">
 
 <header class="w-full max-w-3xl flex justify-between items-center mb-8">
 
@@ -174,7 +187,7 @@ class="w-full p-2 rounded mb-3 text-black"
 
 <div class="glass w-full max-w-3xl">
 
-<div class="flex gap-2 mb-3">
+<div class="flex flex-col sm:flex-row gap-2 mb-3">
 
 <input
 id="search"
@@ -204,7 +217,7 @@ class="flex-1 p-2 rounded text-black"
 
 </div>
 
-<!-- MODAL SOBRE TASKFLOW -->
+<!-- MODAL -->
 
 <div id="welcomeModal" class="modal hidden">
 
@@ -230,9 +243,9 @@ diarias de forma clara, simple y visual.
 <h3 class="text-xl mt-6 mb-2">Quiénes somos</h3>
 
 <p>
-TaskFlow es un proyecto creado durante el bootcamp de desarrollo web
-para aprender JavaScript, diseño de interfaces modernas y gestión de datos
-en aplicaciones reales.
+TaskFlow es un proyecto creado durante un bootcamp de desarrollo web
+para aprender JavaScript, diseño de interfaces modernas y gestión
+de datos en aplicaciones reales.
 </p>
 
 <button onclick="closeWelcome()" class="btn mt-6">Cerrar</button>
