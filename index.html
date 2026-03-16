@@ -19,7 +19,7 @@ font-family:'Poppins',sans-serif;
 transition:background .6s;
 }
 
-/* modo claro */
+/* fondo claro */
 
 body.light{
 background:linear-gradient(120deg,#ffd1dc,#f1c0e8,#e0c3fc);
@@ -27,7 +27,7 @@ background-size:300% 300%;
 animation:bgmove 20s infinite alternate;
 }
 
-/* modo oscuro */
+/* fondo oscuro */
 
 body.dark{
 background:linear-gradient(120deg,#0f172a,#020617,#1e293b);
@@ -90,6 +90,8 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 gap:10px;
+cursor:grab;
+animation:taskEnter .35s ease;
 }
 
 .dark .task{
@@ -103,6 +105,17 @@ font-weight:500;
 
 .dark .task span{
 color:white;
+}
+
+@keyframes taskEnter{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 /* barra progreso */
@@ -221,14 +234,10 @@ class="flex-1 p-2 rounded text-black"
 TaskFlow te ayuda a organizar tus tareas de forma simple y visual.
 </p>
 
-<p class="mb-4">
-Puedes crear tareas, filtrarlas, completarlas y mantener tu productividad bajo control.
-</p>
-
 <h3 class="text-xl mt-6 mb-2">Quiénes somos</h3>
 
 <p>
-Este proyecto fue creado como parte de un bootcamp de desarrollo web
+Este proyecto fue creado durante un bootcamp de desarrollo web
 para aprender JavaScript, diseño moderno y gestión de datos.
 </p>
 
