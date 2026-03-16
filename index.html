@@ -19,7 +19,7 @@ font-family:'Poppins',sans-serif;
 transition:background .6s;
 }
 
-/* fondo claro */
+/* modo claro */
 
 body.light{
 background:linear-gradient(120deg,#ffd1dc,#f1c0e8,#e0c3fc);
@@ -27,7 +27,7 @@ background-size:300% 300%;
 animation:bgmove 20s infinite alternate;
 }
 
-/* fondo oscuro */
+/* modo oscuro */
 
 body.dark{
 background:linear-gradient(120deg,#0f172a,#020617,#1e293b);
@@ -91,7 +91,6 @@ justify-content:space-between;
 align-items:center;
 gap:10px;
 cursor:grab;
-animation:taskEnter .35s ease;
 }
 
 .dark .task{
@@ -107,18 +106,7 @@ font-weight:500;
 color:white;
 }
 
-@keyframes taskEnter{
-from{
-opacity:0;
-transform:translateY(10px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-/* barra progreso */
+/* progreso */
 
 .progress{
 height:8px;
@@ -237,8 +225,8 @@ TaskFlow te ayuda a organizar tus tareas de forma simple y visual.
 <h3 class="text-xl mt-6 mb-2">Quiénes somos</h3>
 
 <p>
-Este proyecto fue creado durante un bootcamp de desarrollo web
-para aprender JavaScript, diseño moderno y gestión de datos.
+Proyecto creado durante un bootcamp de desarrollo web para practicar
+JavaScript, diseño moderno y gestión de tareas.
 </p>
 
 <button onclick="closeWelcome()" class="btn mt-6">Cerrar</button>

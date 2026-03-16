@@ -35,15 +35,14 @@ let filtered=[...tasks];
 if(filter==="completed") filtered=tasks.filter(t=>t.completed);
 if(filter==="pending") filtered=tasks.filter(t=>!t.completed);
 
-const search=document.getElementById("search").value?.toLowerCase() || "";
+const search=document.getElementById("search").value.toLowerCase();
 
 filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
 
-filtered.forEach((task,index)=>{
+filtered.forEach(task=>{
 
 const div=document.createElement("div");
 div.className="task";
-div.draggable=true;
 
 const text=document.createElement("span");
 text.textContent=task.title;
@@ -54,7 +53,7 @@ text.style.opacity=".6";
 }
 
 const actions=document.createElement("div");
-actions.className="flex gap-2 flex-wrap";
+actions.className="flex gap-2";
 
 const done=document.createElement("button");
 done.textContent="✔";
@@ -93,30 +92,6 @@ actions.append(done,edit,del);
 div.append(text,actions);
 list.appendChild(div);
 
-/* drag events */
-
-div.addEventListener("dragstart",()=>{
-div.classList.add("dragging");
-});
-
-div.addEventListener("dragend",()=>{
-div.classList.remove("dragging");
-save();
-});
-
-list.addEventListener("dragover",(e)=>{
-e.preventDefault();
-const dragging=document.querySelector(".dragging");
-const siblings=[...list.querySelectorAll(".task:not(.dragging)")];
-
-const next=siblings.find(s=>{
-return e.clientY<=s.offsetTop+s.offsetHeight/2;
-});
-
-list.insertBefore(dragging,next);
-
-});
-
 });
 
 updateStats();
@@ -128,8 +103,7 @@ function updateStats(){
 const total=tasks.length;
 const completed=tasks.filter(t=>t.completed).length;
 
-document.getElementById("stats").textContent=
-`Completadas ${completed} de ${total}`;
+document.getElementById("stats").textContent=`Completadas ${completed} de ${total}`;
 
 const percent=total?completed/total*100:0;
 
