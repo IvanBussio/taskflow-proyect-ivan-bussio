@@ -1,224 +1,270 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TaskFlow</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
+<title>TaskFlow Pro</title>
 
 <style>
-
-body{
-font-family:'Poppins',sans-serif;
-transition:background .6s;
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+  padding: 20px;
 }
 
-body.light{
-background:linear-gradient(120deg,#ffd1dc,#f1c0e8,#e0c3fc);
-background-size:300% 300%;
-animation:bgmove 20s infinite alternate;
+/* CONTENEDOR */
+.container {
+  max-width: 400px;
+  margin: auto;
+  background: #ffffff40;
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
 }
 
-body.dark{
-background:linear-gradient(120deg,#0f172a,#020617,#1e293b);
-background-size:300% 300%;
-animation:bgmove 20s infinite alternate;
-color:white;
+/* INPUT CATEGORÍA */
+.categoria-input {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
-@keyframes bgmove{
-0%{background-position:0% 50%;}
-100%{background-position:100% 50%;}
+.categoria-input input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #eee;
 }
 
-.glass{
-background:rgba(255,255,255,.35);
-backdrop-filter:blur(14px);
-border-radius:18px;
-padding:25px;
-box-shadow:0 15px 35px rgba(0,0,0,.15);
+.categoria-input button {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  border: none;
+  background: #4CAF50;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
 }
 
-.dark .glass{
-background:rgba(30,41,59,.7);
+/* SELECT */
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
 }
 
-.btn{
-padding:10px 16px;
-border-radius:12px;
-background:rgba(255,255,255,.25);
-backdrop-filter:blur(10px);
-transition:.2s;
-font-weight:500;
+/* CATEGORÍAS VISUALES */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
-.btn:hover{
-transform:scale(1.05);
-background:rgba(255,255,255,.4);
+.tag {
+  background: #ff9800;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.dark .btn{
-background:rgba(255,255,255,.1);
+.tag span {
+  cursor: pointer;
 }
 
-.task{
-background:rgba(255,255,255,.55);
-padding:14px;
-border-radius:12px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* INPUT TAREA */
+input.tarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
 }
 
-.dark .task{
-background:rgba(30,41,59,.7);
+/* BOTONES */
+button {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin: 5px 5px 5px 0;
+  cursor: pointer;
 }
 
-.task span{
-color:#111827;
+.btn-add {
+  background: #2196F3;
+  color: white;
 }
 
-.dark .task span{
-color:white;
+.btn-clear {
+  background: #f44336;
+  color: white;
 }
 
-input{
-color:#111827;
+/* LISTA */
+.task {
+  background: #ffffff80;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
 }
-
-.dark input{
-color:white;
-background:rgba(30,41,59,.7);
-}
-
-.progress{
-height:8px;
-border-radius:6px;
-background:rgba(255,255,255,.4);
-}
-
-.progressbar{
-height:8px;
-border-radius:6px;
-background:#34d399;
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.55);
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.modal-box{
-background:white;
-padding:40px;
-border-radius:20px;
-max-width:500px;
-text-align:center;
-animation:fadeIn .25s ease;
-}
-
-.dark .modal-box{
-background:#1e293b;
-color:white;
-}
-
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(10px);}
-to{opacity:1;transform:translateY(0);}
-}
-
 </style>
 </head>
 
-<body class="light min-h-screen flex flex-col items-center px-4 py-6">
+<body>
 
-<header class="w-full max-w-5xl flex justify-between items-center mb-6">
+<div class="container">
 
-<h1 class="text-3xl font-semibold">TaskFlow</h1>
+<h2>Nueva tarea</h2>
 
-<div class="flex gap-2">
-<button onclick="openWelcome()" class="btn px-3 py-1 text-sm">ℹ</button>
-<button id="themeToggle" class="btn px-3 py-1 text-sm">🌙</button>
+<input class="tarea" id="taskInput" placeholder="Escribe una tarea..." />
+
+<!-- CATEGORÍA -->
+<div class="categoria-input">
+  <input type="text" id="newCategory" placeholder="Nueva categoría..." />
+  <button id="addCategoryBtn">+</button>
 </div>
 
-</header>
+<select id="categorySelect"></select>
 
-<div class="glass w-full max-w-5xl mb-6">
+<div class="tags" id="tags"></div>
 
-<h2 class="text-xl mb-3">Nueva tarea</h2>
+<button class="btn-add" onclick="addTask()">Añadir</button>
+<button class="btn-clear" onclick="clearTasks()">Borrar todo</button>
 
-<input id="taskInput" placeholder="Escribe una tarea..." class="w-full p-2 rounded mb-3"/>
-
-<div class="flex gap-2 mb-3">
-<input id="newCategory" placeholder="Nueva categoría..." class="flex-1 p-2 rounded"/>
-<button onclick="addCategory()" class="btn">+</button>
-</div>
-
-<select id="category" class="w-full p-2 rounded mb-3"></select>
-
-<div id="categoryList" class="flex flex-wrap gap-2 mb-3"></div>
-
-<div class="flex gap-2 flex-wrap">
-<button onclick="addTask()" class="btn">Añadir</button>
-<button onclick="completeAll()" class="btn">Completar todas</button>
-<button onclick="deleteCompleted()" class="btn">Borrar completadas</button>
-</div>
-
-</div>
-
-<div class="glass w-full max-w-5xl">
-
-<input id="search" placeholder="Buscar..." class="w-full p-2 rounded mb-3"/>
-
-<select id="categoryFilter" class="p-2 rounded mb-3"></select>
-
-<p id="stats" class="text-sm mb-2"></p>
-
-<div class="progress mb-4">
-<div id="progressBar" class="progressbar"></div>
-</div>
+<hr>
 
 <div id="taskList"></div>
 
 </div>
 
-<!-- MODAL INFO -->
-<div id="welcomeModal" class="modal hidden">
+<script>
+let categories = JSON.parse(localStorage.getItem("categories")) || ["General"];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-<div class="modal-box">
+/* ===== CATEGORÍAS ===== */
 
-<h2 class="text-3xl mb-4 font-semibold">Bienvenido a TaskFlow</h2>
+function renderCategories() {
+  const select = document.getElementById("categorySelect");
+  const tags = document.getElementById("tags");
 
-<p class="mb-4 text-sm opacity-80">
-TaskFlow es una app simple pero potente para organizar tu día.
-Podés crear tareas, agruparlas por categorías y seguir tu progreso en tiempo real.
-</p>
+  select.innerHTML = "";
+  tags.innerHTML = "";
 
-<p class="mb-4 text-sm opacity-80">
-Diseñada para ser rápida, clara y sin distracciones.
-Todo lo que necesitás para ser más productivo, en un solo lugar.
-</p>
+  categories.forEach(cat => {
+    // SELECT
+    const option = document.createElement("option");
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
 
-<button onclick="closeWelcome()" class="btn mt-4">
-Entendido
-</button>
+    // TAG VISUAL
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.innerHTML = `${cat} <span onclick="deleteCategory('${cat}')">✖</span>`;
+    tags.appendChild(tag);
+  });
 
-</div>
+  localStorage.setItem("categories", JSON.stringify(categories));
+}
 
-</div>
+function addCategory() {
+  const input = document.getElementById("newCategory");
+  const value = input.value.trim();
 
-<script src="script.js"></script>
+  if (!value) return;
+
+  if (categories.includes(value)) {
+    alert("Ya existe");
+    return;
+  }
+
+  categories.push(value);
+  input.value = "";
+  input.focus();
+
+  renderCategories();
+}
+
+function deleteCategory(cat) {
+  categories = categories.filter(c => c !== cat);
+  renderCategories();
+}
+
+/* ENTER PARA CATEGORÍA */
+document.getElementById("newCategory")
+  .addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addCategory();
+    }
+  });
+
+/* BOTÓN + */
+document.getElementById("addCategoryBtn")
+  .addEventListener("click", addCategory);
+
+
+/* ===== TAREAS ===== */
+
+function addTask() {
+  const input = document.getElementById("taskInput");
+  const category = document.getElementById("categorySelect").value;
+
+  if (!input.value.trim()) return;
+
+  tasks.push({
+    text: input.value,
+    category: category
+  });
+
+  input.value = "";
+
+  renderTasks();
+}
+
+function renderTasks() {
+  const list = document.getElementById("taskList");
+  list.innerHTML = "";
+
+  tasks.forEach((task, index) => {
+    const div = document.createElement("div");
+    div.className = "task";
+
+    div.innerHTML = `
+      ${task.text} (${task.category})
+      <span onclick="deleteTask(${index})">🗑</span>
+    `;
+
+    list.appendChild(div);
+  });
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  renderTasks();
+}
+
+function clearTasks() {
+  tasks = [];
+  renderTasks();
+}
+
+/* INIT */
+renderCategories();
+renderTasks();
+</script>
 
 </body>
 </html>
