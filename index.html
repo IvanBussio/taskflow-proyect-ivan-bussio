@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskFlow Pro</title>
+<title>TaskFlow</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -15,13 +15,13 @@
   font-family:'Inter', sans-serif;
 }
 
-/* 🌈 FONDO ANIMADO */
+/* 🌈 FONDO MÁS VISIBLE */
 .animated-bg{
   position:fixed;
   width:100%;
   height:100%;
   z-index:-1;
-  background:linear-gradient(135deg,#ffd6e0,#cce5ff);
+  background:#f8fafc;
 }
 
 .animated-bg svg{
@@ -31,49 +31,38 @@
 
 .animated-bg path{
   fill:none;
-  stroke:rgba(0,0,0,0.08);
-  stroke-width:2;
-  stroke-dasharray:1000;
-  stroke-dashoffset:1000;
-  animation:draw 6s linear infinite;
+  stroke:rgba(0,0,0,0.15);
+  stroke-width:2.5;
+  stroke-dasharray:1200;
+  stroke-dashoffset:1200;
+  animation:draw 8s linear infinite;
 }
-
-.animated-bg path:nth-child(2){animation-delay:1s;}
-.animated-bg path:nth-child(3){animation-delay:2s;}
 
 @keyframes draw{
-  0%{stroke-dashoffset:1000;}
+  0%{stroke-dashoffset:1200;}
   50%{stroke-dashoffset:0;}
-  100%{stroke-dashoffset:-1000;}
+  100%{stroke-dashoffset:-1200;}
 }
 
-/* 🌙 DARK MODE */
+/* 🌙 DARK */
 body.dark{
-  background:#0f172a;
+  background:#020617;
   color:white;
 }
 
 body.dark .animated-bg{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+  background:#020617;
 }
 
 body.dark .animated-bg path{
-  stroke:rgba(255,255,255,0.08);
+  stroke:rgba(255,255,255,0.12);
 }
 
-/* 📦 CONTENEDOR */
-.container{
-  max-width:400px;
-  margin:40px auto;
+/* 📱 LAYOUT APP */
+.app{
   padding:20px;
-  border-radius:20px;
-  backdrop-filter:blur(15px);
-  background:rgba(255,255,255,0.7);
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-
-body.dark .container{
-  background:rgba(30,41,59,0.7);
+  max-width:500px;
+  margin:auto;
 }
 
 /* HEADER */
@@ -81,16 +70,22 @@ body.dark .container{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:15px;
+  margin-bottom:20px;
 }
 
-.header h1{
+.title{
   font-size:22px;
+  font-weight:600;
 }
 
-.header button{
+.actions{
+  display:flex;
+  gap:10px;
+}
+
+.icon-btn{
   border:none;
-  background:none;
+  background:transparent;
   font-size:18px;
   cursor:pointer;
 }
@@ -98,99 +93,137 @@ body.dark .container{
 /* INPUTS */
 input, select{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:6px 0;
-  border-radius:10px;
-  border:1px solid #ccc;
-  outline:none;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  background:white;
+}
+
+body.dark input,
+body.dark select{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:white;
 }
 
 /* BOTONES */
-.buttons{
+.row{
   display:flex;
   gap:10px;
   margin-top:10px;
 }
 
-button{
+button.primary{
   flex:1;
-  padding:10px;
+  padding:12px;
   border:none;
-  border-radius:10px;
-  cursor:pointer;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
   font-weight:500;
 }
 
-.add-btn{ background:#3b82f6; color:white; }
-.sort-btn{ background:#a855f7; color:white; }
+button.secondary{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#64748b;
+  color:white;
+}
 
-/* LISTA */
+/* TAREAS */
 .task{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:#f1f5f9;
-  padding:10px;
+  padding:12px;
   margin-top:10px;
-  border-radius:10px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.7);
 }
 
 body.dark .task{
-  background:#334155;
-}
-
-.task span{
-  font-size:14px;
+  background:rgba(30,41,59,0.7);
 }
 
 .task small{
-  display:block;
   opacity:0.6;
 }
 
 .task button{
-  background:none;
   border:none;
+  background:none;
   cursor:pointer;
   font-size:16px;
+}
+
+/* MODAL INFO */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  width:80%;
+}
+
+body.dark .modal-content{
+  background:#1e293b;
+  color:white;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎨 FONDO -->
+<!-- ✏️ FONDO -->
 <div class="animated-bg">
-  <svg viewBox="0 0 800 600">
-    <path d="M10 100 Q 200 50 400 150 T 800 100"/>
-    <path d="M0 300 Q 300 200 600 350 T 800 300"/>
-    <path d="M50 500 Q 250 400 500 550 T 800 500"/>
-  </svg>
+<svg viewBox="0 0 800 600">
+<path d="M10 100 Q 200 50 400 150 T 800 100"/>
+<path d="M0 200 Q 300 100 600 250 T 800 200"/>
+<path d="M50 300 Q 250 200 500 350 T 800 300"/>
+<path d="M20 400 Q 200 300 400 450 T 800 400"/>
+<path d="M0 500 Q 300 400 600 550 T 800 500"/>
+</svg>
 </div>
 
-<div class="container">
+<div class="app">
 
+  <!-- HEADER -->
   <div class="header">
-    <h1>TaskFlow</h1>
-    <button id="toggleTheme">🌙</button>
+    <div class="title">TaskFlow</div>
+
+    <div class="actions">
+      <button class="icon-btn" onclick="openInfo()">ℹ️</button>
+      <button class="icon-btn" id="themeBtn">🌙</button>
+    </div>
   </div>
 
-  <!-- BUSCADOR -->
+  <!-- INPUTS -->
   <input id="search" placeholder="Buscar...">
-
-  <!-- NUEVA TAREA -->
   <input id="taskInput" placeholder="Nueva tarea...">
 
-  <!-- CATEGORÍAS -->
   <input id="newCategory" placeholder="Nueva categoría...">
   <button onclick="addCategory()">+ Categoría</button>
 
   <select id="categorySelect"></select>
 
   <!-- BOTONES -->
-  <div class="buttons">
-    <button class="add-btn" onclick="addTask()">Añadir</button>
-    <button class="sort-btn" onclick="sortTasks()">Ordenar</button>
+  <div class="row">
+    <button class="primary" onclick="addTask()">Añadir</button>
+    <button class="secondary" onclick="sortTasks()">Ordenar</button>
   </div>
 
   <!-- LISTA -->
@@ -198,88 +231,98 @@ body.dark .task{
 
 </div>
 
+<!-- MODAL -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <h3>TaskFlow</h3>
+    <p>App para gestionar tareas con categorías, búsqueda y modo oscuro.</p>
+    <br>
+    <button onclick="closeInfo()">Cerrar</button>
+  </div>
+</div>
+
 <script>
 
 /* 🌙 DARK MODE */
-document.getElementById("toggleTheme").onclick = () => {
+document.getElementById("themeBtn").onclick = () => {
   document.body.classList.toggle("dark");
 };
 
-/* 📂 CATEGORÍAS */
-let categories = ["General"];
+/* INFO */
+function openInfo(){
+  document.getElementById("infoModal").style.display="flex";
+}
+function closeInfo(){
+  document.getElementById("infoModal").style.display="none";
+}
+
+/* CATEGORÍAS */
+let categories=["General"];
 
 function renderCategories(){
-  const select = document.getElementById("categorySelect");
-  select.innerHTML = "";
+  const select=document.getElementById("categorySelect");
+  select.innerHTML="";
   categories.forEach(cat=>{
-    const option = document.createElement("option");
-    option.value = cat;
-    option.textContent = cat;
-    select.appendChild(option);
+    const o=document.createElement("option");
+    o.value=cat;
+    o.textContent=cat;
+    select.appendChild(o);
   });
 }
 
 function addCategory(){
-  const input = document.getElementById("newCategory");
-  if(!input.value.trim()) return;
-
+  const input=document.getElementById("newCategory");
+  if(!input.value.trim())return;
   categories.push(input.value.trim());
-  input.value = "";
+  input.value="";
   renderCategories();
 }
-
 renderCategories();
 
-/* 📋 TAREAS */
-let tasks = [];
+/* TAREAS */
+let tasks=[];
 
 function addTask(){
-  const input = document.getElementById("taskInput");
-  const category = document.getElementById("categorySelect").value;
+  const input=document.getElementById("taskInput");
+  const category=document.getElementById("categorySelect").value;
 
-  if(!input.value.trim()) return;
+  if(!input.value.trim())return;
 
-  tasks.push({
-    text: input.value,
-    category,
-    completed:false
-  });
-
+  tasks.push({text:input.value,category,completed:false});
   input.value="";
   renderTasks();
 }
 
 function renderTasks(){
-  const list = document.getElementById("taskList");
-  const search = document.getElementById("search").value.toLowerCase();
+  const list=document.getElementById("taskList");
+  const search=document.getElementById("search").value.toLowerCase();
 
   list.innerHTML="";
 
-  tasks
-    .filter(t => t.text.toLowerCase().includes(search))
-    .forEach((task,index)=>{
-      const div = document.createElement("div");
-      div.className="task";
+  tasks.filter(t=>t.text.toLowerCase().includes(search))
+  .forEach((t,i)=>{
+    const div=document.createElement("div");
+    div.className="task";
 
-      div.innerHTML = `
-        <div>
-          <span style="${task.completed ? 'text-decoration:line-through;' : ''}">
-            ${task.text}
-          </span>
-          <small>${task.category}</small>
-        </div>
-        <div>
-          <button onclick="toggleTask(${index})">✔️</button>
-          <button onclick="deleteTask(${index})">🗑️</button>
-        </div>
-      `;
+    div.innerHTML=`
+      <div>
+        <span style="${t.completed?'text-decoration:line-through':''}">
+          ${t.text}
+        </span>
+        <small>${t.category}</small>
+      </div>
+      <div>
+        <button onclick="toggleTask(${i})">✔️</button>
+        <button onclick="deleteTask(${i})">🗑️</button>
+      </div>
+    `;
 
-      list.appendChild(div);
-    });
+    list.appendChild(div);
+  });
 }
 
 function toggleTask(i){
-  tasks[i].completed = !tasks[i].completed;
+  tasks[i].completed=!tasks[i].completed;
   renderTasks();
 }
 
@@ -288,17 +331,17 @@ function deleteTask(i){
   renderTasks();
 }
 
-/* 🔤 ORDENAR */
+/* ORDENAR */
 function sortTasks(){
   tasks.sort((a,b)=>a.text.localeCompare(b.text));
   renderTasks();
 }
 
-/* 🔎 BUSCADOR */
-document.getElementById("search").addEventListener("input", renderTasks);
+/* BUSCAR */
+document.getElementById("search").addEventListener("input",renderTasks);
 
-/* ⌨️ ENTER */
-document.getElementById("taskInput").addEventListener("keypress", e=>{
+/* ENTER */
+document.getElementById("taskInput").addEventListener("keypress",e=>{
   if(e.key==="Enter") addTask();
 });
 
