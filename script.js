@@ -174,3 +174,11 @@ document.getElementById("themeToggle").onclick=()=>{
 
 renderCategories();
 renderTasks();
+
+function openWelcome(){
+  document.getElementById("welcomeModal").classList.remove("hidden");
+}
+
+function closeWelcome(){
+  document.getElementById("welcomeModal").classList.add("hidden");
+}
