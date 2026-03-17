@@ -1,184 +1,136 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+import { useState, useEffect } from "react";
 
-let categories = JSON.parse(localStorage.getItem("categories")) || [
-  { name: "General", color: "#34d399" }
-];
+export default function Categorias() {
+  const [nuevaCategoria, setNuevaCategoria] = useState("");
+  const [categorias, setCategorias] = useState([]);
+  const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
 
-const taskList = document.getElementById("taskList");
-const stats = document.getElementById("stats");
-const progressBar = document.getElementById("progressBar");
+  // 🔧 Normalizar (NO rompe datos antiguos)
+  const normalizarCategorias = (cats) => {
+    return cats.map((cat) => {
+      if (typeof cat === "string") {
+        return { nombre: cat };
+      }
+      return cat;
+    });
+  };
 
-function saveTasks(){
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+  // 🔧 Obtener nombre seguro
+  const getNombre = (cat) =>
+    typeof cat === "object" ? cat.nombre : cat;
 
-function getRandomColor(){
-  const colors=["#60a5fa","#f472b6","#facc15","#34d399","#fb923c","#a78bfa"];
-  return colors[Math.floor(Math.random()*colors.length)];
-}
+  // 📦 Cargar desde localStorage
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("categorias")) || [];
+    setCategorias(normalizarCategorias(data));
+  }, []);
 
-function addCategory(){
-  const input=document.getElementById("newCategory");
-  const value=input.value.trim();
+  // 💾 Guardar en localStorage
+  useEffect(() => {
+    localStorage.setItem("categorias", JSON.stringify(categorias));
+  }, [categorias]);
 
-  if(!value)return;
+  // ➕ Agregar categoría
+  const agregarCategoria = () => {
+    const nombre = nuevaCategoria.trim();
+    if (!nombre) return;
 
-  if(!categories.find(c=>c.name===value)){
-    categories.push({name:value,color:getRandomColor()});
-    localStorage.setItem("categories",JSON.stringify(categories));
-    renderCategories();
-  }
+    // evitar duplicados
+    if (categorias.some((c) => getNombre(c) === nombre)) return;
 
-  input.value="";
-}
+    setCategorias((prev) => [...prev, { nombre }]);
+    setNuevaCategoria("");
+  };
 
-function deleteCategory(name){
-  categories=categories.filter(c=>c.name!==name);
+  // ⌨️ Enter para agregar
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      agregarCategoria();
+    }
+  };
 
-  tasks.forEach(t=>{
-    if(t.category===name)t.category="General";
-  });
+  // 🟠 Seleccionar categoría
+  const seleccionarCategoria = (e) => {
+    const value = e.target.value;
+    if (!value) return;
 
-  localStorage.setItem("categories",JSON.stringify(categories));
-  saveTasks();
+    if (!categoriasSeleccionadas.includes(value)) {
+      setCategoriasSeleccionadas((prev) => [...prev, value]);
+    }
+  };
 
-  renderCategories();
-  renderTasks();
-}
+  // ❌ Eliminar categoría seleccionada
+  const eliminarSeleccionada = (cat) => {
+    setCategoriasSeleccionadas((prev) =>
+      prev.filter((c) => c !== cat)
+    );
+  };
 
-function renderCategories(){
-  const select=document.getElementById("category");
-  const filter=document.getElementById("categoryFilter");
-  const list=document.getElementById("categoryList");
+  // 🧹 Borrar todo
+  const borrarTodo = () => {
+    setCategoriasSeleccionadas([]);
+  };
 
-  select.innerHTML="";
-  filter.innerHTML='<option value="all">Todas</option>';
-  list.innerHTML="";
+  return (
+    <div className="p-4 bg-white rounded-xl shadow-md">
+      <h2 className="text-xl font-bold mb-3">Nueva tarea</h2>
 
-  categories.forEach(cat=>{
-    const opt=document.createElement("option");
-    opt.value=cat.name;
-    opt.textContent=cat.name;
-    select.appendChild(opt);
-
-    const opt2=document.createElement("option");
-    opt2.value=cat.name;
-    opt2.textContent=cat.name;
-    filter.appendChild(opt2);
-
-    const chip=document.createElement("div");
-    chip.className="px-3 py-1 rounded text-sm flex gap-2";
-    chip.style.background=cat.color;
-    chip.innerHTML=`${cat.name} ${cat.name!=="General"?`<button onclick="deleteCategory('${cat.name}')">✖</button>`:""}`;
-
-    list.appendChild(chip);
-  });
-}
-
-function addTask(){
-  const input=document.getElementById("taskInput");
-  const category=document.getElementById("category").value;
-
-  if(input.value.trim()==="")return;
-
-  tasks.push({text:input.value,done:false,category});
-
-  input.value="";
-  saveTasks();
-  renderTasks();
-}
-
-function toggleTask(i){
-  tasks[i].done=!tasks[i].done;
-  saveTasks();
-  renderTasks();
-}
-
-function deleteTask(i){
-  tasks.splice(i,1);
-  saveTasks();
-  renderTasks();
-}
-
-function completeAll(){
-  tasks.forEach(t=>t.done=true);
-  saveTasks();
-  renderTasks();
-}
-
-function deleteCompleted(){
-  tasks=tasks.filter(t=>!t.done);
-  saveTasks();
-  renderTasks();
-}
-
-function renderTasks(){
-  taskList.innerHTML="";
-
-  const search=document.getElementById("search").value.toLowerCase();
-  const catFilter=document.getElementById("categoryFilter").value;
-
-  let filtered=tasks.filter(t=>{
-    if(catFilter==="all")return true;
-    return t.category===catFilter;
-  });
-
-  filtered=filtered.filter(t=>t.text.toLowerCase().includes(search));
-
-  filtered.forEach((task,i)=>{
-    const div=document.createElement("div");
-    div.className="task";
-    div.style.animation="fadeIn .3s ease";
-
-    const cat=categories.find(c=>c.name===task.category);
-
-    div.innerHTML=`
-      <div>
-        <span style="${task.done?'text-decoration:line-through;opacity:.6':''}">
-          ${task.text}
-        </span>
-
-        <div class="flex items-center gap-2 mt-1">
-          <div style="width:10px;height:10px;border-radius:50%;background:${cat?.color}"></div>
-          <p class="text-xs opacity-70">${task.category}</p>
-        </div>
+      {/* Input categoría */}
+      <div className="flex gap-2 mb-3">
+        <input
+          type="text"
+          placeholder="Nueva categoría..."
+          value={nuevaCategoria}
+          onChange={(e) => setNuevaCategoria(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-1 p-2 border rounded-lg"
+        />
+        <button
+          onClick={agregarCategoria}
+          className="bg-green-500 text-white px-4 rounded-lg"
+        >
+          +
+        </button>
       </div>
 
-      <div class="flex gap-2">
-        <button onclick="toggleTask(${i})">✔</button>
-        <button onclick="deleteTask(${i})">🗑</button>
+      {/* Select */}
+      <select
+        onChange={seleccionarCategoria}
+        className="w-full p-2 border rounded-lg mb-3"
+      >
+        <option value="">Seleccionar categoría</option>
+        {categorias.map((cat, i) => (
+          <option key={i} value={getNombre(cat)}>
+            {getNombre(cat)}
+          </option>
+        ))}
+      </select>
+
+      {/* Chips */}
+      <div className="flex flex-wrap gap-2 mb-3">
+        {categoriasSeleccionadas.map((cat, i) => (
+          <div
+            key={i}
+            className="bg-orange-500 text-white px-3 py-1 rounded-lg flex items-center gap-2"
+          >
+            {cat}
+            <button onClick={() => eliminarSeleccionada(cat)}>✕</button>
+          </div>
+        ))}
       </div>
-    `;
 
-    taskList.appendChild(div);
-  });
-
-  updateStats();
-}
-
-function updateStats(){
-  const total=tasks.length;
-  const done=tasks.filter(t=>t.done).length;
-
-  stats.innerText=`${done} de ${total} completadas`;
-  progressBar.style.width=total?(done/total)*100+"%":"0%";
-}
-
-document.getElementById("search").addEventListener("input",renderTasks);
-document.getElementById("categoryFilter").addEventListener("change",renderTasks);
-
-document.getElementById("themeToggle").onclick=()=>{
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
-};
-
-renderCategories();
-renderTasks();
-
-function openWelcome(){
-  document.getElementById("welcomeModal").classList.remove("hidden");
-}
-
-function closeWelcome(){
-  document.getElementById("welcomeModal").classList.add("hidden");
+      {/* Botones */}
+      <div className="flex gap-2">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
+          Añadir
+        </button>
+        <button
+          onClick={borrarTodo}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg"
+        >
+          Borrar todo
+        </button>
+      </div>
+    </div>
+  );
 }
