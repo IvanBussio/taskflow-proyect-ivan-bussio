@@ -6,13 +6,28 @@
   <title>TaskFlow</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .dark-mode {
+      background: #111827;
+      color: white;
+    }
+  </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-r from-pink-300 to-blue-300 p-4">
+<body id="body" class="min-h-screen bg-gradient-to-r from-pink-300 to-blue-300 p-4">
 
   <div class="max-w-md mx-auto bg-white/30 backdrop-blur-lg p-4 rounded-xl shadow-lg">
 
-    <h1 class="text-2xl font-bold mb-4">Nueva tarea</h1>
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">TaskFlow</h1>
+
+      <div class="flex gap-2">
+        <button id="btnInfo" class="bg-gray-200 px-2 rounded">ℹ️</button>
+        <button id="btnModo" class="bg-gray-200 px-2 rounded">🌙</button>
+      </div>
+    </div>
 
     <!-- INPUT TAREA -->
     <input id="inputTarea" type="text" placeholder="Escribe una tarea..."
@@ -51,12 +66,23 @@
 
   </div>
 
+  <!-- MODAL INFO -->
+  <div id="modalInfo" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div class="bg-white p-4 rounded-lg max-w-sm">
+      <h2 class="text-lg font-bold mb-2">Sobre TaskFlow</h2>
+      <p>App para gestionar tareas con categorías.</p>
+      <button onclick="cerrarModal()" class="mt-3 bg-blue-500 text-white px-3 py-1 rounded">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
   <script>
     let categorias = [];
     let categoriasSeleccionadas = [];
     let tareas = [];
+    let darkMode = false;
 
-    // 🔧 Normalizar (evita [object Object])
     function normalizarCategorias(cats) {
       return cats.map(cat =>
         typeof cat === "string" ? { nombre: cat } : cat
@@ -67,41 +93,35 @@
       return typeof cat === "object" ? cat.nombre : cat;
     }
 
-    // 📦 Cargar datos
     function cargarDatos() {
-      const cats = JSON.parse(localStorage.getItem("categorias")) || [];
-      const tasks = JSON.parse(localStorage.getItem("tareas")) || [];
+      categorias = normalizarCategorias(JSON.parse(localStorage.getItem("categorias")) || []);
+      tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+      darkMode = JSON.parse(localStorage.getItem("darkMode")) || false;
 
-      categorias = normalizarCategorias(cats);
-      tareas = tasks;
-
+      aplicarModo();
       renderCategorias();
       renderTareas();
     }
 
-    // 💾 Guardar
     function guardar() {
       localStorage.setItem("categorias", JSON.stringify(categorias));
       localStorage.setItem("tareas", JSON.stringify(tareas));
+      localStorage.setItem("darkMode", JSON.stringify(darkMode));
     }
 
-    // ➕ Agregar categoría
     function agregarCategoria() {
       const input = document.getElementById("inputCategoria");
       const nombre = input.value.trim();
-
       if (!nombre) return;
 
       if (categorias.some(c => getNombre(c) === nombre)) return;
 
       categorias.push({ nombre });
       input.value = "";
-
       guardar();
       renderCategorias();
     }
 
-    // 🟠 Render categorías
     function renderCategorias() {
       const select = document.getElementById("selectCategorias");
       select.innerHTML = `<option value="">Seleccionar categoría</option>`;
@@ -114,7 +134,6 @@
       });
     }
 
-    // 🟠 Seleccionar categoría
     document.getElementById("selectCategorias").addEventListener("change", (e) => {
       const value = e.target.value;
       if (!value) return;
@@ -125,7 +144,6 @@
       }
     });
 
-    // 🟠 Render chips
     function renderChips() {
       const container = document.getElementById("chips");
       container.innerHTML = "";
@@ -143,17 +161,14 @@
       renderChips();
     }
 
-    // 🧹 Borrar chips
     function borrarTodo() {
       categoriasSeleccionadas = [];
       renderChips();
     }
 
-    // ✅ Agregar tarea
     function agregarTarea() {
       const input = document.getElementById("inputTarea");
       const texto = input.value.trim();
-
       if (!texto) return;
 
       tareas.push({
@@ -170,14 +185,12 @@
       renderTareas();
     }
 
-    // ✔️ Toggle tarea
     function toggleTarea(index) {
       tareas[index].completada = !tareas[index].completada;
       guardar();
       renderTareas();
     }
 
-    // 📋 Render tareas
     function renderTareas() {
       const lista = document.getElementById("listaTareas");
       lista.innerHTML = "";
@@ -202,14 +215,44 @@
       });
     }
 
+    // 🌙 Modo oscuro
+    function aplicarModo() {
+      const body = document.getElementById("body");
+      if (darkMode) {
+        body.classList.add("dark-mode");
+      } else {
+        body.classList.remove("dark-mode");
+      }
+    }
+
+    document.getElementById("btnModo").onclick = () => {
+      darkMode = !darkMode;
+      guardar();
+      aplicarModo();
+    };
+
+    // ℹ️ Modal
+    document.getElementById("btnInfo").onclick = () => {
+      document.getElementById("modalInfo").classList.remove("hidden");
+    };
+
+    function cerrarModal() {
+      document.getElementById("modalInfo").classList.add("hidden");
+    }
+
+    // ⌨️ ENTER
+    document.getElementById("inputCategoria").addEventListener("keydown", e => {
+      if (e.key === "Enter") agregarCategoria();
+    });
+
+    document.getElementById("inputTarea").addEventListener("keydown", e => {
+      if (e.key === "Enter") agregarTarea();
+    });
+
     // 🎯 Eventos
     document.getElementById("btnAgregarCat").onclick = agregarCategoria;
     document.getElementById("btnAgregarTarea").onclick = agregarTarea;
     document.getElementById("btnBorrar").onclick = borrarTodo;
-
-    document.getElementById("inputCategoria").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") agregarCategoria();
-    });
 
     // 🚀 Init
     cargarDatos();
