@@ -6,6 +6,8 @@
 <title>TaskFlow</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 *{
@@ -45,6 +47,22 @@
 }
 
 /* 🌙 DARK */
+
+/* BASE */
+
+body{
+font-family:'Poppins',sans-serif;
+transition:background .6s;
+}
+
+/* MODOS */
+
+body.light{
+background:linear-gradient(120deg,#d4f5e9,#c7f9cc,#e0f7fa);
+background-size:300% 300%;
+animation:bgmove 20s infinite alternate;
+}
+
 body.dark{
   background:#000;
   color:white;
@@ -104,6 +122,51 @@ input{
 input:focus{
   border:1px solid #22c55e;
   box-shadow:0 0 0 2px rgba(34,197,94,0.2);
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+/* HEADER PREMIUM */
+
+.logo{
+font-size:28px;
+font-weight:600;
+background:linear-gradient(90deg,#6366f1,#22c55e);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.icon-btn{
+width:40px;
+height:40px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:12px;
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(10px);
+transition:.25s;
+cursor:pointer;
+}
+
+.icon-btn:hover{
+transform:translateY(-2px) scale(1.05);
+background:rgba(255,255,255,0.7);
+}
+
+.dark .icon-btn{
+background:rgba(255,255,255,0.08);
+}
+
+/* CARDS */
+
+.glass{
+background:rgba(255,255,255,.35);
+backdrop-filter:blur(14px);
+border-radius:18px;
+padding:25px;
+box-shadow:0 15px 35px rgba(0,0,0,.15);
 }
 
 body.dark input{
@@ -128,6 +191,13 @@ body.dark input{
   background:rgba(255,255,255,0.6);
   border:1px solid rgba(0,0,0,0.08);
   transition:all 0.2s ease;
+/* BOTONES */
+
+.btn{
+padding:10px 16px;
+border-radius:10px;
+background:rgba(255,255,255,.4);
+transition:.25s;
 }
 
 .chip.active{
@@ -138,6 +208,9 @@ body.dark input{
 
 body.dark .chip{
   background:rgba(255,255,255,0.08);
+.btn:hover{
+transform:translateY(-2px);
+background:rgba(255,255,255,.7);
 }
 
 body.dark .chip.active{
@@ -150,6 +223,7 @@ body.dark .chip.active{
   gap:10px;
   margin-top:10px;
 }
+/* TAREAS */
 
 button{
   padding:12px;
@@ -170,17 +244,44 @@ button{
   margin-top:10px;
   border-radius:12px;
   background:rgba(255,255,255,0.7);
+background:rgba(255,255,255,.55);
+padding:12px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.dark .task{
+background:rgba(30,41,59,.7);
 }
 
 body.dark .task{
   background:rgba(255,255,255,0.05);
+.completed{
+text-decoration:line-through;
+opacity:.6;
+}
+
+/* PROGRESS */
+
+.progress{
+height:8px;
+border-radius:6px;
+background:rgba(255,255,255,.4);
 }
 
 .task small{
   opacity:0.6;
+.progressbar{
+height:8px;
+border-radius:6px;
+background:#22c55e;
 }
 
 /* MODAL */
+/* MODAL */
+
 .modal{
   position:fixed;
   top:0;
@@ -191,6 +292,12 @@ body.dark .task{
   display:none;
   justify-content:center;
   align-items:center;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .modal-content{
@@ -204,11 +311,25 @@ body.dark .task{
 
 body.dark .modal-content{
   background:rgba(30,41,59,0.95);
+.modal-box{
+background:white;
+padding:30px;
+border-radius:20px;
+max-width:400px;
+text-align:center;
+}
+
+.dark .modal-box{
+background:#1e293b;
+color:white;
 }
 </style>
 </head>
 
 <body>
+<body class="light min-h-screen flex flex-col items-center px-4 py-6">
+
+<!-- HEADER -->
 
 <div class="animated-bg">
 <svg viewBox="0 0 800 600">
@@ -218,6 +339,32 @@ body.dark .modal-content{
 <path d="M20 400 Q 200 300 400 450 T 800 400"/>
 <path d="M0 500 Q 300 400 600 550 T 800 500"/>
 </svg>
+<header class="w-full max-w-3xl flex justify-between items-center mb-8">
+
+<div class="flex gap-2">
+
+<button onclick="openWelcome()" class="icon-btn">ℹ</button>
+
+<button id="themeToggle" class="icon-btn">
+<span id="themeIcon">🌙</span>
+</button>
+
+</div>
+
+<h1 class="logo">TaskFlow</h1>
+
+</header>
+
+<!-- INPUT -->
+
+<div class="glass w-full max-w-3xl mb-6">
+
+<input id="taskInput" placeholder="Nueva tarea..." class="w-full p-2 rounded mb-3 text-black">
+
+<div class="flex gap-2 flex-wrap">
+<button onclick="addTask()" class="btn">Añadir</button>
+<button onclick="completeAll()" class="btn">Completar todas</button>
+<button onclick="deleteCompleted()" class="btn">Borrar completadas</button>
 </div>
 
 <div class="app">
@@ -237,13 +384,26 @@ body.dark .modal-content{
 <button onclick="addCategory()">+ Categoría</button>
 
 <div id="categoryChips" class="chips"></div>
+</div>
+
+<!-- LIST -->
+
+<div class="glass w-full max-w-3xl">
+
+<input id="search" placeholder="Buscar..." class="w-full p-2 rounded mb-3 text-black">
+
+<button onclick="sortTasks()" class="btn mb-3">Ordenar</button>
+
+<div id="taskList"></div>
+
+<p id="stats" class="mt-2"></p>
 
 <div class="row">
   <button class="primary" onclick="addTask()">Añadir</button>
   <button class="secondary" onclick="sortTasks()">Ordenar</button>
+<div class="progress mt-2">
+<div id="progressBar" class="progressbar"></div>
 </div>
-
-<div id="taskList"></div>
 
 </div>
 
@@ -270,6 +430,13 @@ body.dark .modal-content{
     <br>
     <button onclick="closeInfo()">Cerrar</button>
   </div>
+<!-- MODAL -->
+
+<div id="modal" class="modal hidden">
+<div class="modal-box">
+<h2 class="text-xl mb-2">Sobre TaskFlow</h2>
+<p>App de tareas moderna con diseño premium.</p>
+<button onclick="closeWelcome()" class="btn mt-4">Cerrar</button>
 </div>
 
 <script>
@@ -389,6 +556,9 @@ document.getElementById("taskInput").addEventListener("keypress",e=>{
 });
 
 </script>
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
