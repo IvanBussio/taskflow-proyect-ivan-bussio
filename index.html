@@ -12,12 +12,32 @@
 body{
 margin:0;
 font-family:sans-serif;
-background:#020617;
 color:white;
+transition:all .4s ease;
 overflow-x:hidden;
 }
 
-/* FONDO LÍNEAS LÁPIZ */
+/* 🌙 MODO OSCURO (DEFAULT) */
+body{
+background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);
+background-size:300% 300%;
+animation:bgmove 12s ease infinite;
+}
+
+/* ☀️ MODO CLARO */
+body.light{
+background:linear-gradient(135deg,#d1fae5,#bbf7d0,#a7f3d0);
+color:#022c22;
+}
+
+/* ANIMACIÓN FONDO */
+@keyframes bgmove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+/* ✏️ LÍNEAS ANIMADAS */
 .bg{
 position:fixed;
 top:0;
@@ -32,7 +52,7 @@ overflow:hidden;
 position:absolute;
 width:2px;
 height:200%;
-background:rgba(255,255,255,0.06);
+background:rgba(255,255,255,0.08);
 animation:draw 6s linear infinite;
 }
 
@@ -43,10 +63,28 @@ animation:draw 6s linear infinite;
 
 /* TARJETAS */
 .card{
-background:rgba(30,41,59,0.7);
+background:rgba(30,41,59,0.6);
 padding:25px;
 border-radius:16px;
-backdrop-filter:blur(10px);
+backdrop-filter:blur(12px);
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+body.light .card{
+background:white;
+}
+
+/* INPUT */
+input{
+background:#020617;
+border:1px solid #334155;
+color:white;
+}
+
+body.light input{
+background:white;
+color:#022c22;
+border:1px solid #86efac;
 }
 
 /* BOTONES */
@@ -58,20 +96,18 @@ transition:.2s;
 }
 
 .btn:hover{
-background:#475569;
 transform:scale(1.05);
+background:#475569;
 }
 
-/* INPUT */
-input{
-background:#0f172a;
-border:1px solid #334155;
-color:white;
+body.light .btn{
+background:#4ade80;
+color:#022c22;
 }
 
 /* TAREAS */
 .task{
-background:#0f172a;
+background:#020617;
 padding:14px;
 border-radius:10px;
 margin-bottom:10px;
@@ -79,6 +115,11 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 animation:fade .3s ease;
+}
+
+body.light .task{
+background:#bbf7d0;
+color:#022c22;
 }
 
 @keyframes fade{
@@ -95,12 +136,40 @@ font-size:12px;
 margin-left:6px;
 }
 
+body.light .chip{
+background:#16a34a;
+color:white;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.modal-box{
+background:#020617;
+padding:40px;
+border-radius:20px;
+max-width:400px;
+text-align:center;
+}
+
+body.light .modal-box{
+background:white;
+color:#022c22;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- FONDO -->
+<!-- FONDO LÍNEAS -->
 <div class="bg">
 <div class="line" style="left:15%"></div>
 <div class="line" style="left:35%"></div>
@@ -117,7 +186,7 @@ margin-left:6px;
 <button onclick="toggleTheme()" class="btn">🌙</button>
 </div>
 
-<h1 class="text-4xl">TaskFlow</h1>
+<h1 class="text-4xl font-semibold">TaskFlow</h1>
 
 </div>
 
@@ -149,15 +218,16 @@ margin-left:6px;
 </div>
 
 <!-- MODAL -->
-<div id="modal" style="display:none;" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+<div id="modal" style="display:none;" class="modal">
 
-<div class="card max-w-md text-center">
+<div class="modal-box">
 
 <h2 class="text-2xl mb-3">Bienvenido a TaskFlow</h2>
 
 <p class="mb-4">
-Organiza tus tareas con estilo.  
-Arrastra, clasifica y controla tu día.
+Organiza tu día con estilo.  
+Modo claro verde pastel 🌿  
+Modo oscuro galáctico 🌌
 </p>
 
 <button onclick="closeModal()" class="btn">Empezar</button>
@@ -168,7 +238,6 @@ Arrastra, clasifica y controla tu día.
 
 <script>
 
-// SAFE STORAGE
 let tasks = []
 try{
 tasks = JSON.parse(localStorage.getItem("tasks")) || []
@@ -185,7 +254,6 @@ localStorage.setItem("tasks", JSON.stringify(tasks))
 function addTask(){
 const text = document.getElementById("taskInput").value
 const cat = document.getElementById("categoryInput").value
-
 if(!text) return
 
 tasks.push({text,cat,done:false})
@@ -260,11 +328,12 @@ save()
 render()
 }
 
+/* 🌙 CAMBIO DE TEMA */
 function toggleTheme(){
-document.body.classList.toggle("bg-white")
-document.body.classList.toggle("text-black")
+document.body.classList.toggle("light")
 }
 
+/* MODAL */
 function openModal(){
 document.getElementById("modal").style.display="flex"
 }
