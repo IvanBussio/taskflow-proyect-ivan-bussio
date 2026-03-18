@@ -10,57 +10,55 @@
 
 <style>
 
-/* BASE */
 body{
 font-family:'Poppins',sans-serif;
-overflow-x:hidden;
 }
 
-/* FONDO ANIMADO "LÁPIZ" */
-.background-lines{
+/* FONDO LÁPIZ */
+.background{
 position:fixed;
-width:100%;
-height:100%;
 top:0;
 left:0;
+width:100%;
+height:100%;
 z-index:-1;
+background:#f9fafb;
 overflow:hidden;
 }
 
 .line{
 position:absolute;
 width:2px;
-height:120%;
-background:rgba(255,255,255,0.1);
-animation:draw 6s linear infinite;
+height:200%;
+background:rgba(0,0,0,0.05);
+animation:move 6s linear infinite;
 }
 
-@keyframes draw{
+@keyframes move{
 0%{transform:translateY(-100%)}
 100%{transform:translateY(100%)}
 }
 
-/* MODOS */
-body.light{
-background:#f9fafb;
+/* DARK */
+.dark .background{
+background:#020617;
 }
 
-body.dark{
-background:#020617;
-color:white;
+.dark .line{
+background:rgba(255,255,255,0.05);
 }
 
 /* GLASS */
 .glass{
-background:rgba(255,255,255,.7);
+background:rgba(255,255,255,.8);
 backdrop-filter:blur(12px);
 border-radius:20px;
 padding:30px;
-box-shadow:0 20px 40px rgba(0,0,0,.1);
 }
 
 .dark .glass{
-background:rgba(30,41,59,.7);
+background:rgba(30,41,59,.8);
+color:white;
 }
 
 /* BOTONES */
@@ -68,11 +66,6 @@ background:rgba(30,41,59,.7);
 padding:10px 18px;
 border-radius:12px;
 background:#e5e7eb;
-transition:.25s;
-}
-
-.btn:hover{
-transform:scale(1.05);
 }
 
 .dark .btn{
@@ -82,26 +75,18 @@ color:white;
 
 /* TAREAS */
 .task{
-padding:16px;
-border-radius:14px;
-margin-bottom:12px;
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
 display:flex;
 justify-content:space-between;
-align-items:center;
 background:white;
-animation:fadeIn .4s ease;
 }
 
 .dark .task{
 background:#1e293b;
 }
 
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
-}
-
-/* CHIP */
 .chip{
 background:#34d399;
 color:white;
@@ -125,9 +110,6 @@ justify-content:center;
 background:white;
 padding:40px;
 border-radius:20px;
-max-width:500px;
-text-align:center;
-animation:fadeIn .5s ease;
 }
 
 .dark .modal-box{
@@ -140,41 +122,34 @@ color:white;
 
 <body class="light min-h-screen px-8 py-6">
 
-<!-- FONDO ANIMADO -->
-<div class="background-lines">
-<div class="line" style="left:10%"></div>
-<div class="line" style="left:30%"></div>
+<!-- FONDO -->
+<div class="background">
+<div class="line" style="left:20%"></div>
 <div class="line" style="left:50%"></div>
-<div class="line" style="left:70%"></div>
-<div class="line" style="left:90%"></div>
+<div class="line" style="left:80%"></div>
 </div>
 
 <!-- HEADER -->
-<header class="w-full flex justify-between items-center mb-10">
-
-<div class="flex gap-3">
-<button onclick="openWelcome()" class="btn">ℹ</button>
-<button id="themeToggle" class="btn">🌙</button>
+<header class="flex justify-between items-center mb-10">
+<div class="flex gap-2">
+<button onclick="openModal()" class="btn">ℹ</button>
+<button onclick="toggleTheme()" class="btn">🌙</button>
 </div>
-
-<h1 class="text-5xl font-semibold">TaskFlow</h1>
-
+<h1 class="text-4xl font-semibold">TaskFlow</h1>
 </header>
 
-<div class="w-full max-w-7xl mx-auto">
+<div class="max-w-6xl mx-auto">
 
 <!-- INPUT -->
 <div class="glass mb-6">
 
-<h2 class="text-2xl mb-4">Nueva tarea</h2>
-
-<input id="taskInput" placeholder="Tarea..." class="w-full p-3 rounded mb-3 text-black"/>
+<input id="taskInput" placeholder="Tarea..." class="w-full p-3 rounded mb-2 text-black"/>
 <input id="categoryInput" placeholder="Categoría..." class="w-full p-3 rounded mb-4 text-black"/>
 
-<div class="flex gap-3 flex-wrap">
+<div class="flex gap-2">
 <button onclick="addTask()" class="btn">Añadir</button>
-<button onclick="completeAll()" class="btn">Completar todas</button>
-<button onclick="deleteCompleted()" class="btn">Borrar completadas</button>
+<button onclick="completeAll()" class="btn">Completar</button>
+<button onclick="deleteCompleted()" class="btn">Borrar</button>
 </div>
 
 </div>
@@ -182,12 +157,7 @@ color:white;
 <!-- LISTA -->
 <div class="glass">
 
-<div class="flex gap-3 mb-4">
-<input id="search" placeholder="Buscar..." class="flex-1 p-3 rounded text-black"/>
-<button onclick="sortTasks()" class="btn">Ordenar</button>
-</div>
-
-<p id="stats" class="text-sm mb-3"></p>
+<input id="search" placeholder="Buscar..." class="w-full p-3 rounded mb-4 text-black"/>
 
 <div id="taskList"></div>
 
@@ -196,31 +166,27 @@ color:white;
 </div>
 
 <!-- MODAL -->
-<div id="welcomeModal" class="modal hidden">
+<div id="modal" class="modal hidden">
 <div class="modal-box">
 
-<h2 class="text-3xl mb-4">Bienvenido a TaskFlow</h2>
+<h2 class="text-2xl mb-3">Bienvenido</h2>
+<p class="mb-4">App de tareas con animaciones, categorías y guardado automático.</p>
 
-<p class="mb-4">
-Organiza tu día con estilo.  
-Arrastra tareas, crea categorías y mantén todo bajo control.
-</p>
-
-<ul class="text-left mb-4">
-<li>✔ Drag & Drop</li>
-<li>✔ Categorías</li>
-<li>✔ Guardado automático</li>
-<li>✔ Modo oscuro</li>
-</ul>
-
-<button onclick="closeWelcome()" class="btn">Empezar</button>
+<button onclick="closeModal()" class="btn">Empezar</button>
 
 </div>
 </div>
 
 <script>
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || []
+// SAFE LOAD
+let tasks = []
+try{
+tasks = JSON.parse(localStorage.getItem("tasks")) || []
+}catch{
+tasks = []
+}
+
 let dragIndex = null
 
 function save(){
@@ -229,11 +195,10 @@ localStorage.setItem("tasks", JSON.stringify(tasks))
 
 function addTask(){
 const text = taskInput.value
-const category = categoryInput.value
-
+const cat = categoryInput.value
 if(!text) return
 
-tasks.push({text,category,done:false})
+tasks.push({text,cat,done:false})
 taskInput.value=""
 categoryInput.value=""
 save()
@@ -246,31 +211,27 @@ list.innerHTML=""
 
 const search = document.getElementById("search").value.toLowerCase()
 
-let completed=0
-
 tasks.forEach((t,i)=>{
 
 if(search && !t.text.toLowerCase().includes(search)) return
 
-if(t.done) completed++
-
-const div=document.createElement("div")
+const div = document.createElement("div")
 div.className="task"
 div.draggable=true
 
 div.ondragstart=()=>dragIndex=i
-div.ondragover=(e)=>e.preventDefault()
 div.ondrop=()=>{
-const moved = tasks.splice(dragIndex,1)[0]
+const moved=tasks.splice(dragIndex,1)[0]
 tasks.splice(i,0,moved)
 save()
 render()
 }
+div.ondragover=(e)=>e.preventDefault()
 
 div.innerHTML=`
 <span style="${t.done?'text-decoration:line-through':''}">
 ${t.text}
-${t.category?`<span class="chip">${t.category}</span>`:""}
+${t.cat?`<span class="chip">${t.cat}</span>`:""}
 </span>
 
 <div>
@@ -281,8 +242,6 @@ ${t.category?`<span class="chip">${t.category}</span>`:""}
 
 list.appendChild(div)
 })
-
-document.getElementById("stats").innerText=`${completed}/${tasks.length} completadas`
 }
 
 function toggle(i){
@@ -309,32 +268,25 @@ save()
 render()
 }
 
-function sortTasks(){
-tasks.sort((a,b)=>a.text.localeCompare(b.text))
-save()
-render()
-}
-
-document.getElementById("themeToggle").onclick=()=>{
+function toggleTheme(){
 document.body.classList.toggle("dark")
-document.body.classList.toggle("light")
 }
 
-function openWelcome(){
-document.getElementById("welcomeModal").classList.remove("hidden")
+function openModal(){
+document.getElementById("modal").classList.remove("hidden")
 }
 
-function closeWelcome(){
-document.getElementById("welcomeModal").classList.add("hidden")
+function closeModal(){
+document.getElementById("modal").classList.add("hidden")
 localStorage.setItem("visited",true)
 }
 
-/* PRIMERA VEZ */
+// PRIMERA VEZ
 if(!localStorage.getItem("visited")){
-openWelcome()
+openModal()
 }
 
-document.getElementById("search").addEventListener("input", render)
+document.getElementById("search").addEventListener("input",render)
 
 render()
 
