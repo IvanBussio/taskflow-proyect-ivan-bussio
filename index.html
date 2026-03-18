@@ -3,26 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskFlow PRO</title>
+<title>TaskFlow</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-
 body{
-font-family:'Poppins',sans-serif;
+font-family:sans-serif;
+margin:0;
 }
 
-/* FONDO LÁPIZ */
-.background{
+/* FONDO ANIMADO */
+.bg{
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
+top:0;
+left:0;
 z-index:-1;
-background:#f9fafb;
+background:#f3f4f6;
 overflow:hidden;
 }
 
@@ -30,178 +29,53 @@ overflow:hidden;
 position:absolute;
 width:2px;
 height:200%;
-background:rgba(0,0,0,0.05);
-animation:move 6s linear infinite;
+background:rgba(0,0,0,0.1);
+animation:move 5s linear infinite;
 }
 
 @keyframes move{
 0%{transform:translateY(-100%)}
 100%{transform:translateY(100%)}
 }
-
-/* DARK */
-.dark .background{
-background:#020617;
-}
-
-.dark .line{
-background:rgba(255,255,255,0.05);
-}
-
-/* GLASS */
-.glass{
-background:rgba(255,255,255,.8);
-backdrop-filter:blur(12px);
-border-radius:20px;
-padding:30px;
-}
-
-.dark .glass{
-background:rgba(30,41,59,.8);
-color:white;
-}
-
-/* BOTONES */
-.btn{
-padding:10px 18px;
-border-radius:12px;
-background:#e5e7eb;
-}
-
-.dark .btn{
-background:#1e293b;
-color:white;
-}
-
-/* TAREAS */
-.task{
-padding:15px;
-border-radius:12px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
-background:white;
-}
-
-.dark .task{
-background:#1e293b;
-}
-
-.chip{
-background:#34d399;
-color:white;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-margin-left:6px;
-}
-
-/* MODAL */
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.modal-box{
-background:white;
-padding:40px;
-border-radius:20px;
-}
-
-.dark .modal-box{
-background:#1e293b;
-color:white;
-}
-
 </style>
+
 </head>
 
-<body class="light min-h-screen px-8 py-6">
+<body>
 
-<!-- FONDO -->
-<div class="background">
+<div class="bg">
 <div class="line" style="left:20%"></div>
 <div class="line" style="left:50%"></div>
 <div class="line" style="left:80%"></div>
 </div>
 
-<!-- HEADER -->
-<header class="flex justify-between items-center mb-10">
-<div class="flex gap-2">
-<button onclick="openModal()" class="btn">ℹ</button>
-<button onclick="toggleTheme()" class="btn">🌙</button>
-</div>
-<h1 class="text-4xl font-semibold">TaskFlow</h1>
-</header>
+<div class="p-10 max-w-4xl mx-auto">
 
-<div class="max-w-6xl mx-auto">
+<h1 class="text-4xl mb-6">TaskFlow</h1>
 
-<!-- INPUT -->
-<div class="glass mb-6">
+<input id="taskInput" class="border p-2 w-full mb-3" placeholder="Tarea...">
 
-<input id="taskInput" placeholder="Tarea..." class="w-full p-3 rounded mb-2 text-black"/>
-<input id="categoryInput" placeholder="Categoría..." class="w-full p-3 rounded mb-4 text-black"/>
-
-<div class="flex gap-2">
-<button onclick="addTask()" class="btn">Añadir</button>
-<button onclick="completeAll()" class="btn">Completar</button>
-<button onclick="deleteCompleted()" class="btn">Borrar</button>
-</div>
-
-</div>
-
-<!-- LISTA -->
-<div class="glass">
-
-<input id="search" placeholder="Buscar..." class="w-full p-3 rounded mb-4 text-black"/>
+<button onclick="addTask()" class="bg-blue-500 text-white px-4 py-2 mb-4">
+Añadir
+</button>
 
 <div id="taskList"></div>
 
 </div>
 
-</div>
-
-<!-- MODAL -->
-<div id="modal" class="modal hidden">
-<div class="modal-box">
-
-<h2 class="text-2xl mb-3">Bienvenido</h2>
-<p class="mb-4">App de tareas con animaciones, categorías y guardado automático.</p>
-
-<button onclick="closeModal()" class="btn">Empezar</button>
-
-</div>
-</div>
-
 <script>
 
-// SAFE LOAD
+// 🔥 SIN localStorage (para evitar errores)
 let tasks = []
-try{
-tasks = JSON.parse(localStorage.getItem("tasks")) || []
-}catch{
-tasks = []
-}
-
-let dragIndex = null
-
-function save(){
-localStorage.setItem("tasks", JSON.stringify(tasks))
-}
 
 function addTask(){
-const text = taskInput.value
-const cat = categoryInput.value
-if(!text) return
+const input = document.getElementById("taskInput")
 
-tasks.push({text,cat,done:false})
-taskInput.value=""
-categoryInput.value=""
-save()
+if(!input.value) return
+
+tasks.push(input.value)
+input.value=""
+
 render()
 }
 
@@ -209,86 +83,15 @@ function render(){
 const list = document.getElementById("taskList")
 list.innerHTML=""
 
-const search = document.getElementById("search").value.toLowerCase()
-
 tasks.forEach((t,i)=>{
-
-if(search && !t.text.toLowerCase().includes(search)) return
-
 const div = document.createElement("div")
-div.className="task"
-div.draggable=true
+div.className="p-3 bg-white mb-2 rounded shadow"
 
-div.ondragstart=()=>dragIndex=i
-div.ondrop=()=>{
-const moved=tasks.splice(dragIndex,1)[0]
-tasks.splice(i,0,moved)
-save()
-render()
-}
-div.ondragover=(e)=>e.preventDefault()
-
-div.innerHTML=`
-<span style="${t.done?'text-decoration:line-through':''}">
-${t.text}
-${t.cat?`<span class="chip">${t.cat}</span>`:""}
-</span>
-
-<div>
-<button onclick="toggle(${i})">✔</button>
-<button onclick="removeTask(${i})">❌</button>
-</div>
-`
+div.innerHTML = t
 
 list.appendChild(div)
 })
 }
-
-function toggle(i){
-tasks[i].done=!tasks[i].done
-save()
-render()
-}
-
-function removeTask(i){
-tasks.splice(i,1)
-save()
-render()
-}
-
-function completeAll(){
-tasks.forEach(t=>t.done=true)
-save()
-render()
-}
-
-function deleteCompleted(){
-tasks=tasks.filter(t=>!t.done)
-save()
-render()
-}
-
-function toggleTheme(){
-document.body.classList.toggle("dark")
-}
-
-function openModal(){
-document.getElementById("modal").classList.remove("hidden")
-}
-
-function closeModal(){
-document.getElementById("modal").classList.add("hidden")
-localStorage.setItem("visited",true)
-}
-
-// PRIMERA VEZ
-if(!localStorage.getItem("visited")){
-openModal()
-}
-
-document.getElementById("search").addEventListener("input",render)
-
-render()
 
 </script>
 
