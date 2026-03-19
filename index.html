@@ -1,388 +1,225 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TaskFlow PRO</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 
 body{
-margin:0;
-font-family:sans-serif;
-color:white;
-transition:.4s;
-overflow-x:hidden;
+  font-family:'Poppins',sans-serif;
+  transition:background .6s,color .4s;
+  overflow-x:hidden;
 }
 
-/* 🌌 DARK */
-body{
-background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);
-background-size:300% 300%;
-animation:bgmove 12s infinite;
-}
-
-/* 🌿 LIGHT */
+/* 🌿 MODO CLARO PASTEL */
 body.light{
-background:linear-gradient(135deg,#d1fae5,#bbf7d0,#a7f3d0);
-color:#022c22;
+  background:linear-gradient(120deg,#d1fae5,#bbf7d0,#a7f3d0);
+  background-size:300% 300%;
+  animation:bgmove 15s infinite alternate;
+}
+
+/* 🌌 MODO OSCURO GALÁCTICO */
+body.dark{
+  background:linear-gradient(120deg,#0f172a,#1e1b4b,#312e81);
+  background-size:300% 300%;
+  animation:bgmove 20s infinite alternate;
+  color:white;
 }
 
 @keyframes bgmove{
-0%{background-position:0%}
-50%{background-position:100%}
-100%{background-position:0%}
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
 }
 
-/* LÍNEAS */
-.bg{
-position:fixed;
-inset:0;
-z-index:-1;
-overflow:hidden;
+/* ✏️ líneas animadas */
+body::before{
+  content:"";
+  position:fixed;
+  width:200%;
+  height:200%;
+  background-image:linear-gradient(transparent 95%, rgba(0,0,0,0.05) 100%);
+  animation:moveLines 30s linear infinite;
+  pointer-events:none;
 }
 
-.line{
-position:absolute;
-width:2px;
-height:200%;
-background:rgba(255,255,255,.08);
-animation:move 6s linear infinite;
+@keyframes moveLines{
+  from{transform:translateY(0);}
+  to{transform:translateY(-200px);}
 }
 
-@keyframes move{
-0%{transform:translateY(-100%)}
-100%{transform:translateY(100%)}
+/* glass */
+.glass{
+  background:rgba(255,255,255,.35);
+  backdrop-filter:blur(14px);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
 }
 
-/* CARD */
-.card{
-background:rgba(30,41,59,.6);
-padding:25px;
-border-radius:16px;
-backdrop-filter:blur(10px);
+.dark .glass{
+  background:rgba(30,41,59,.7);
 }
 
-body.light .card{
-background:white;
-}
-
-/* INPUT */
-input{
-background:#020617;
-border:1px solid #334155;
-color:white;
-}
-
-body.light input{
-background:white;
-color:#022c22;
-border:1px solid #86efac;
-}
-
-/* BOTONES */
+/* botones */
 .btn{
-background:#334155;
-padding:8px 14px;
-border-radius:10px;
-transition:.2s;
+  padding:10px 18px;
+  border-radius:10px;
+  background:rgba(255,255,255,.4);
+  transition:.25s;
 }
 
 .btn:hover{
-transform:scale(1.05);
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.7);
 }
 
-body.light .btn{
-background:#4ade80;
-color:#022c22;
+.dark .btn{
+  background:rgba(255,255,255,.1);
 }
 
-/* TAREA */
+/* tareas */
 .task{
-background:#020617;
-padding:14px;
-border-radius:10px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
-animation:fade .3s;
+  background:rgba(255,255,255,.6);
+  padding:14px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-body.light .task{
-background:#bbf7d0;
-color:#022c22;
+.dark .task{
+  background:rgba(30,41,59,.7);
 }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1}
+.task span{
+  color:#111827;
+  font-weight:500;
 }
 
-/* CHIP */
-.chip{
-padding:4px 8px;
-border-radius:20px;
-font-size:12px;
-color:white;
+.dark .task span{
+  color:white;
 }
 
-/* MODAL */
+/* modal */
 .modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.7);
-display:flex;
-justify-content:center;
-align-items:center;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .modal-box{
-background:#020617;
-padding:40px;
-border-radius:20px;
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  max-width:500px;
+  text-align:center;
 }
 
-body.light .modal-box{
-background:white;
-color:#022c22;
+.dark .modal-box{
+  background:#1e293b;
+  color:white;
 }
 
 </style>
+
 </head>
 
-<body>
-
-<!-- FONDO -->
-<div class="bg">
-<div class="line" style="left:15%"></div>
-<div class="line" style="left:35%"></div>
-<div class="line" style="left:55%"></div>
-<div class="line" style="left:75%"></div>
-</div>
+<body class="light min-h-screen flex flex-col items-center px-4 py-6">
 
 <!-- HEADER -->
-<div class="flex justify-between p-6">
-<h1 class="text-4xl font-semibold">TaskFlow</h1>
+<header class="w-full max-w-6xl flex justify-between items-center mb-8">
 
-<div class="flex gap-2">
-<button onclick="openModal()" class="btn">ℹ</button>
-<button onclick="toggleTheme()" class="btn">🌙</button>
-</div>
-</div>
+  <!-- IZQUIERDA -->
+  <div class="flex gap-2">
+    <button onclick="openWelcome()" class="btn">ℹ Info</button>
+    <button id="themeToggle" class="btn">🌙</button>
+  </div>
 
-<div class="max-w-5xl mx-auto p-6">
+  <!-- DERECHA -->
+  <h1 class="text-4xl font-semibold">TaskFlow</h1>
+
+</header>
 
 <!-- INPUT -->
-<div class="card mb-6">
+<div class="glass w-full max-w-4xl mb-6">
 
-<input id="taskInput" placeholder="Nueva tarea..." class="w-full p-2 mb-2 rounded">
-<input id="categoryInput" placeholder="Categoría..." class="w-full p-2 mb-3 rounded">
+  <h2 class="text-xl mb-3">Nueva tarea</h2>
 
-<div id="categoriesList" class="flex gap-2 flex-wrap mb-3"></div>
+  <input
+    id="taskInput"
+    placeholder="Escribe una tarea..."
+    class="w-full p-2 rounded mb-3 text-black"
+  />
 
-<div class="flex gap-2 flex-wrap">
-<button onclick="addTask()" class="btn">Añadir</button>
-<button onclick="completeAll()" class="btn">Completar</button>
-<button onclick="deleteCompleted()" class="btn">Borrar</button>
-<button onclick="sortTasks()" class="btn">A–Z</button>
-<button onclick="clearFilter()" class="btn">Todas</button>
-</div>
+  <button onclick="addTask()" class="btn">Añadir</button>
 
 </div>
 
 <!-- LISTA -->
-<div class="card">
+<div class="glass w-full max-w-4xl">
 
-<input id="search" placeholder="Buscar..." class="w-full p-2 mb-3 rounded">
-
-<div id="taskList"></div>
-
-</div>
+  <div id="taskList" class="flex flex-col gap-3"></div>
 
 </div>
 
 <!-- MODAL -->
-<div id="modal" style="display:none" class="modal">
-<div class="modal-box text-center">
-<h2 class="text-2xl mb-3">Bienvenido</h2>
-<p>App inteligente con IA de categorías</p>
-<button onclick="closeModal()" class="btn mt-4">Empezar</button>
+<div id="welcomeModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <h2 class="text-3xl mb-4">Bienvenido a TaskFlow</h2>
+
+    <p class="mb-4">
+      Organiza tus tareas con estilo, rendimiento y claridad.
+    </p>
+
+    <p class="text-sm opacity-70">
+      Proyecto fullstack con Node.js + Express
+    </p>
+
+    <button onclick="closeWelcome()" class="btn mt-6">Cerrar</button>
+
+  </div>
+
 </div>
-</div>
+
+<!-- SCRIPT -->
+<script type="module" src="script.js"></script>
 
 <script>
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || []
-let categories = JSON.parse(localStorage.getItem("categories")) || []
-let filterCategory = null
-let dragIndex = null
+/* 🌙 DARK MODE */
+const toggle = document.getElementById("themeToggle");
 
-const colors = ["#22c55e","#3b82f6","#a855f7","#f59e0b","#ef4444"]
+toggle.onclick = () => {
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
+};
 
-/* IA */
-const smart = {
-"Salud":["gym","correr","futbol"],
-"Trabajo":["reunion","cliente","proyecto"],
-"Compras":["comprar","super","mercado"],
-"Estudio":["estudiar","curso","leer"]
+/* MODAL */
+function openWelcome(){
+  document.getElementById("welcomeModal").classList.remove("hidden");
 }
 
-function suggest(text){
-text=text.toLowerCase()
-for(let c in smart){
-for(let k of smart[c]){
-if(text.includes(k)) return c
-}
-}
-return ""
+function closeWelcome(){
+  document.getElementById("welcomeModal").classList.add("hidden");
 }
 
-taskInput.addEventListener("input",(e)=>{
-let s=suggest(e.target.value)
-if(s) categoryInput.value=s
-})
-
-function save(){
-localStorage.setItem("tasks",JSON.stringify(tasks))
-localStorage.setItem("categories",JSON.stringify(categories))
+/* FIRST LOAD */
+if(!localStorage.getItem("visited")){
+  openWelcome();
+  localStorage.setItem("visited",true);
 }
-
-function addTask(){
-let t=taskInput.value
-let c=categoryInput.value
-if(!t) return
-
-tasks.push({text:t,cat:c,done:false})
-
-if(c && !categories.find(x=>x.name===c)){
-categories.push({name:c,color:colors[categories.length%colors.length]})
-}
-
-taskInput.value=""
-categoryInput.value=""
-
-save()
-render()
-renderCategories()
-}
-
-function render(){
-let list=taskList
-list.innerHTML=""
-let s=search.value.toLowerCase()
-
-tasks.forEach((t,i)=>{
-
-if(filterCategory && t.cat!==filterCategory) return
-if(s && !t.text.toLowerCase().includes(s)) return
-
-let div=document.createElement("div")
-div.className="task"
-div.draggable=true
-
-div.ondragstart=()=>dragIndex=i
-div.ondrop=()=>{
-let m=tasks.splice(dragIndex,1)[0]
-tasks.splice(i,0,m)
-save()
-render()
-}
-div.ondragover=e=>e.preventDefault()
-
-div.innerHTML=`
-<span>${t.done?"<s>"+t.text+"</s>":t.text}
-${t.cat?`<span class="chip" style="background:${getColor(t.cat)}">${t.cat}</span>`:""}
-</span>
-
-<div>
-<button onclick="toggle(${i})">✔</button>
-<button onclick="removeTask(${i})">❌</button>
-</div>
-`
-
-list.appendChild(div)
-})
-}
-
-function renderCategories(){
-categoriesList.innerHTML=""
-categories.forEach(c=>{
-let b=document.createElement("button")
-b.innerText=c.name
-b.className="chip"
-b.style.background=c.color
-
-b.onclick=()=>{
-categoryInput.value=c.name
-filterCategory=c.name
-render()
-}
-
-categoriesList.appendChild(b)
-})
-}
-
-function getColor(name){
-let c=categories.find(x=>x.name===name)
-return c?c.color:"#64748b"
-}
-
-function toggle(i){
-tasks[i].done=!tasks[i].done
-save()
-render()
-}
-
-function removeTask(i){
-tasks.splice(i,1)
-save()
-render()
-}
-
-function completeAll(){
-tasks.forEach(t=>t.done=true)
-save()
-render()
-}
-
-function deleteCompleted(){
-tasks=tasks.filter(t=>!t.done)
-save()
-render()
-}
-
-function sortTasks(){
-tasks.sort((a,b)=>a.text.localeCompare(b.text))
-save()
-render()
-}
-
-function clearFilter(){
-filterCategory=null
-render()
-}
-
-function toggleTheme(){
-document.body.classList.toggle("light")
-}
-
-function openModal(){
-modal.style.display="flex"
-}
-
-function closeModal(){
-modal.style.display="none"
-localStorage.setItem("visited",true)
-}
-
-if(!localStorage.getItem("visited")) openModal()
-
-search.addEventListener("input",render)
-
-render()
-renderCategories()
 
 </script>
 
