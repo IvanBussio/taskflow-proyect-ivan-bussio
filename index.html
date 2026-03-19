@@ -1,168 +1,183 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>TaskFlow PRO</title>
 
-<!-- Fuente PRO -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 
 body{
   font-family:'Inter',sans-serif;
-  overflow-x:hidden;
+  transition:0.5s;
 }
 
 /* 🌿 MODO CLARO */
 body.light{
-  background:linear-gradient(120deg,#c7f9cc,#a8e6cf,#b7efc5);
+  background:linear-gradient(135deg,#b7e4c7,#95d5b2,#74c69d);
 }
 
 /* 🌌 MODO OSCURO */
 body.dark{
-  background:linear-gradient(120deg,#020617,#0f172a,#1e1b4b);
+  background:linear-gradient(135deg,#0f172a,#1e293b,#312e81);
   color:white;
 }
 
-/* canvas */
-.canvas-bg{
+/* ✏️ FONDO LÍNEAS */
+.bg-lines{
   position:fixed;
-  top:0;
-  left:0;
   width:100%;
   height:100%;
-  z-index:-1;
+  top:0;
+  left:0;
+  pointer-events:none;
+  opacity:.15;
 }
 
-/* glass */
-.glass{
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(14px);
-  border-radius:20px;
-  padding:25px;
+.bg-lines::before{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 40px,
+    rgba(0,0,0,0.1) 42px
+  );
+  animation:moveLines 10s linear infinite;
 }
 
-.dark .glass{
-  background:rgba(15,23,42,.6);
+@keyframes moveLines{
+  from{transform:translateY(0)}
+  to{transform:translateY(50px)}
+}
+
+/* tarjetas */
+.card{
+  backdrop-filter:blur(12px);
+  border-radius:16px;
+  padding:20px;
+  background:rgba(255,255,255,0.3);
+}
+
+.dark .card{
+  background:rgba(30,41,59,0.6);
 }
 
 /* botones */
 .btn{
-  padding:10px 16px;
+  padding:8px 14px;
   border-radius:10px;
-  background:rgba(255,255,255,.6);
-  transition:all .25s ease;
+  transition:.3s;
 }
 
 .btn:hover{
-  transform:translateY(-3px) scale(1.05);
-  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  transform:scale(1.08);
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
 }
 
-/* tareas */
+/* tarea */
 .task{
-  background:rgba(255,255,255,.7);
-  padding:12px;
-  border-radius:12px;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
-  margin-top:10px;
-  transition:.2s;
+  padding:10px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.5);
 }
 
 .dark .task{
-  background:rgba(30,41,59,.7);
+  background:rgba(30,41,59,0.7);
 }
 
-/* texto tachado */
-.completed span{
+.completed{
   text-decoration:line-through;
-  opacity:0.6;
+  opacity:.6;
 }
 
-/* chip */
+/* chips */
 .chip{
-  background:#34d399;
-  color:white;
-  padding:4px 10px;
-  border-radius:20px;
+  padding:4px 8px;
+  border-radius:8px;
   font-size:12px;
+  color:white;
 }
 
-/* input */
-input{
-  outline:none;
+/* colores */
+.cat-Trabajo{background:#3b82f6;}
+.cat-Personal{background:#10b981;}
+.cat-Compras{background:#f59e0b;}
+.cat-Estudio{background:#8b5cf6;}
+.cat-Gym{background:#ef4444;}
+
+/* stats */
+.stat{
+  padding:10px;
+  border-radius:10px;
+  color:white;
 }
 
 </style>
-
 </head>
 
-<body class="light px-6 py-6">
+<body class="light">
 
-<canvas id="bgCanvas" class="canvas-bg"></canvas>
+<div class="bg-lines"></div>
 
 <!-- HEADER -->
-<header class="flex justify-between items-center mb-10">
+<header class="flex justify-between items-center p-6">
 
-<h1 class="text-4xl font-semibold">TaskFlow</h1>
+<h1 class="text-3xl font-semibold">TaskFlow</h1>
 
 <div class="flex gap-2">
-<button onclick="openInfo()" class="btn">ℹ</button>
-<button onclick="toggleTheme()" class="btn">🌙</button>
+<button onclick="openInfo()" class="btn bg-white/40">Info</button>
+<button onclick="toggleTheme()" class="btn bg-white/40">🌙</button>
 </div>
 
 </header>
 
-<!-- INPUT -->
-<div class="glass max-w-5xl mx-auto mb-6">
+<!-- MAIN -->
+<main class="max-w-3xl mx-auto">
 
-<input id="taskInput" placeholder="Escribe tu tarea..." class="w-full p-3 rounded mb-2 text-black">
+<div class="card mb-6">
 
-<input id="categoryInput" placeholder="Categoría..." class="w-full p-3 rounded mb-2 text-black">
+<input id="input" placeholder="Nueva tarea..." class="w-full p-2 rounded mb-2 text-black">
 
-<div id="suggestions" class="text-sm mb-2"></div>
+<input id="categoryInput" placeholder="Categoría..." class="w-full p-2 rounded mb-2 text-black">
 
-<div class="flex gap-2">
-<button onclick="addTask()" class="btn">Añadir</button>
-<button onclick="sortTasks()" class="btn">Ordenar A-Z</button>
+<div class="flex gap-2 flex-wrap">
+<button onclick="addTask()" class="btn bg-green-400">Añadir</button>
+<button onclick="deleteAll()" class="btn bg-red-400">Eliminar todo</button>
 </div>
 
 </div>
 
-<!-- LISTA -->
-<div class="glass max-w-5xl mx-auto">
-<div id="taskList"></div>
-</div>
+<div id="taskList" class="flex flex-col gap-2"></div>
+
+<div id="stats" class="grid grid-cols-2 gap-2 mt-6"></div>
+
+</main>
 
 <!-- MODAL INFO -->
-<div id="infoModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center" onclick="closeInfo(event)">
+<div id="infoModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center" onclick="closeInfo(event)">
 
-<div class="bg-white p-6 rounded-xl max-w-md" onclick="event.stopPropagation()">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl text-center max-w-md">
+<h2 class="text-xl mb-2">Sobre TaskFlow</h2>
+<p>App de gestión de tareas con IA, categorías y UI moderna.</p>
+</div>
 
-<h2 class="text-2xl mb-3">TaskFlow PRO</h2>
+</div>
 
-<p class="text-sm">
-TaskFlow es una app moderna de gestión de tareas con categorías inteligentes, animaciones fluidas y una experiencia optimizada para productividad.
-</p>
+<!-- MODAL WELCOME -->
+<div id="welcome" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center">
 
-<ul class="mt-3 text-sm">
-<li>• Organización inteligente</li>
-<li>• Categorías automáticas</li>
-<li>• UI moderna</li>
-<li>• Optimizada para 4K</li>
-</ul>
-
-<button onclick="closeInfo()" class="btn mt-4">Cerrar</button>
-
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl text-center">
+<h2 class="text-2xl mb-2">Bienvenido 🚀</h2>
+<p>Organiza tu día como un pro.</p>
+<button onclick="closeWelcome()" class="btn mt-3 bg-green-400">Empezar</button>
 </div>
 
 </div>

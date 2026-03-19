@@ -1,285 +1,151 @@
-/* =========================
-   STORAGE
-========================= */
-
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let categories = JSON.parse(localStorage.getItem("categories")) || [];
 
-function save(){
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  localStorage.setItem("categories", JSON.stringify(categories));
-}
+const input = document.getElementById("input");
+const catInput = document.getElementById("categoryInput");
 
-/* =========================
-   IA CATEGORÍAS
-========================= */
-
-function smartCategory(text){
+/* IA simple */
+function suggestCategory(text){
   text = text.toLowerCase();
-
-  if(text.includes("gym") || text.includes("entren")) return "Gym";
-  if(text.includes("comprar") || text.includes("super")) return "Compras";
-  if(text.includes("estudiar") || text.includes("curso")) return "Estudio";
-  if(text.includes("trabajo") || text.includes("proyecto")) return "Trabajo";
-  if(text.includes("medico") || text.includes("salud")) return "Salud";
-
-  return null;
+  if(text.includes("gym")) return "Gym";
+  if(text.includes("compra")) return "Compras";
+  if(text.includes("estudi")) return "Estudio";
+  if(text.includes("trab")) return "Trabajo";
+  return "Personal";
 }
 
-function suggestCategory(input){
-  const base = ["Trabajo","Personal","Compras","Gym","Estudio","Salud"];
+/* añadir */
+function addTask(){
+  let text = input.value.trim();
+  if(!text) return;
 
-  return [...new Set([...categories, ...base])]
-    .filter(cat => cat.toLowerCase().includes(input.toLowerCase()));
-}
+  let cat = catInput.value || suggestCategory(text);
 
-function renderSuggestions(){
-  const input = document.getElementById("categoryInput").value;
-  const taskText = document.getElementById("taskInput").value;
-  const box = document.getElementById("suggestions");
-
-  box.innerHTML = "";
-
-  let suggestions = suggestCategory(input);
-
-  if(!input && taskText){
-    const auto = smartCategory(taskText);
-    if(auto) suggestions.unshift(auto);
-  }
-
-  suggestions.slice(0,5).forEach(cat=>{
-    const div = document.createElement("div");
-    div.innerText = cat;
-    div.className = "cursor-pointer text-sm";
-    div.onclick = ()=>{
-      document.getElementById("categoryInput").value = cat;
-      box.innerHTML="";
-    };
-    box.appendChild(div);
+  tasks.push({
+    id:Date.now(),
+    text,
+    category:cat,
+    completed:false
   });
+
+  input.value="";
+  catInput.value="";
+  save();
 }
 
-document.getElementById("categoryInput").addEventListener("input", renderSuggestions);
-document.getElementById("taskInput").addEventListener("input", renderSuggestions);
+/* render */
+function render(){
 
-/* =========================
-   RENDER
-========================= */
-
-function renderTasks(){
   const list = document.getElementById("taskList");
-  list.innerHTML = "";
+  list.innerHTML="";
 
-  tasks.forEach((task, i)=>{
+  tasks.forEach(t=>{
+
     const div = document.createElement("div");
-    div.className = "task";
+    div.className="task";
 
-    if(task.completed){
-      div.classList.add("completed");
-    }
+    div.innerHTML=`
+      <span onclick="toggle(${t.id})" class="${t.completed?'completed':''}">
+        ${t.text}
+      </span>
 
-    div.innerHTML = `
-      <div onclick="toggleComplete(${i})" style="cursor:pointer">
-        <span>${task.text}</span>
-        <div class="chip">${task.category}</div>
-      </div>
+      <div class="flex gap-2 items-center">
 
-      <div class="flex gap-2">
-        <button onclick="editTask(${i})">✏️</button>
-        <button onclick="deleteTask(${i})">❌</button>
+        <div class="chip cat-${t.category}">
+          ${t.category}
+        </div>
+
+        <button onclick="edit(${t.id})">✏️</button>
+        <button onclick="remove(${t.id})">❌</button>
+
       </div>
     `;
 
     list.appendChild(div);
+
   });
 
-  renderCategoryStats();
+  renderStats();
 }
 
-/* =========================
-   ACCIONES
-========================= */
+/* stats */
+function renderStats(){
 
-function addTask(){
-  const input = document.getElementById("taskInput");
-  const catInput = document.getElementById("categoryInput");
-
-  const text = input.value;
-  let category = catInput.value;
-
-  if(!text.trim()) return;
-
-  if(!category){
-    category = smartCategory(text) || "Personal";
-  }
-
-  tasks.push({
-    text,
-    category,
-    completed:false
-  });
-
-  if(!categories.includes(category)){
-    categories.push(category);
-  }
-
-  input.value="";
-  catInput.value="";
-
-  save();
-  renderTasks();
-}
-
-function deleteTask(i){
-  tasks.splice(i,1);
-  save();
-  renderTasks();
-}
-
-/* 🔥 eliminar todo */
-function deleteAll(){
-  if(confirm("Eliminar todas las tareas?")){
-    tasks = [];
-    save();
-    renderTasks();
-  }
-}
-
-/* tachar */
-function toggleComplete(i){
-  tasks[i].completed = !tasks[i].completed;
-  save();
-  renderTasks();
-}
-
-/* editar */
-function editTask(i){
-  const nuevo = prompt("Editar tarea:", tasks[i].text);
-
-  if(nuevo && nuevo.trim()){
-    tasks[i].text = nuevo;
-    save();
-    renderTasks();
-  }
-}
-
-/* ordenar */
-function sortTasks(){
-  tasks.sort((a,b)=> a.text.localeCompare(b.text));
-  save();
-  renderTasks();
-}
-
-/* =========================
-   ENTER PARA AÑADIR
-========================= */
-
-document.getElementById("taskInput").addEventListener("keypress", (e)=>{
-  if(e.key === "Enter"){
-    addTask();
-  }
-});
-
-/* =========================
-   CONTADOR POR CATEGORÍAS
-========================= */
-
-function renderCategoryStats(){
-  let stats = {};
+  const stats = {};
+  const container = document.getElementById("stats");
+  container.innerHTML="";
 
   tasks.forEach(t=>{
-    stats[t.category] = (stats[t.category] || 0) + 1;
+    stats[t.category]=(stats[t.category]||0)+1;
   });
 
-  let container = document.getElementById("categoryStats");
+  for(let cat in stats){
 
-  if(!container){
-    container = document.createElement("div");
-    container.id = "categoryStats";
-    container.className = "mt-4 text-sm";
-    document.querySelector(".glass").appendChild(container);
+    const div=document.createElement("div");
+    div.className=`stat cat-${cat}`;
+    div.innerHTML=`${cat}: ${stats[cat]}`;
+
+    container.appendChild(div);
   }
-
-  container.innerHTML = "<strong>Categorías:</strong><br>";
-
-  Object.entries(stats).forEach(([cat,count])=>{
-    container.innerHTML += `${cat}: ${count}<br>`;
-  });
 }
 
-/* =========================
-   UI
-========================= */
+/* acciones */
+function toggle(id){
+  tasks = tasks.map(t=> t.id===id ? {...t,completed:!t.completed}:t);
+  save();
+}
 
+function remove(id){
+  tasks = tasks.filter(t=>t.id!==id);
+  save();
+}
+
+function edit(id){
+  let t = tasks.find(t=>t.id===id);
+  let nuevo = prompt("Editar tarea", t.text);
+  if(nuevo) t.text=nuevo;
+  save();
+}
+
+function deleteAll(){
+  tasks=[];
+  save();
+}
+
+/* guardar */
+function save(){
+  localStorage.setItem("tasks",JSON.stringify(tasks));
+  render();
+}
+
+/* tema */
 function toggleTheme(){
   document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
 }
 
+/* modales */
 function openInfo(){
   document.getElementById("infoModal").classList.remove("hidden");
 }
 
 function closeInfo(e){
-  if(!e || e.target.id === "infoModal"){
-    document.getElementById("infoModal").classList.add("hidden");
+  if(e.target.id==="infoModal"){
+    e.currentTarget.classList.add("hidden");
   }
 }
 
-/* =========================
-   FONDO LÁPIZ CORREGIDO
-========================= */
-
-const canvas = document.getElementById("bgCanvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let lines = [];
-
-for(let i=0;i<60;i++){
-  lines.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    length:150+Math.random()*200,
-    speed:0.3+Math.random()
-  });
+function closeWelcome(){
+  document.getElementById("welcome").classList.add("hidden");
 }
 
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+/* enter */
+input.addEventListener("keypress",(e)=>{
+  if(e.key==="Enter") addTask();
+});
 
-  /* color dinámico */
-  const isDark = document.body.classList.contains("dark");
-
-  ctx.strokeStyle = isDark
-    ? "rgba(255,255,255,0.05)"
-    : "rgba(0,0,0,0.07)";
-
-  ctx.lineWidth = 1;
-
-  lines.forEach(l=>{
-    ctx.beginPath();
-    ctx.moveTo(l.x,l.y);
-    ctx.lineTo(l.x,l.y+l.length);
-    ctx.stroke();
-
-    l.y += l.speed;
-
-    if(l.y > canvas.height){
-      l.y = -l.length;
-      l.x = Math.random()*canvas.width;
-    }
-  });
-
-  requestAnimationFrame(draw);
+/* bienvenida */
+if(!localStorage.getItem("welcome")){
+  document.getElementById("welcome").classList.remove("hidden");
+  localStorage.setItem("welcome",true);
 }
 
-draw();
-
-/* =========================
-   INIT
-========================= */
-
-renderTasks();
+render();
