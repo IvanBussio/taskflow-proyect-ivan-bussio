@@ -3,28 +3,26 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 const input = document.getElementById("input");
 const catInput = document.getElementById("categoryInput");
 
-/* IA automática en tiempo real */
+/* IA categorías en tiempo real */
 input.addEventListener("input", () => {
-  const text = input.value.toLowerCase();
+  const t = input.value.toLowerCase();
 
-  if(text.includes("gym")) catInput.value = "Gym";
-  else if(text.includes("compr")) catInput.value = "Compras";
-  else if(text.includes("estudi")) catInput.value = "Estudio";
-  else if(text.includes("trab")) catInput.value = "Trabajo";
-  else catInput.value = "Personal";
+  if(t.includes("gym")) catInput.value="Gym";
+  else if(t.includes("compr")) catInput.value="Compras";
+  else if(t.includes("estudi")) catInput.value="Estudio";
+  else if(t.includes("trab")) catInput.value="Trabajo";
+  else catInput.value="Personal";
 });
 
 /* añadir */
 function addTask(){
-  let text = input.value.trim();
+  const text = input.value.trim();
   if(!text) return;
-
-  let cat = catInput.value || "Personal";
 
   tasks.push({
     id:Date.now(),
     text,
-    category:cat,
+    category:catInput.value || "Personal",
     completed:false
   });
 
@@ -35,102 +33,77 @@ function addTask(){
 
 /* render */
 function render(){
-
   const list = document.getElementById("taskList");
   list.innerHTML="";
 
   tasks.forEach(t=>{
-
     const div = document.createElement("div");
     div.className="task";
 
     div.innerHTML=`
-      <span onclick="toggle(${t.id})" class="${t.completed?'completed':''}">
+      <span class="${t.completed?'completed':''}" onclick="toggle(${t.id})">
         ${t.text}
       </span>
 
-      <div class="flex gap-2 items-center">
-
-        <div class="chip cat-${t.category}">
-          ${t.category}
-        </div>
-
+      <div>
+        <span class="chip cat-${t.category}">${t.category}</span>
         <button onclick="edit(${t.id})">✏️</button>
         <button onclick="remove(${t.id})">❌</button>
-
       </div>
     `;
 
     list.appendChild(div);
-
   });
-
-  renderStats();
 }
 
-/* stats */
-function renderStats(){
-
-  const stats = {};
-  const container = document.getElementById("stats");
-  container.innerHTML="";
-
-  tasks.forEach(t=>{
-    stats[t.category]=(stats[t.category]||0)+1;
-  });
-
-  for(let cat in stats){
-
-    const div=document.createElement("div");
-    div.className=`stat cat-${cat}`;
-    div.innerHTML=`${cat}: ${stats[cat]}`;
-
-    container.appendChild(div);
-  }
-}
-
-/* acciones */
+/* toggle check */
 function toggle(id){
-  tasks = tasks.map(t=> t.id===id ? {...t,completed:!t.completed}:t);
+  tasks = tasks.map(t =>
+    t.id === id ? {...t, completed:!t.completed} : t
+  );
   save();
 }
 
+/* eliminar */
 function remove(id){
   tasks = tasks.filter(t=>t.id!==id);
   save();
 }
 
+/* editar */
 function edit(id){
-  let t = tasks.find(t=>t.id===id);
-  let nuevo = prompt("Editar tarea", t.text);
-  if(nuevo) t.text=nuevo;
+  const t = tasks.find(t=>t.id===id);
+  const nuevo = prompt("Editar tarea", t.text);
+  if(nuevo) t.text = nuevo;
   save();
 }
 
+/* eliminar todo */
 function deleteAll(){
-  tasks=[];
+  tasks = [];
   save();
 }
 
 /* guardar */
 function save(){
-  localStorage.setItem("tasks",JSON.stringify(tasks));
+  localStorage.setItem("tasks", JSON.stringify(tasks));
   render();
 }
 
 /* tema */
 function toggleTheme(){
   document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
 }
 
-/* modales */
+/* modal */
 function openInfo(){
-  document.getElementById("infoModal").classList.remove("hidden");
+  document.getElementById("infoModal").style.display="flex";
 }
 
 function closeInfo(e){
   if(e.target.id==="infoModal"){
-    e.currentTarget.classList.add("hidden");
+    document.getElementById("infoModal").style.display="none";
   }
 }
 
