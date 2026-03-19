@@ -18,19 +18,19 @@ body{
   transition:.4s;
 }
 
-/* 🌌 DARK */
+/* DARK */
 body.dark{
-  background: linear-gradient(135deg,#0B0A18,#1A1235,#2A1A5A);
+  background:linear-gradient(135deg,#0B0A18,#1A1235,#2A1A5A);
   background-size:400% 400%;
-  animation:bg 12s ease infinite;
+  animation:bg 10s ease infinite;
   color:#E5E7EB;
 }
 
-/* 🌸 LIGHT */
+/* LIGHT */
 body.light{
-  background: linear-gradient(135deg,#FFD6E0,#E0F2FE);
+  background:linear-gradient(135deg,#FFD6E0,#E0F2FE);
   background-size:400% 400%;
-  animation:bg 12s ease infinite;
+  animation:bg 10s ease infinite;
 }
 
 @keyframes bg{
@@ -48,7 +48,6 @@ header{
 
 .title{
   font-size:34px;
-  font-weight:600;
   background:linear-gradient(90deg,#ff7eb3,#6ec3ff);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -67,11 +66,11 @@ header{
 }
 
 .btn:hover{
-  background:rgba(255,255,255,0.18);
   transform:translateY(-2px);
+  background:rgba(255,255,255,0.2);
 }
 
-/* CONTENEDOR */
+/* CONTAINER */
 .container{
   max-width:1500px;
   margin:auto;
@@ -81,7 +80,6 @@ header{
 /* GRID */
 .layout{
   display:grid;
-  grid-template-columns:1fr;
   gap:30px;
 }
 
@@ -101,10 +99,9 @@ header{
 
 body.light .card{
   background:rgba(255,255,255,0.7);
-  border:1px solid rgba(0,0,0,0.05);
 }
 
-/* 🔥 INPUT PREMIUM */
+/* INPUT PREMIUM */
 .input{
   width:100%;
   padding:16px;
@@ -113,36 +110,22 @@ body.light .card{
   box-sizing:border-box;
   border:1px solid transparent;
   outline:none;
-  transition:all .25s ease;
+  transition:.25s;
 }
 
-/* DARK INPUT */
 body.dark .input{
   background:rgba(255,255,255,0.06);
   color:white;
 }
 
-/* LIGHT INPUT */
 body.light .input{
   background:#F1F5F9;
   border:1px solid #E2E8F0;
 }
 
-/* ✨ FOCUS PRO */
 .input:focus{
   border:1px solid #8B5CF6;
   box-shadow:0 0 0 3px rgba(139,92,246,0.2);
-  transform:scale(1.01);
-}
-
-/* Placeholder */
-.input::placeholder{
-  color:#94A3B8;
-  transition:.2s;
-}
-
-.input:focus::placeholder{
-  opacity:0.5;
 }
 
 /* DASHBOARD */
@@ -157,25 +140,13 @@ body.light .input{
   padding:18px;
   border-radius:16px;
   text-align:center;
-  font-weight:600;
 }
 
-.total{ 
-  background:linear-gradient(135deg,#93C5FD,#BFDBFE);
-  color:#1E3A8A;
-}
+.total{background:#BFDBFE;}
+.completed{background:#BBF7D0;}
+.pending{background:#FBCFE8;}
 
-.completed{ 
-  background:linear-gradient(135deg,#86EFAC,#BBF7D0);
-  color:#065F46;
-}
-
-.pending{ 
-  background:linear-gradient(135deg,#F9A8D4,#FBCFE8);
-  color:#831843;
-}
-
-/* TAREAS */
+/* TASK */
 .task{
   display:flex;
   justify-content:space-between;
@@ -183,12 +154,9 @@ body.light .input{
   border-radius:14px;
   margin-bottom:10px;
   background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(10px);
 }
 
-body.light .task{
-  background:white;
-}
+body.light .task{background:white;}
 
 .task .completed{
   text-decoration:line-through;
@@ -196,12 +164,11 @@ body.light .task{
   color:#9CA3AF;
 }
 
-/* CATEGORIAS PASTEL */
+/* CATEGORIAS */
 .chip{
   padding:6px 14px;
   border-radius:999px;
   font-size:12px;
-  font-weight:500;
 }
 
 .cat-Trabajo{background:#BFDBFE;color:#1E3A8A;}
@@ -210,11 +177,20 @@ body.light .task{
 .cat-Estudio{background:#E9D5FF;color:#4C1D95;}
 .cat-Gym{background:#FECACA;color:#7F1D1D;}
 
-footer{
-  margin-top:40px;
-  padding:20px;
+/* FOOTER */
+.footer{
+  margin-top:60px;
+  padding:25px;
   text-align:center;
-  opacity:0.7;
+}
+
+.link{
+  color:#a78bfa;
+  text-decoration:none;
+}
+
+.link:hover{
+  color:#f472b6;
 }
 
 </style>
@@ -224,26 +200,22 @@ footer{
 <body class="dark">
 
 <header>
-
 <h1 class="title">TaskFlow</h1>
 
 <div>
-<button class="btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+<button class="btn" onclick="toggleTheme()">🌙</button>
 </div>
-
 </header>
 
 <main class="container layout">
 
 <div class="card">
-
 <input id="input" class="input" placeholder="Nueva tarea...">
 <input id="categoryInput" class="input" placeholder="Categoría automática...">
 
 <button class="btn" onclick="addTask()">Añadir</button>
-<button class="btn" onclick="sortTasks()">Ordenar A-Z</button>
+<button class="btn" onclick="sortTasks()">Ordenar</button>
 <button class="btn" onclick="deleteAll()">Eliminar todo</button>
-
 </div>
 
 <div>
@@ -253,8 +225,11 @@ footer{
 
 </main>
 
-<footer>
-© 2026 TaskFlow — Ivan Bussio
+<footer class="footer">
+© 2026 TaskFlow · Project developed by Ivan Bussio (FCT) — 
+<a href="https://www.corner-estudios.com" target="_blank" class="link">
+🔗 Corner Estudios
+</a> · All rights reserved
 </footer>
 
 <script src="script.js"></script>

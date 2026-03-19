@@ -2,9 +2,8 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 const input = document.getElementById("input");
 const catInput = document.getElementById("categoryInput");
-const themeBtn = document.getElementById("themeBtn");
 
-/* IA */
+/* IA categorias */
 input.addEventListener("input",()=>{
   let t = input.value.toLowerCase();
 
@@ -35,7 +34,17 @@ function addTask(){
 /* render */
 function render(){
   const list=document.getElementById("taskList");
+  const dash=document.getElementById("dashboard");
+
   list.innerHTML="";
+
+  let completed=tasks.filter(t=>t.completed).length;
+
+  dash.innerHTML=`
+    <div class="dashboard-card total">Total ${tasks.length}</div>
+    <div class="dashboard-card completed">Completadas ${completed}</div>
+    <div class="dashboard-card pending">Pendientes ${tasks.length-completed}</div>
+  `;
 
   tasks.forEach(t=>{
     const div=document.createElement("div");
@@ -55,29 +64,6 @@ function render(){
 
     list.appendChild(div);
   });
-
-  renderDashboard();
-}
-
-/* dashboard */
-function renderDashboard(){
-  const container=document.getElementById("dashboard");
-
-  const total=tasks.length;
-  const completed=tasks.filter(t=>t.completed).length;
-  const pending=total-completed;
-
-  container.innerHTML=`
-    <div class="dashboard-card total">TOTAL<br>${total}</div>
-    <div class="dashboard-card completed">COMPLETADAS<br>${completed}</div>
-    <div class="dashboard-card pending">PENDIENTES<br>${pending}</div>
-  `;
-}
-
-/* ordenar */
-function sortTasks(){
-  tasks.sort((a,b)=>a.text.localeCompare(b.text));
-  save();
 }
 
 /* acciones */
@@ -103,6 +89,11 @@ function deleteAll(){
   save();
 }
 
+function sortTasks(){
+  tasks.sort((a,b)=>a.text.localeCompare(b.text));
+  save();
+}
+
 /* guardar */
 function save(){
   localStorage.setItem("tasks",JSON.stringify(tasks));
@@ -111,36 +102,8 @@ function save(){
 
 /* tema */
 function toggleTheme(){
-  if(document.body.classList.contains("dark")){
-    document.body.classList.remove("dark");
-    document.body.classList.add("light");
-    themeBtn.textContent="🌙";
-  }else{
-    document.body.classList.remove("light");
-    document.body.classList.add("dark");
-    themeBtn.textContent="☀️";
-  }
-}
-
-/* modales */
-function openInfo(){
-  document.getElementById("infoModal").style.display="flex";
-}
-
-function closeInfo(e){
-  if(e.target.id==="infoModal"){
-    e.currentTarget.style.display="none";
-  }
-}
-
-/* welcome */
-if(!localStorage.getItem("welcome")){
-  document.getElementById("welcome").style.display="flex";
-  localStorage.setItem("welcome",true);
-}
-
-function closeWelcome(){
-  document.getElementById("welcome").style.display="none";
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
 }
 
 /* enter */
