@@ -4,50 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TaskFlow</title>
+<title>TaskFlow PRO</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+
 body{
   font-family:'Poppins',sans-serif;
-  transition:background .6s;
+  overflow-x:hidden;
 }
 
-/* claro */
+/* 🌿 claro */
 body.light{
   background:linear-gradient(120deg,#d1fae5,#bbf7d0,#a7f3d0);
 }
 
-/* oscuro */
+/* 🌌 oscuro */
 body.dark{
   background:linear-gradient(120deg,#0f172a,#1e1b4b,#312e81);
   color:white;
 }
 
-/* tarjetas */
+/* ✏️ fondo líneas animadas */
+body::before{
+  content:"";
+  position:fixed;
+  width:200%;
+  height:200%;
+  background-image:linear-gradient(transparent 95%, rgba(0,0,0,0.05) 100%);
+  animation:lines 25s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes lines{
+  from{transform:translateY(0);}
+  to{transform:translateY(-200px);}
+}
+
+/* glass */
 .glass{
   background:rgba(255,255,255,.4);
-  backdrop-filter:blur(14px);
-  border-radius:18px;
+  backdrop-filter:blur(12px);
+  border-radius:20px;
   padding:25px;
 }
 
 /* botones */
 .btn{
-  padding:10px 18px;
+  padding:10px 16px;
   border-radius:10px;
   background:rgba(255,255,255,.5);
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
 }
 
 /* tareas */
 .task{
   background:rgba(255,255,255,.6);
-  padding:14px;
-  border-radius:12px;
+  padding:12px;
+  border-radius:10px;
   display:flex;
   justify-content:space-between;
+  margin-top:10px;
+}
+
+/* chips */
+.chip{
+  background:#34d399;
+  color:white;
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
+  margin-right:5px;
 }
 
 /* progreso */
@@ -61,27 +94,34 @@ body.dark{
   height:100%;
   background:#34d399;
 }
+
 </style>
 </head>
 
-<body class="light min-h-screen flex flex-col items-center px-4 py-6">
+<body class="light min-h-screen px-6 py-6">
 
-<header class="w-full max-w-4xl flex justify-between items-center mb-8">
-
-<div class="flex gap-2">
-<button onclick="openWelcome()" class="btn">ℹ Info</button>
-<button onclick="toggleTheme()" class="btn">🌙</button>
-</div>
+<!-- HEADER -->
+<header class="w-full flex justify-between items-center mb-10">
 
 <h1 class="text-4xl font-semibold">TaskFlow</h1>
 
+<div class="flex gap-2">
+<button onclick="openWelcome()" class="btn">ℹ</button>
+<button onclick="toggleTheme()" class="btn">🌙</button>
+</div>
+
 </header>
 
-<div class="glass w-full max-w-3xl mb-6">
+<!-- INPUT -->
+<div class="glass max-w-5xl mx-auto mb-6">
 
-<h2>Nueva tarea</h2>
+<h2 class="mb-3">Nueva tarea</h2>
 
-<input id="taskInput" class="w-full p-2 rounded mb-3 text-black" placeholder="Nueva tarea...">
+<input id="taskInput" placeholder="Escribe tarea..." class="w-full p-2 rounded mb-2 text-black">
+
+<input id="categoryInput" placeholder="Categoría..." class="w-full p-2 rounded mb-2 text-black">
+
+<div id="suggestions" class="mb-2"></div>
 
 <div class="flex gap-2">
 <button onclick="addTask()" class="btn">Añadir</button>
@@ -96,10 +136,12 @@ body.dark{
 
 </div>
 
-<div class="glass w-full max-w-3xl">
+<!-- LISTA -->
+<div class="glass max-w-5xl mx-auto">
 <div id="taskList"></div>
 </div>
 
+<!-- MODAL -->
 <div id="welcomeModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
 <div class="bg-white p-6 rounded">
 <h2>Bienvenido a TaskFlow</h2>
