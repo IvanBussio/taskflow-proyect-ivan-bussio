@@ -13,37 +13,33 @@ body{
 margin:0;
 font-family:sans-serif;
 color:white;
-transition:all .4s ease;
+transition:.4s;
 overflow-x:hidden;
 }
 
-/* 🌙 MODO OSCURO (DEFAULT) */
+/* 🌌 DARK */
 body{
 background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);
 background-size:300% 300%;
-animation:bgmove 12s ease infinite;
+animation:bgmove 12s infinite;
 }
 
-/* ☀️ MODO CLARO */
+/* 🌿 LIGHT */
 body.light{
 background:linear-gradient(135deg,#d1fae5,#bbf7d0,#a7f3d0);
 color:#022c22;
 }
 
-/* ANIMACIÓN FONDO */
 @keyframes bgmove{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
+0%{background-position:0%}
+50%{background-position:100%}
+100%{background-position:0%}
 }
 
-/* ✏️ LÍNEAS ANIMADAS */
+/* LÍNEAS */
 .bg{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+inset:0;
 z-index:-1;
 overflow:hidden;
 }
@@ -52,22 +48,21 @@ overflow:hidden;
 position:absolute;
 width:2px;
 height:200%;
-background:rgba(255,255,255,0.08);
-animation:draw 6s linear infinite;
+background:rgba(255,255,255,.08);
+animation:move 6s linear infinite;
 }
 
-@keyframes draw{
+@keyframes move{
 0%{transform:translateY(-100%)}
 100%{transform:translateY(100%)}
 }
 
-/* TARJETAS */
+/* CARD */
 .card{
-background:rgba(30,41,59,0.6);
+background:rgba(30,41,59,.6);
 padding:25px;
 border-radius:16px;
-backdrop-filter:blur(12px);
-box-shadow:0 10px 30px rgba(0,0,0,.3);
+backdrop-filter:blur(10px);
 }
 
 body.light .card{
@@ -97,7 +92,6 @@ transition:.2s;
 
 .btn:hover{
 transform:scale(1.05);
-background:#475569;
 }
 
 body.light .btn{
@@ -105,7 +99,7 @@ background:#4ade80;
 color:#022c22;
 }
 
-/* TAREAS */
+/* TAREA */
 .task{
 background:#020617;
 padding:14px;
@@ -113,8 +107,7 @@ border-radius:10px;
 margin-bottom:10px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-animation:fade .3s ease;
+animation:fade .3s;
 }
 
 body.light .task{
@@ -124,20 +117,14 @@ color:#022c22;
 
 @keyframes fade{
 from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
+to{opacity:1}
 }
 
 /* CHIP */
 .chip{
-background:#22c55e;
 padding:4px 8px;
 border-radius:20px;
 font-size:12px;
-margin-left:6px;
-}
-
-body.light .chip{
-background:#16a34a;
 color:white;
 }
 
@@ -147,16 +134,14 @@ position:fixed;
 inset:0;
 background:rgba(0,0,0,.7);
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 }
 
 .modal-box{
 background:#020617;
 padding:40px;
 border-radius:20px;
-max-width:400px;
-text-align:center;
 }
 
 body.light .modal-box{
@@ -169,25 +154,22 @@ color:#022c22;
 
 <body>
 
-<!-- FONDO LÍNEAS -->
+<!-- FONDO -->
 <div class="bg">
 <div class="line" style="left:15%"></div>
 <div class="line" style="left:35%"></div>
 <div class="line" style="left:55%"></div>
 <div class="line" style="left:75%"></div>
-<div class="line" style="left:90%"></div>
 </div>
 
 <!-- HEADER -->
-<div class="flex justify-between items-center p-6">
+<div class="flex justify-between p-6">
+<h1 class="text-4xl font-semibold">TaskFlow</h1>
 
 <div class="flex gap-2">
 <button onclick="openModal()" class="btn">ℹ</button>
 <button onclick="toggleTheme()" class="btn">🌙</button>
 </div>
-
-<h1 class="text-4xl font-semibold">TaskFlow</h1>
-
 </div>
 
 <div class="max-w-5xl mx-auto p-6">
@@ -195,13 +177,17 @@ color:#022c22;
 <!-- INPUT -->
 <div class="card mb-6">
 
-<input id="taskInput" placeholder="Nueva tarea..." class="w-full p-2 rounded mb-2">
-<input id="categoryInput" placeholder="Categoría..." class="w-full p-2 rounded mb-3">
+<input id="taskInput" placeholder="Nueva tarea..." class="w-full p-2 mb-2 rounded">
+<input id="categoryInput" placeholder="Categoría..." class="w-full p-2 mb-3 rounded">
 
-<div class="flex gap-2">
+<div id="categoriesList" class="flex gap-2 flex-wrap mb-3"></div>
+
+<div class="flex gap-2 flex-wrap">
 <button onclick="addTask()" class="btn">Añadir</button>
 <button onclick="completeAll()" class="btn">Completar</button>
 <button onclick="deleteCompleted()" class="btn">Borrar</button>
+<button onclick="sortTasks()" class="btn">A–Z</button>
+<button onclick="clearFilter()" class="btn">Todas</button>
 </div>
 
 </div>
@@ -209,7 +195,7 @@ color:#022c22;
 <!-- LISTA -->
 <div class="card">
 
-<input id="search" placeholder="Buscar..." class="w-full p-2 rounded mb-3">
+<input id="search" placeholder="Buscar..." class="w-full p-2 mb-3 rounded">
 
 <div id="taskList"></div>
 
@@ -218,80 +204,96 @@ color:#022c22;
 </div>
 
 <!-- MODAL -->
-<div id="modal" style="display:none;" class="modal">
-
-<div class="modal-box">
-
-<h2 class="text-2xl mb-3">Bienvenido a TaskFlow</h2>
-
-<p class="mb-4">
-Organiza tu día con estilo.  
-Modo claro verde pastel 🌿  
-Modo oscuro galáctico 🌌
-</p>
-
-<button onclick="closeModal()" class="btn">Empezar</button>
-
+<div id="modal" style="display:none" class="modal">
+<div class="modal-box text-center">
+<h2 class="text-2xl mb-3">Bienvenido</h2>
+<p>App inteligente con IA de categorías</p>
+<button onclick="closeModal()" class="btn mt-4">Empezar</button>
 </div>
-
 </div>
 
 <script>
 
-let tasks = []
-try{
-tasks = JSON.parse(localStorage.getItem("tasks")) || []
-}catch{
-tasks = []
-}
-
+let tasks = JSON.parse(localStorage.getItem("tasks")) || []
+let categories = JSON.parse(localStorage.getItem("categories")) || []
+let filterCategory = null
 let dragIndex = null
 
+const colors = ["#22c55e","#3b82f6","#a855f7","#f59e0b","#ef4444"]
+
+/* IA */
+const smart = {
+"Salud":["gym","correr","futbol"],
+"Trabajo":["reunion","cliente","proyecto"],
+"Compras":["comprar","super","mercado"],
+"Estudio":["estudiar","curso","leer"]
+}
+
+function suggest(text){
+text=text.toLowerCase()
+for(let c in smart){
+for(let k of smart[c]){
+if(text.includes(k)) return c
+}
+}
+return ""
+}
+
+taskInput.addEventListener("input",(e)=>{
+let s=suggest(e.target.value)
+if(s) categoryInput.value=s
+})
+
 function save(){
-localStorage.setItem("tasks", JSON.stringify(tasks))
+localStorage.setItem("tasks",JSON.stringify(tasks))
+localStorage.setItem("categories",JSON.stringify(categories))
 }
 
 function addTask(){
-const text = document.getElementById("taskInput").value
-const cat = document.getElementById("categoryInput").value
-if(!text) return
+let t=taskInput.value
+let c=categoryInput.value
+if(!t) return
 
-tasks.push({text,cat,done:false})
+tasks.push({text:t,cat:c,done:false})
 
-document.getElementById("taskInput").value=""
-document.getElementById("categoryInput").value=""
+if(c && !categories.find(x=>x.name===c)){
+categories.push({name:c,color:colors[categories.length%colors.length]})
+}
+
+taskInput.value=""
+categoryInput.value=""
 
 save()
 render()
+renderCategories()
 }
 
 function render(){
-const list = document.getElementById("taskList")
+let list=taskList
 list.innerHTML=""
-
-const search = document.getElementById("search").value.toLowerCase()
+let s=search.value.toLowerCase()
 
 tasks.forEach((t,i)=>{
 
-if(search && !t.text.toLowerCase().includes(search)) return
+if(filterCategory && t.cat!==filterCategory) return
+if(s && !t.text.toLowerCase().includes(s)) return
 
-const div = document.createElement("div")
+let div=document.createElement("div")
 div.className="task"
 div.draggable=true
 
 div.ondragstart=()=>dragIndex=i
-div.ondragover=(e)=>e.preventDefault()
 div.ondrop=()=>{
-const moved = tasks.splice(dragIndex,1)[0]
-tasks.splice(i,0,moved)
+let m=tasks.splice(dragIndex,1)[0]
+tasks.splice(i,0,m)
 save()
 render()
 }
+div.ondragover=e=>e.preventDefault()
 
 div.innerHTML=`
-<span style="${t.done?'text-decoration:line-through':''}">
-${t.text}
-${t.cat?`<span class="chip">${t.cat}</span>`:""}
+<span>${t.done?"<s>"+t.text+"</s>":t.text}
+${t.cat?`<span class="chip" style="background:${getColor(t.cat)}">${t.cat}</span>`:""}
 </span>
 
 <div>
@@ -302,6 +304,29 @@ ${t.cat?`<span class="chip">${t.cat}</span>`:""}
 
 list.appendChild(div)
 })
+}
+
+function renderCategories(){
+categoriesList.innerHTML=""
+categories.forEach(c=>{
+let b=document.createElement("button")
+b.innerText=c.name
+b.className="chip"
+b.style.background=c.color
+
+b.onclick=()=>{
+categoryInput.value=c.name
+filterCategory=c.name
+render()
+}
+
+categoriesList.appendChild(b)
+})
+}
+
+function getColor(name){
+let c=categories.find(x=>x.name===name)
+return c?c.color:"#64748b"
 }
 
 function toggle(i){
@@ -328,28 +353,36 @@ save()
 render()
 }
 
-/* 🌙 CAMBIO DE TEMA */
+function sortTasks(){
+tasks.sort((a,b)=>a.text.localeCompare(b.text))
+save()
+render()
+}
+
+function clearFilter(){
+filterCategory=null
+render()
+}
+
 function toggleTheme(){
 document.body.classList.toggle("light")
 }
 
-/* MODAL */
 function openModal(){
-document.getElementById("modal").style.display="flex"
+modal.style.display="flex"
 }
 
 function closeModal(){
-document.getElementById("modal").style.display="none"
-localStorage.setItem("visited","true")
+modal.style.display="none"
+localStorage.setItem("visited",true)
 }
 
-if(!localStorage.getItem("visited")){
-openModal()
-}
+if(!localStorage.getItem("visited")) openModal()
 
-document.getElementById("search").addEventListener("input",render)
+search.addEventListener("input",render)
 
 render()
+renderCategories()
 
 </script>
 
