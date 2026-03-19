@@ -11,7 +11,7 @@ function save(){
 }
 
 /* =========================
-   IA CATEGORÍAS (REAL)
+   IA CATEGORÍAS
 ========================= */
 
 function smartCategory(text){
@@ -29,12 +29,8 @@ function smartCategory(text){
 function suggestCategory(input){
   const base = ["Trabajo","Personal","Compras","Gym","Estudio","Salud"];
 
-  return [...new Set([
-    ...categories,
-    ...base
-  ])].filter(cat =>
-    cat.toLowerCase().includes(input.toLowerCase())
-  );
+  return [...new Set([...categories, ...base])]
+    .filter(cat => cat.toLowerCase().includes(input.toLowerCase()));
 }
 
 function renderSuggestions(){
@@ -46,7 +42,6 @@ function renderSuggestions(){
 
   let suggestions = suggestCategory(input);
 
-  /* IA automática */
   if(!input && taskText){
     const auto = smartCategory(taskText);
     if(auto) suggestions.unshift(auto);
@@ -64,14 +59,11 @@ function renderSuggestions(){
   });
 }
 
-document.getElementById("categoryInput")
-.addEventListener("input", renderSuggestions);
-
-document.getElementById("taskInput")
-.addEventListener("input", renderSuggestions);
+document.getElementById("categoryInput").addEventListener("input", renderSuggestions);
+document.getElementById("taskInput").addEventListener("input", renderSuggestions);
 
 /* =========================
-   RENDER TAREAS
+   RENDER
 ========================= */
 
 function renderTasks(){
@@ -87,10 +79,9 @@ function renderTasks(){
     }
 
     div.innerHTML = `
-      <div class="flex items-center gap-2">
-        <input type="checkbox" ${task.completed ? "checked" : ""} onchange="toggleComplete(${i})">
+      <div onclick="toggleComplete(${i})" style="cursor:pointer">
         <span>${task.text}</span>
-        <div class="chip">${task.category || "Personal"}</div>
+        <div class="chip">${task.category}</div>
       </div>
 
       <div class="flex gap-2">
@@ -101,6 +92,8 @@ function renderTasks(){
 
     list.appendChild(div);
   });
+
+  renderCategoryStats();
 }
 
 /* =========================
@@ -108,12 +101,14 @@ function renderTasks(){
 ========================= */
 
 function addTask(){
-  const text = document.getElementById("taskInput").value;
-  let category = document.getElementById("categoryInput").value;
+  const input = document.getElementById("taskInput");
+  const catInput = document.getElementById("categoryInput");
+
+  const text = input.value;
+  let category = catInput.value;
 
   if(!text.trim()) return;
 
-  /* IA AUTO */
   if(!category){
     category = smartCategory(text) || "Personal";
   }
@@ -128,8 +123,8 @@ function addTask(){
     categories.push(category);
   }
 
-  document.getElementById("taskInput").value="";
-  document.getElementById("categoryInput").value="";
+  input.value="";
+  catInput.value="";
 
   save();
   renderTasks();
@@ -141,12 +136,23 @@ function deleteTask(i){
   renderTasks();
 }
 
+/* 🔥 eliminar todo */
+function deleteAll(){
+  if(confirm("Eliminar todas las tareas?")){
+    tasks = [];
+    save();
+    renderTasks();
+  }
+}
+
+/* tachar */
 function toggleComplete(i){
   tasks[i].completed = !tasks[i].completed;
   save();
   renderTasks();
 }
 
+/* editar */
 function editTask(i){
   const nuevo = prompt("Editar tarea:", tasks[i].text);
 
@@ -157,10 +163,48 @@ function editTask(i){
   }
 }
 
+/* ordenar */
 function sortTasks(){
   tasks.sort((a,b)=> a.text.localeCompare(b.text));
   save();
   renderTasks();
+}
+
+/* =========================
+   ENTER PARA AÑADIR
+========================= */
+
+document.getElementById("taskInput").addEventListener("keypress", (e)=>{
+  if(e.key === "Enter"){
+    addTask();
+  }
+});
+
+/* =========================
+   CONTADOR POR CATEGORÍAS
+========================= */
+
+function renderCategoryStats(){
+  let stats = {};
+
+  tasks.forEach(t=>{
+    stats[t.category] = (stats[t.category] || 0) + 1;
+  });
+
+  let container = document.getElementById("categoryStats");
+
+  if(!container){
+    container = document.createElement("div");
+    container.id = "categoryStats";
+    container.className = "mt-4 text-sm";
+    document.querySelector(".glass").appendChild(container);
+  }
+
+  container.innerHTML = "<strong>Categorías:</strong><br>";
+
+  Object.entries(stats).forEach(([cat,count])=>{
+    container.innerHTML += `${cat}: ${count}<br>`;
+  });
 }
 
 /* =========================
@@ -172,7 +216,6 @@ function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-/* modal info */
 function openInfo(){
   document.getElementById("infoModal").classList.remove("hidden");
 }
@@ -184,7 +227,7 @@ function closeInfo(e){
 }
 
 /* =========================
-   FONDO LÁPIZ VERTICAL
+   FONDO LÁPIZ CORREGIDO
 ========================= */
 
 const canvas = document.getElementById("bgCanvas");
@@ -195,20 +238,26 @@ canvas.height = window.innerHeight;
 
 let lines = [];
 
-for(let i=0;i<50;i++){
+for(let i=0;i<60;i++){
   lines.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
-    length:100+Math.random()*200,
-    speed:0.5+Math.random()
+    length:150+Math.random()*200,
+    speed:0.3+Math.random()
   });
 }
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  ctx.strokeStyle="rgba(0,0,0,0.07)";
-  ctx.lineWidth=1;
+  /* color dinámico */
+  const isDark = document.body.classList.contains("dark");
+
+  ctx.strokeStyle = isDark
+    ? "rgba(255,255,255,0.05)"
+    : "rgba(0,0,0,0.07)";
+
+  ctx.lineWidth = 1;
 
   lines.forEach(l=>{
     ctx.beginPath();
