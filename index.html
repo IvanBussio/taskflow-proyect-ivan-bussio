@@ -22,7 +22,7 @@ body{
 body.dark{
   background:linear-gradient(135deg,#0B0A18,#1A1235,#2A1A5A);
   background-size:400% 400%;
-  animation:bg 10s ease infinite;
+  animation:bg 12s ease infinite;
   color:#E5E7EB;
 }
 
@@ -30,7 +30,7 @@ body.dark{
 body.light{
   background:linear-gradient(135deg,#FFD6E0,#E0F2FE);
   background-size:400% 400%;
-  animation:bg 10s ease infinite;
+  animation:bg 12s ease infinite;
 }
 
 @keyframes bg{
@@ -53,21 +53,55 @@ header{
   -webkit-text-fill-color:transparent;
 }
 
+/* ICON BUTTONS */
+.top-buttons{
+  display:flex;
+  gap:10px;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.25s;
+}
+
+body.dark .icon-btn{
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+}
+
+body.light .icon-btn{
+  background:#fff;
+  color:#111;
+}
+
+.icon-btn:hover{
+  transform:scale(1.1);
+}
+
 /* BOTONES */
 .btn{
   padding:10px 16px;
   border-radius:12px;
   border:none;
   cursor:pointer;
-  background:rgba(255,255,255,0.08);
+  font-weight:500;
+  background:#374151;
   color:white;
-  border:1px solid rgba(255,255,255,0.15);
+  margin-right:6px;
   transition:.3s;
 }
 
 .btn:hover{
+  background:#4B5563;
   transform:translateY(-2px);
-  background:rgba(255,255,255,0.2);
 }
 
 /* CONTAINER */
@@ -94,23 +128,19 @@ header{
   background:rgba(255,255,255,0.05);
   padding:25px;
   border-radius:20px;
-  backdrop-filter:blur(12px);
 }
 
 body.light .card{
   background:rgba(255,255,255,0.7);
 }
 
-/* INPUT PREMIUM */
+/* INPUT */
 .input{
   width:100%;
   padding:16px;
   border-radius:14px;
   margin-bottom:14px;
-  box-sizing:border-box;
-  border:1px solid transparent;
-  outline:none;
-  transition:.25s;
+  border:none;
 }
 
 body.dark .input{
@@ -119,13 +149,7 @@ body.dark .input{
 }
 
 body.light .input{
-  background:#F1F5F9;
-  border:1px solid #E2E8F0;
-}
-
-.input:focus{
-  border:1px solid #8B5CF6;
-  box-shadow:0 0 0 3px rgba(139,92,246,0.2);
+  background:#fff;
 }
 
 /* DASHBOARD */
@@ -140,11 +164,13 @@ body.light .input{
   padding:18px;
   border-radius:16px;
   text-align:center;
+  font-weight:600;
+  color:#1F2937;
 }
 
-.total{background:#BFDBFE;}
-.completed{background:#BBF7D0;}
-.pending{background:#FBCFE8;}
+.total{background:#93C5FD;}
+.completed{background:#86EFAC;}
+.pending{background:#F9A8D4;}
 
 /* TASK */
 .task{
@@ -158,39 +184,52 @@ body.light .input{
 
 body.light .task{background:white;}
 
-.task .completed{
+.completed{
   text-decoration:line-through;
   opacity:.5;
-  color:#9CA3AF;
 }
 
-/* CATEGORIAS */
+/* CHIPS */
 .chip{
-  padding:6px 14px;
+  padding:6px 12px;
   border-radius:999px;
   font-size:12px;
 }
 
-.cat-Trabajo{background:#BFDBFE;color:#1E3A8A;}
-.cat-Personal{background:#BBF7D0;color:#065F46;}
-.cat-Compras{background:#FED7AA;color:#7C2D12;}
-.cat-Estudio{background:#E9D5FF;color:#4C1D95;}
-.cat-Gym{background:#FECACA;color:#7F1D1D;}
+.cat-Compras{background:#FED7AA;}
+.cat-Estudio{background:#E9D5FF;}
+.cat-Personal{background:#BBF7D0;}
+.cat-Trabajo{background:#BFDBFE;}
+.cat-Gym{background:#FECACA;}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,0.5);
+}
+
+.modal-content{
+  padding:30px;
+  border-radius:16px;
+  background:white;
+  max-width:400px;
+  text-align:center;
+}
 
 /* FOOTER */
 .footer{
   margin-top:60px;
-  padding:25px;
   text-align:center;
 }
 
 .link{
   color:#a78bfa;
-  text-decoration:none;
-}
-
-.link:hover{
-  color:#f472b6;
 }
 
 </style>
@@ -202,9 +241,11 @@ body.light .task{background:white;}
 <header>
 <h1 class="title">TaskFlow</h1>
 
-<div>
-<button class="btn" onclick="toggleTheme()">🌙</button>
+<div class="top-buttons">
+<button class="icon-btn" onclick="openInfo()">i</button>
+<button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
 </div>
+
 </header>
 
 <main class="container layout">
@@ -225,11 +266,19 @@ body.light .task{background:white;}
 
 </main>
 
+<!-- MODAL -->
+<div id="infoModal" class="modal" onclick="closeInfo(event)">
+<div class="modal-content">
+<h2>TaskFlow</h2>
+<p>Gestión de tareas con IA y UI moderna</p>
+</div>
+</div>
+
 <footer class="footer">
 © 2026 TaskFlow · Project developed by Ivan Bussio (FCT) — 
 <a href="https://www.corner-estudios.com" target="_blank" class="link">
 🔗 Corner Estudios
-</a> · All rights reserved
+</a>
 </footer>
 
 <script src="script.js"></script>

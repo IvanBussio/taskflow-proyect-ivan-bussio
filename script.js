@@ -2,8 +2,9 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 const input = document.getElementById("input");
 const catInput = document.getElementById("categoryInput");
+const themeBtn = document.getElementById("themeBtn");
 
-/* IA categorias */
+/* IA */
 input.addEventListener("input",()=>{
   let t = input.value.toLowerCase();
 
@@ -22,7 +23,7 @@ function addTask(){
   tasks.push({
     id:Date.now(),
     text:text.toUpperCase(),
-    category:catInput.value || "Personal",
+    category:catInput.value,
     completed:false
   });
 
@@ -38,12 +39,12 @@ function render(){
 
   list.innerHTML="";
 
-  let completed=tasks.filter(t=>t.completed).length;
+  let comp=tasks.filter(t=>t.completed).length;
 
   dash.innerHTML=`
-    <div class="dashboard-card total">Total ${tasks.length}</div>
-    <div class="dashboard-card completed">Completadas ${completed}</div>
-    <div class="dashboard-card pending">Pendientes ${tasks.length-completed}</div>
+    <div class="dashboard-card total">TOTAL ${tasks.length}</div>
+    <div class="dashboard-card completed">COMPLETADAS ${comp}</div>
+    <div class="dashboard-card pending">PENDIENTES ${tasks.length-comp}</div>
   `;
 
   tasks.forEach(t=>{
@@ -104,6 +105,19 @@ function save(){
 function toggleTheme(){
   document.body.classList.toggle("dark");
   document.body.classList.toggle("light");
+
+  themeBtn.textContent = document.body.classList.contains("dark") ? "🌙" : "☀️";
+}
+
+/* modal */
+function openInfo(){
+  document.getElementById("infoModal").style.display="flex";
+}
+
+function closeInfo(e){
+  if(e.target.id==="infoModal"){
+    document.getElementById("infoModal").style.display="none";
+  }
 }
 
 /* enter */
