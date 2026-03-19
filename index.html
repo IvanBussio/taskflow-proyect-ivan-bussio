@@ -18,7 +18,7 @@ body{
   transition:.4s;
 }
 
-/* 🌌 DARK PASTEL */
+/* 🌌 DARK */
 body.dark{
   background: linear-gradient(135deg,#0B0A18,#1A1235,#2A1A5A);
   background-size:400% 400%;
@@ -51,7 +51,6 @@ header{
   font-weight:600;
   background:linear-gradient(90deg,#ff7eb3,#6ec3ff);
   -webkit-background-clip:text;
-  background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
@@ -111,10 +110,9 @@ body.light .card{
   border-radius:14px;
   border:none;
   margin-bottom:14px;
-  box-sizing:border-box;
 }
 
-/* DASHBOARD PASTEL */
+/* DASHBOARD */
 .dashboard{
   display:flex;
   gap:10px;
@@ -129,18 +127,17 @@ body.light .card{
   font-weight:600;
 }
 
-/* 🎨 PASTEL */
-.total{ 
+.total{
   background:linear-gradient(135deg,#93C5FD,#BFDBFE);
   color:#1E3A8A;
 }
 
-.completed{ 
+.completed{
   background:linear-gradient(135deg,#86EFAC,#BBF7D0);
   color:#065F46;
 }
 
-.pending{ 
+.pending{
   background:linear-gradient(135deg,#F9A8D4,#FBCFE8);
   color:#831843;
 }
@@ -160,25 +157,46 @@ body.light .task{
   background:white;
 }
 
-/* TACHADO SOLO TAREAS */
+/* ✔ SOLO TACHADO */
 .task .completed{
   text-decoration:line-through;
-  opacity:.4;
+  opacity:.5;
+  background:none !important;
+  color:#9CA3AF;
 }
 
-/* CATEGORIAS */
+/* CATEGORIAS PASTEL */
 .chip{
-  padding:5px 12px;
-  border-radius:10px;
+  padding:6px 14px;
+  border-radius:999px;
   font-size:12px;
-  color:white;
+  font-weight:500;
 }
 
-.cat-Trabajo{background:#3B82F6;}
-.cat-Personal{background:#10B981;}
-.cat-Compras{background:#F59E0B;}
-.cat-Estudio{background:#8B5CF6;}
-.cat-Gym{background:#EF4444;}
+.cat-Trabajo{
+  background:#BFDBFE;
+  color:#1E3A8A;
+}
+
+.cat-Personal{
+  background:#BBF7D0;
+  color:#065F46;
+}
+
+.cat-Compras{
+  background:#FED7AA;
+  color:#7C2D12;
+}
+
+.cat-Estudio{
+  background:#E9D5FF;
+  color:#4C1D95;
+}
+
+.cat-Gym{
+  background:#FECACA;
+  color:#7F1D1D;
+}
 
 /* MODAL */
 .modal{
@@ -194,8 +212,6 @@ body.light .task{
   background:#1C1533;
   padding:30px;
   border-radius:18px;
-  max-width:450px;
-  text-align:center;
 }
 
 body.light .modal-box{
@@ -254,12 +270,7 @@ footer{
 <div id="infoModal" class="modal" style="display:none" onclick="closeInfo(event)">
   <div class="modal-box">
     <h2>TaskFlow 🚀</h2>
-    <p>
-      Organiza tus tareas con IA.<br><br>
-      ✔ Categorías automáticas<br>
-      ✔ Dashboard visual<br>
-      ✔ Diseño moderno<br>
-    </p>
+    <p>Gestión inteligente de tareas con IA.</p>
   </div>
 </div>
 
@@ -267,7 +278,6 @@ footer{
 <div id="welcome" class="modal" style="display:none">
   <div class="modal-box">
     <h2>Bienvenido 👋</h2>
-    <p>Tu productividad empieza ahora.</p>
     <button class="btn" onclick="closeWelcome()">Entrar</button>
   </div>
 </div>
