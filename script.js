@@ -3,22 +3,23 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 const input = document.getElementById("input");
 const catInput = document.getElementById("categoryInput");
 
-/* IA simple */
-function suggestCategory(text){
-  text = text.toLowerCase();
-  if(text.includes("gym")) return "Gym";
-  if(text.includes("compra")) return "Compras";
-  if(text.includes("estudi")) return "Estudio";
-  if(text.includes("trab")) return "Trabajo";
-  return "Personal";
-}
+/* IA automática en tiempo real */
+input.addEventListener("input", () => {
+  const text = input.value.toLowerCase();
+
+  if(text.includes("gym")) catInput.value = "Gym";
+  else if(text.includes("compr")) catInput.value = "Compras";
+  else if(text.includes("estudi")) catInput.value = "Estudio";
+  else if(text.includes("trab")) catInput.value = "Trabajo";
+  else catInput.value = "Personal";
+});
 
 /* añadir */
 function addTask(){
   let text = input.value.trim();
   if(!text) return;
 
-  let cat = catInput.value || suggestCategory(text);
+  let cat = catInput.value || "Personal";
 
   tasks.push({
     id:Date.now(),
@@ -133,19 +134,9 @@ function closeInfo(e){
   }
 }
 
-function closeWelcome(){
-  document.getElementById("welcome").classList.add("hidden");
-}
-
 /* enter */
 input.addEventListener("keypress",(e)=>{
   if(e.key==="Enter") addTask();
 });
-
-/* bienvenida */
-if(!localStorage.getItem("welcome")){
-  document.getElementById("welcome").classList.remove("hidden");
-  localStorage.setItem("welcome",true);
-}
 
 render();
