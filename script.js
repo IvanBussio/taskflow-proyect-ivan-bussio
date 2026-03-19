@@ -2,6 +2,7 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 const input = document.getElementById("input");
 const catInput = document.getElementById("categoryInput");
+const themeBtn = document.getElementById("themeBtn");
 
 /* IA */
 input.addEventListener("input",()=>{
@@ -21,8 +22,8 @@ function addTask(){
 
   tasks.push({
     id:Date.now(),
-    text,
-    category:catInput.value,
+    text: text.toUpperCase(),
+    category: catInput.value || "Personal",
     completed:false
   });
 
@@ -76,7 +77,7 @@ function remove(id){
 function edit(id){
   let t = tasks.find(t=>t.id===id);
   let nuevo = prompt("Editar",t.text);
-  if(nuevo) t.text=nuevo;
+  if(nuevo) t.text=nuevo.toUpperCase();
   save();
 }
 
@@ -91,10 +92,17 @@ function save(){
   render();
 }
 
-/* tema */
+/* 🌙☀️ tema con icono */
 function toggleTheme(){
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
+  if(document.body.classList.contains("dark")){
+    document.body.classList.remove("dark");
+    document.body.classList.add("light");
+    themeBtn.textContent="🌙";
+  }else{
+    document.body.classList.remove("light");
+    document.body.classList.add("dark");
+    themeBtn.textContent="☀️";
+  }
 }
 
 /* modal */

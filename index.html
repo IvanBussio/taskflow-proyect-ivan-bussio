@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,84 +15,69 @@ body{
   font-family:'Poppins',sans-serif;
   margin:0;
   transition:0.4s;
-  overflow-x:hidden;
 }
 
 /* 🌸 CLARO */
 body.light{
-  background:linear-gradient(135deg,#ffd6e0,#cde7ff);
+  background: linear-gradient(270deg,#ffd6e0,#cde7ff,#ffd6e0);
+  background-size:400% 400%;
+  animation:bg 12s ease infinite;
 }
 
 /* 🌌 OSCURO */
 body.dark{
-  background:linear-gradient(135deg,#0a0a0f,#1a0933,#2a0a4a);
+  background: linear-gradient(270deg,#0a0a0f,#2a0a4a,#0a0a0f);
+  background-size:400% 400%;
+  animation:bg 12s ease infinite;
   color:white;
 }
 
-/* ✏️ FONDO ANIMADO */
-.bg{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
+@keyframes bg{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
 }
 
-.bg::before{
-  content:"";
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:repeating-linear-gradient(
-    to right,
-    transparent,
-    transparent 40px,
-    rgba(255,255,255,0.05) 42px
-  );
-  animation:move 8s linear infinite;
-}
-
-@keyframes move{
-  from{transform:translateX(0)}
-  to{transform:translateX(60px)}
-}
-
-/* header */
+/* HEADER */
 header{
   display:flex;
   justify-content:space-between;
   padding:20px 40px;
 }
 
-/* título */
+/* TÍTULO */
 .title{
   font-size:32px;
   font-weight:600;
   background:linear-gradient(90deg,#ff7eb3,#6ec3ff);
   -webkit-background-clip:text;
+  background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
-/* botones */
+/* BOTONES */
 .btn{
-  padding:8px 14px;
+  padding:10px 16px;
   border-radius:10px;
   border:none;
   cursor:pointer;
+  background:#2e2e2e;
+  color:white;
   transition:.3s;
 }
 
 .btn:hover{
-  transform:scale(1.1);
-  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  transform:scale(1.08);
+  background:#444;
 }
 
-/* contenedor */
+/* CONTENEDOR */
 .container{
   max-width:600px;
   margin:auto;
 }
 
-/* tarjeta */
+/* CARD */
 .card{
   background:rgba(255,255,255,0.5);
   padding:20px;
@@ -103,24 +89,24 @@ header{
   background:rgba(30,30,60,0.6);
 }
 
-/* inputs */
+/* INPUTS */
 .input{
   width:100%;
-  padding:12px;
-  border-radius:10px;
+  padding:14px;
+  border-radius:12px;
   border:none;
-  margin-bottom:10px;
+  margin-bottom:12px;
   box-sizing:border-box;
 }
 
-/* tareas */
+/* TAREAS */
 .task{
   display:flex;
   justify-content:space-between;
-  padding:10px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:12px;
   margin-bottom:8px;
-  background:rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.7);
 }
 
 .dark .task{
@@ -132,9 +118,9 @@ header{
   opacity:.6;
 }
 
-/* chips */
+/* CHIPS */
 .chip{
-  padding:3px 8px;
+  padding:4px 10px;
   border-radius:8px;
   font-size:12px;
   color:white;
@@ -146,7 +132,7 @@ header{
 .cat-Estudio{background:#8b5cf6;}
 .cat-Gym{background:#ef4444;}
 
-/* modal */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -170,11 +156,10 @@ header{
 }
 
 </style>
+
 </head>
 
 <body class="light">
-
-<div class="bg"></div>
 
 <header>
 
@@ -182,7 +167,7 @@ header{
 
 <div>
 <button class="btn" onclick="openInfo()">i</button>
-<button class="btn" onclick="toggleTheme()">🌙</button>
+<button class="btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
 </div>
 
 </header>
@@ -209,11 +194,11 @@ header{
   <div class="modal-box">
     <h2>TaskFlow 🚀</h2>
     <p>
-      Organiza tus tareas de forma inteligente.<br><br>
-      ✔ Categorías automáticas<br>
-      ✔ Gestión rápida<br>
-      ✔ Interfaz moderna<br><br>
-      Mejora tu productividad diaria.
+      Organiza tus tareas fácilmente.<br><br>
+      ✔ IA de categorías<br>
+      ✔ Orden automático<br>
+      ✔ Diseño moderno<br><br>
+      Productividad sin esfuerzo.
     </p>
   </div>
 </div>
@@ -222,7 +207,7 @@ header{
 <div id="welcome" class="modal" style="display:none">
   <div class="modal-box">
     <h2>Bienvenido 👋</h2>
-    <p>Empieza a organizar tu día como un pro.</p>
+    <p>Organiza tu día como un pro.</p>
     <button class="btn" onclick="closeWelcome()">Entrar</button>
   </div>
 </div>
