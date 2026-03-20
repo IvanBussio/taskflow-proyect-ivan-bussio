@@ -1,128 +1,88 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+const taskInput = document.getElementById("taskInput");
+const addBtn = document.getElementById("addBtn");
+const taskList = document.getElementById("taskList");
+const darkModeBtn = document.getElementById("darkModeBtn");
+const sortBtn = document.getElementById("sortBtn");
+const clearBtn = document.getElementById("clearBtn");
 
-const input = document.getElementById("input");
-const catInput = document.getElementById("categoryInput");
-const themeBtn = document.getElementById("themeBtn");
+// =======================
+// 🌙 MODO OSCURO
+// =======================
+function toggleDarkMode() {
+  document.documentElement.classList.toggle("dark");
 
-/* IA */
-input.addEventListener("input",()=>{
-  let t = input.value.toLowerCase();
-
-  if(t.includes("gym")) catInput.value="Gym";
-  else if(t.includes("compr")) catInput.value="Compras";
-  else if(t.includes("estudi")) catInput.value="Estudio";
-  else if(t.includes("trab")) catInput.value="Trabajo";
-  else catInput.value="Personal";
-});
-
-/* añadir */
-function addTask(){
-  let text = input.value.trim();
-  if(!text) return;
-
-  tasks.push({
-    id:Date.now(),
-    text:text.toUpperCase(),
-    category:catInput.value || "Personal",
-    completed:false
-  });
-
-  input.value="";
-  catInput.value="";
-  save();
+  const isDark = document.documentElement.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
 }
 
-/* render */
-function render(){
-  const list=document.getElementById("taskList");
-  const dash=document.getElementById("dashboard");
+darkModeBtn.addEventListener("click", toggleDarkMode);
 
-  list.innerHTML="";
+// cargar preferencia
+if (localStorage.getItem("theme") === "dark") {
+  document.documentElement.classList.add("dark");
+}
 
-  let comp=tasks.filter(t=>t.completed).length;
+// =======================
+// ➕ AGREGAR TAREA
+// =======================
+function addTask() {
+  const text = taskInput.value.trim();
+  if (!text) return;
 
-  dash.innerHTML=`
-    <div class="dashboard-card total">TOTAL ${tasks.length}</div>
-    <div class="dashboard-card completed">COMPLETADAS ${comp}</div>
-    <div class="dashboard-card pending">PENDIENTES ${tasks.length-comp}</div>
+  const li = document.createElement("li");
+  li.className = "flex justify-between items-center bg-gray-200 dark:bg-gray-700 px-3 py-2 rounded-lg";
+
+  li.innerHTML = `
+    <span class="task-text cursor-pointer">${text}</span>
+    <button class="delete text-red-500">X</button>
   `;
 
-  tasks.forEach(t=>{
-    const div=document.createElement("div");
-    div.className="task";
-
-    div.innerHTML=`
-      <span onclick="toggle(${t.id})" class="${t.completed?'completed':''}">
-        ${t.text}
-      </span>
-
-      <div>
-        <span class="chip cat-${t.category}">${t.category}</span>
-        <button onclick="edit(${t.id})">✏️</button>
-        <button onclick="remove(${t.id})">❌</button>
-      </div>
-    `;
-
-    list.appendChild(div);
+  // completar tarea
+  li.querySelector(".task-text").addEventListener("click", () => {
+    li.classList.toggle("line-through");
+    li.classList.toggle("opacity-50");
   });
+
+  // eliminar tarea
+  li.querySelector(".delete").addEventListener("click", () => {
+    li.remove();
+  });
+
+  taskList.appendChild(li);
+  taskInput.value = "";
 }
 
-/* acciones */
-function toggle(id){
-  tasks = tasks.map(t=>t.id===id?{...t,completed:!t.completed}:t);
-  save();
-}
+// botón +
+addBtn.addEventListener("click", addTask);
 
-function remove(id){
-  tasks = tasks.filter(t=>t.id!==id);
-  save();
-}
-
-function edit(id){
-  let t = tasks.find(t=>t.id===id);
-  let nuevo = prompt("Editar",t.text);
-  if(nuevo) t.text=nuevo.toUpperCase();
-  save();
-}
-
-function deleteAll(){
-  tasks=[];
-  save();
-}
-
-function sortTasks(){
-  tasks.sort((a,b)=>a.text.localeCompare(b.text));
-  save();
-}
-
-/* guardar */
-function save(){
-  localStorage.setItem("tasks",JSON.stringify(tasks));
-  render();
-}
-
-/* tema */
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
-
-  themeBtn.textContent = document.body.classList.contains("dark") ? "🌙" : "☀️";
-}
-
-/* modal */
-function openInfo(){
-  document.getElementById("infoModal").style.display="flex";
-}
-
-function closeInfo(e){
-  if(e.target.id==="infoModal"){
-    document.getElementById("infoModal").style.display="none";
-  }
-}
-
-/* enter */
-input.addEventListener("keypress",(e)=>{
-  if(e.key==="Enter") addTask();
+// ENTER
+taskInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") addTask();
 });
 
-render();
+// =======================
+// 🔤 ORDENAR
+// =======================
+sortBtn.addEventListener("click", () => {
+  const tasks = Array.from(taskList.children);
+
+  tasks.sort((a, b) => {
+    return a.innerText.localeCompare(b.innerText);
+  });
+
+  taskList.innerHTML = "";
+  tasks.forEach(task => taskList.appendChild(task));
+});
+
+// =======================
+// 🧹 ELIMINAR COMPLETADAS
+// =======================
+clearBtn.addEventListener("click", () => {
+  const tasks = Array.from(taskList.children);
+
+  tasks.forEach(task => {
+    if (task.classList.contains("line-through")) {
+      task.remove();
+    }
+  });
+});
