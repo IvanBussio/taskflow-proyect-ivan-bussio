@@ -28,17 +28,17 @@ function addTask() {
   li.innerHTML = `
     <span class="task-text cursor-pointer select-none">${text}</span>
     <div class="flex gap-2">
-      <button class="edit text-blue-500 focus:outline-none active:outline-none focus:ring-0">✏️</button>
-      <button class="delete text-red-500 focus:outline-none active:outline-none focus:ring-0">✖</button>
+      <button class="edit text-blue-500">✏️</button>
+      <button class="delete text-red-500">✖</button>
     </div>
   `;
 
-  // 🔥 EVITA FOCUS (SOLUCIÓN REAL)
+  // 🔥 evitar focus (clave)
   li.addEventListener("mousedown", (e) => {
     e.preventDefault();
   });
 
-  // ✅ completar tarea
+  // ✅ completar tarea (SIN verde)
   li.querySelector(".task-text").addEventListener("click", () => {
     li.classList.toggle("line-through");
     li.classList.toggle("opacity-50");

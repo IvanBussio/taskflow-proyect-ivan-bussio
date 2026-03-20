@@ -13,36 +13,30 @@
     }
   </script>
 
-  <!-- 🔥 ELIMINAR TODOS LOS CONTORNOS -->
+  <!-- 🔥 eliminar TODOS los bordes y focus -->
   <style>
     *:focus {
       outline: none !important;
       box-shadow: none !important;
     }
 
-    button:focus,
-    button:active,
-    button:focus-visible {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-
-    input:focus {
-      outline: none !important;
-      box-shadow: none !important;
+    button {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
     }
   </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center bg-green-100 dark:bg-black transition">
+<body class="min-h-screen flex items-center justify-center bg-green-100 dark:bg-black">
 
-  <!-- Botón dark -->
+  <!-- botón dark -->
   <button id="darkModeBtn"
-    class="absolute top-4 right-4 bg-white dark:bg-gray-800 px-3 py-2 rounded-full shadow">
+    class="absolute top-4 right-4 text-xl bg-white dark:bg-gray-800 px-3 py-2 rounded-full shadow">
     🌙
   </button>
 
-  <!-- Container -->
+  <!-- container -->
   <div class="w-full max-w-xl mx-4 bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-xl">
 
     <div class="text-center mb-6">
@@ -50,28 +44,28 @@
       <p class="text-gray-600 dark:text-gray-300">Organiza tu día 🚀</p>
     </div>
 
-    <!-- Input -->
+    <!-- input -->
     <div class="flex gap-2 mb-4">
       <input
         id="taskInput"
         type="text"
         placeholder="Agregar tarea..."
-        class="flex-1 px-4 py-2 rounded-lg border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+        class="flex-1 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
       />
 
       <button id="addBtn"
-        class="bg-green-500 hover:bg-green-600 text-white px-4 rounded-lg">
+        class="bg-green-500 text-white px-4 rounded-lg">
         +
       </button>
     </div>
 
-    <!-- Botones -->
+    <!-- botones -->
     <div class="flex justify-between mb-4 text-sm">
       <button id="sortBtn" class="text-blue-500">Ordenar</button>
       <button id="clearBtn" class="text-red-500">Eliminar completadas</button>
     </div>
 
-    <!-- Lista -->
+    <!-- lista -->
     <ul id="taskList" class="space-y-2"></ul>
 
   </div>
