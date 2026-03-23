@@ -8,84 +8,62 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
-:root{
-  --primary:#6366f1;
-  --bg:#0b1220;
-}
-
-/* BASE */
 body{
   font-family:Inter,sans-serif;
-  background:var(--bg);
-  color:white;
+  background:#0b1220;
+  color:#e5e7eb;
   transition:0.3s;
 }
 
-/* LIGHT MODE REAL */
+/* LIGHT MODE (BIEN HECHO) */
 body.light{
-  background:linear-gradient(135deg,#eef2ff,#dbeafe);
+  background:#f1f5f9;
   color:#0f172a;
 }
 
-/* APP */
-.container{padding:40px;}
+.container{padding:30px;}
 
 .app{
-  max-width:1400px;
-  width:95%;
+  max-width:1200px;
   margin:auto;
-  background:rgba(17,24,39,0.85);
-  border-radius:20px;
-  padding:35px;
-  position:relative;
+  background:#111827;
+  padding:30px;
+  border-radius:16px;
 }
 
 body.light .app{
-  background:white;
+  background:#ffffff;
 }
 
 /* BOTONES */
-.top-buttons{
-  position:absolute;
-  top:20px;
-  left:0;
-  right:0;
-  padding:0 25px;
+.top{
   display:flex;
   justify-content:space-between;
+  margin-bottom:15px;
 }
 
-.top-buttons button{
-  background:rgba(255,255,255,0.08);
-  border:none;
-  padding:8px 12px;
-  border-radius:10px;
+button{
   cursor:pointer;
-}
-
-body.light .top-buttons button{
-  background:#e2e8f0;
-  color:#0f172a;
+  border:none;
+  border-radius:8px;
+  padding:8px 12px;
 }
 
 /* HEADER */
-h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:20px;opacity:0.7;}
-
-/* STATS */
-.stats{display:flex;gap:10px;margin-bottom:20px;}
-.stat{flex:1;padding:15px;border-radius:10px;text-align:center;font-weight:bold;}
-.total{background:#3b82f6;}
-.completed{background:#22c55e;}
-.active{background:#f59e0b;}
+h1{text-align:center;margin-bottom:10px;}
+.subtitle{text-align:center;margin-bottom:20px;opacity:0.6;}
 
 /* INPUT */
-.input-group{display:flex;gap:10px;margin-bottom:20px;}
+.input-group{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
 
 input{
   flex:1;
-  padding:12px;
-  border-radius:10px;
+  padding:10px;
+  border-radius:8px;
   border:none;
   background:#1f2937;
   color:white;
@@ -96,42 +74,23 @@ body.light input{
   color:#0f172a;
 }
 
-.input-group button{
-  background:var(--primary);
-  border:none;
-  padding:0 20px;
-  border-radius:10px;
-  cursor:pointer;
+.add{
+  background:#6366f1;
+  color:white;
 }
 
 /* TASK */
 .task{
   display:flex;
   justify-content:space-between;
-  background:#1e293b;
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:10px;
+  padding:10px;
+  background:#1f2937;
+  margin-bottom:8px;
+  border-radius:8px;
 }
 
 body.light .task{
-  background:white;
-  border:1px solid #ddd;
-}
-
-/* COLORES POR CATEGORÍA */
-.task[data-cat="Compras"]{border-left:4px solid #22c55e;}
-.task[data-cat="Estudio"]{border-left:4px solid #3b82f6;}
-.task[data-cat="Trabajo"]{border-left:4px solid #f59e0b;}
-.task[data-cat="Gym"]{border-left:4px solid #ef4444;}
-.task[data-cat="Comida"]{border-left:4px solid #eab308;}
-.task[data-cat="Proyectos"]{border-left:4px solid #8b5cf6;}
-.task[data-cat="General"]{border-left:4px solid #6b7280;}
-
-.task-content{
-  display:flex;
-  align-items:center;
-  gap:10px;
+  background:#f8fafc;
 }
 
 .task.completed span{
@@ -140,49 +99,22 @@ body.light .task{
 }
 
 /* DELETE */
-.delete-btn{
+.delete{
   background:none;
-  border:none;
-  color:#94a3b8;
-  cursor:pointer;
-}
-
-.delete-btn:hover{
   color:#ef4444;
 }
 
 /* SELECT */
-.category-select{
+select{
   background:#374151;
   color:white;
   border:none;
-  border-radius:8px;
-  padding:5px;
+  border-radius:6px;
 }
 
-body.light .category-select{
-  background:#e5e7eb;
+body.light select{
+  background:#e2e8f0;
   color:#0f172a;
-}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-
-.modal-content{
-  background:#1f2937;
-  padding:20px;
-  border-radius:10px;
-}
-
-body.light .modal-content{
-  background:white;
 }
 
 </style>
@@ -193,23 +125,17 @@ body.light .modal-content{
 <div class="container">
 <div class="app">
 
-<div class="top-buttons">
-  <button onclick="openInfo()">ℹ️</button>
-  <button onclick="toggleMode()">🌙</button>
+<div class="top">
+<button onclick="toggleMode()">🌙</button>
+<button onclick="openInfo()">ℹ️</button>
 </div>
 
 <h1>TaskFlow</h1>
-<p class="subtitle">Organiza tu día 🚀</p>
-
-<div class="stats">
-<div class="stat total">Total <span id="total">0</span></div>
-<div class="stat completed">Completadas <span id="done">0</span></div>
-<div class="stat active">Pendientes <span id="pending">0</span></div>
-</div>
+<p class="subtitle">Organiza tu día</p>
 
 <div class="input-group">
 <input id="taskInput" placeholder="Agregar tarea...">
-<button onclick="addTask()">+</button>
+<button class="add" onclick="addTask()">+</button>
 </div>
 
 <div id="taskList"></div>
@@ -218,115 +144,97 @@ body.light .modal-content{
 </div>
 
 <!-- MODAL -->
-<div class="modal" id="infoModal">
-  <div class="modal-content">
-    <h3>TaskFlow</h3>
-    <p>Organiza tus tareas con inteligencia.</p>
-    <button onclick="closeInfo()">Cerrar</button>
-  </div>
+<div id="infoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
+<div style="background:white;padding:20px;border-radius:10px;">
+<h3>TaskFlow</h3>
+<p>App para organizar tareas con IA básica.</p>
+<button onclick="closeInfo()">Cerrar</button>
+</div>
 </div>
 
 <script>
 
-/* IA */
+/* IA REAL SIMPLE */
 function detectCategory(text){
-  text = text.toLowerCase();
+text=text.toLowerCase();
 
-  if(/comprar|super|mercado/.test(text)) return "Compras";
-  if(/estudiar|examen|curso/.test(text)) return "Estudio";
-  if(/gym|entrenar/.test(text)) return "Gym";
-  if(/trabajo|reunion|email/.test(text)) return "Trabajo";
-  if(/comer|cena|almuerzo/.test(text)) return "Comida";
-  if(/app|codigo|proyecto/.test(text)) return "Proyectos";
+if(text.includes("comprar")) return "Compras";
+if(text.includes("estudiar")) return "Estudio";
+if(text.includes("gym")) return "Gym";
+if(text.includes("trabajo")) return "Trabajo";
+if(text.includes("comer")) return "Comida";
 
-  return "General";
+return "General";
 }
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-/* ADD */
 function addTask(){
-  if(!taskInput.value.trim()) return;
+if(!taskInput.value.trim()) return;
 
-  const cat = detectCategory(taskInput.value);
+const cat = detectCategory(taskInput.value);
 
-  tasks.push({
-    text: taskInput.value,
-    completed: false,
-    category: cat
-  });
+tasks.push({
+text:taskInput.value,
+completed:false,
+category:cat
+});
 
-  taskInput.value="";
-  taskInput.placeholder="Agregar tarea...";
-  save();
+taskInput.value="";
+save();
 }
 
-/* RENDER */
-function renderTasks(){
-  taskList.innerHTML="";
+/* IA EN TIEMPO REAL */
+taskInput.addEventListener("input",()=>{
+const cat=detectCategory(taskInput.value);
+taskInput.placeholder="→ "+cat;
+});
 
-  tasks.forEach((t,i)=>{
+function render(){
+taskList.innerHTML="";
 
-    taskList.innerHTML+=`
-    <div class="task ${t.completed?"completed":""}" data-cat="${t.category}">
-      <div class="task-content">
-        <label style="display:flex;gap:10px;cursor:pointer;">
-          <input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
-          <span>${t.text}</span>
-        </label>
+tasks.forEach((t,i)=>{
+taskList.innerHTML+=`
+<div class="task ${t.completed?"completed":""}">
+<span onclick="toggleTask(${i})">${t.text}</span>
 
-        <select class="category-select" onchange="changeCategory(${i},this.value)">
-          <option value="General" ${t.category==="General"?"selected":""}>General</option>
-          <option value="Compras" ${t.category==="Compras"?"selected":""}>Compras</option>
-          <option value="Estudio" ${t.category==="Estudio"?"selected":""}>Estudio</option>
-          <option value="Trabajo" ${t.category==="Trabajo"?"selected":""}>Trabajo</option>
-          <option value="Gym" ${t.category==="Gym"?"selected":""}>Gym</option>
-          <option value="Comida" ${t.category==="Comida"?"selected":""}>Comida</option>
-          <option value="Proyectos" ${t.category==="Proyectos"?"selected":""}>Proyectos</option>
-        </select>
-      </div>
+<select onchange="changeCat(${i},this.value)">
+<option ${t.category==="General"?"selected":""}>General</option>
+<option ${t.category==="Compras"?"selected":""}>Compras</option>
+<option ${t.category==="Estudio"?"selected":""}>Estudio</option>
+<option ${t.category==="Trabajo"?"selected":""}>Trabajo</option>
+<option ${t.category==="Gym"?"selected":""}>Gym</option>
+<option ${t.category==="Comida"?"selected":""}>Comida</option>
+</select>
 
-      <button class="delete-btn" onclick="deleteTask(${i})">✖</button>
-    </div>`;
-  });
-
-  updateStats();
+<button class="delete" onclick="deleteTask(${i})">✖</button>
+</div>`;
+});
 }
 
-/* FUNCIONES */
 function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
 function deleteTask(i){tasks.splice(i,1);save();}
-function changeCategory(i,val){tasks[i].category=val;save();}
+function changeCat(i,val){tasks[i].category=val;save();}
 
-/* STATS */
-function updateStats(){
-  total.textContent=tasks.length;
-  done.textContent=tasks.filter(t=>t.completed).length;
-  pending.textContent=tasks.filter(t=>!t.completed).length;
-}
-
-/* SAVE */
 function save(){
-  localStorage.setItem("tasks",JSON.stringify(tasks));
-  renderTasks();
+localStorage.setItem("tasks",JSON.stringify(tasks));
+render();
 }
-
-/* INFO */
-function openInfo(){infoModal.style.display="flex";}
-function closeInfo(){infoModal.style.display="none";}
 
 /* MODE */
 function toggleMode(){
-  document.body.classList.toggle("light");
+document.body.classList.toggle("light");
 }
 
-/* IA TIEMPO REAL */
-taskInput.addEventListener("input",()=>{
-  const cat=detectCategory(taskInput.value);
-  taskInput.placeholder="Sugerencia: "+cat;
-});
+/* INFO */
+function openInfo(){
+infoModal.style.display="flex";
+}
+function closeInfo(){
+infoModal.style.display="none";
+}
 
-renderTasks();
+render();
 
 </script>
 
