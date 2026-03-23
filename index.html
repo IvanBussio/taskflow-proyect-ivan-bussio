@@ -17,20 +17,24 @@ body{
   transition:0.3s;
 }
 
+/* LIGHT */
 body.light{
   background: linear-gradient(135deg,#dbeafe,#bfdbfe);
   color:#0f172a;
 }
 
-/* APP */
+/* CONTAINER */
 .container{padding:40px;}
+
+/* APP */
 .app{
-  max-width:1100px;
+  max-width:1400px;
+  width:95%;
   margin:auto;
   background:rgba(30,41,59,0.7);
   backdrop-filter:blur(20px);
   border-radius:20px;
-  padding:30px;
+  padding:35px;
   position:relative;
 }
 
@@ -41,9 +45,11 @@ body.light .app{
 /* BOTONES ARRIBA */
 .top-buttons{
   position:absolute;
-  top:15px;
-  left:15px;
-  right:15px;
+  top:20px;
+  left:0;
+  right:0;
+  width:100%;
+  padding:0 25px;
   display:flex;
   justify-content:space-between;
 }
@@ -62,15 +68,18 @@ body.light .app{
 }
 
 /* HEADER */
-h1{text-align:center;font-size:2.2rem;}
-.subtitle{text-align:center;margin-bottom:20px;color:#94a3b8;}
+h1{text-align:center;font-size:2.5rem;}
+.subtitle{text-align:center;margin-bottom:25px;color:#94a3b8;}
+
+body.light .subtitle{color:#475569;}
 
 /* STATS */
-.stats{display:flex;gap:10px;margin-bottom:20px;}
+.stats{display:flex;gap:15px;margin-bottom:25px;}
+
 .stat{
   flex:1;
-  padding:15px;
-  border-radius:10px;
+  padding:18px;
+  border-radius:12px;
   text-align:center;
   font-weight:bold;
 }
@@ -84,7 +93,7 @@ h1{text-align:center;font-size:2.2rem;}
 
 input{
   flex:1;
-  padding:12px;
+  padding:14px;
   border-radius:10px;
   border:none;
   background:#334155;
@@ -134,9 +143,15 @@ body.light input{
   justify-content:space-between;
   align-items:center;
   background:#1e293b;
-  padding:12px;
-  border-radius:10px;
+  padding:14px 16px;
+  border-radius:12px;
   margin-bottom:10px;
+  transition:0.2s;
+}
+
+.task:hover{
+  transform:scale(1.01);
+  background:#253044;
 }
 
 body.light .task{
@@ -144,10 +159,11 @@ body.light .task{
   border:1px solid #e2e8f0;
 }
 
+/* TASK CONTENT */
 .task-content{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px;
   flex:1;
 }
 
@@ -156,10 +172,12 @@ body.light .task{
   opacity:0.5;
 }
 
+/* DELETE */
 .delete-btn{
   background:none;
   border:none;
   cursor:pointer;
+  font-size:16px;
 }
 
 /* SELECT */
@@ -189,12 +207,36 @@ body.light .category-select{
 .modal-content{
   background:#1e293b;
   padding:25px;
-  border-radius:10px;
+  border-radius:12px;
   max-width:400px;
 }
 
 body.light .modal-content{
   background:white;
+}
+
+/* BOTÓN MODAL */
+.modal-content button{
+  background:#3b82f6;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.modal-content button:hover{
+  background:#2563eb;
+  transform:scale(1.05);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+.container{padding:15px;}
+.stats{flex-direction:column;}
+.input-group{flex-direction:column;}
+.filters{flex-direction:column;gap:10px;}
 }
 
 </style>
@@ -234,19 +276,17 @@ body.light .modal-content{
 </div>
 </div>
 
-<!-- INFO -->
+<!-- MODAL -->
 <div class="modal" id="infoModal">
   <div class="modal-content">
     <h2>TaskFlow</h2>
     <p>
-    Organiza tus tareas de forma simple y rápida.
+    Gestiona tus tareas de forma clara y eficiente.
     <br><br>
     ✔ Añade tareas  
-    ✔ Márcalas como completadas  
-    ✔ Filtra y ordena  
-    ✔ Gestiona categorías  
-    <br><br>
-    Diseñado para productividad diaria.
+    ✔ Marca completadas  
+    ✔ Organiza con categorías  
+    ✔ Mantén foco diario  
     </p>
     <br>
     <button onclick="closeInfo()">Cerrar</button>
@@ -282,14 +322,18 @@ div.className="task"+(t.completed?" completed":"");
 
 div.innerHTML=`
 <div class="task-content">
+
+<label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
 <input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
 <span>${t.text}</span>
+</label>
 
 <select class="category-select" onchange="changeCategory(${i},this.value)">
 <option ${t.category==="📌 General"?"selected":""}>📌 General</option>
 <option ${t.category==="🛒 Compras"?"selected":""}>🛒 Compras</option>
 <option ${t.category==="📚 Estudio"?"selected":""}>📚 Estudio</option>
 </select>
+
 </div>
 
 <button class="delete-btn" onclick="deleteTask(${i})">✖</button>
@@ -350,6 +394,7 @@ function toggleMode(){
 document.body.classList.toggle("light");
 }
 
+/* ENTER */
 taskInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")addTask();
 });
