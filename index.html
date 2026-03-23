@@ -6,47 +6,25 @@
 <title>TaskFlow</title>
 
 <style>
-
-/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
 
 :root{
-  --bg:#0b1220;
-  --card:#111827;
   --primary:#6366f1;
-  --success:#22c55e;
-  --warning:#f59e0b;
-  --danger:#ef4444;
+  --bg:#0b1220;
 }
 
+/* BASE */
 body{
   font-family:Inter,sans-serif;
   background:var(--bg);
   color:white;
-  overflow-x:hidden;
+  transition:0.3s;
 }
 
-/* FONDO ANIMADO */
-body::before{
-  content:"";
-  position:fixed;
-  width:200%;
-  height:200%;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.02),
-      rgba(255,255,255,0.02) 1px,
-      transparent 1px,
-      transparent 40px
-    );
-  animation:moveBg 30s linear infinite;
-  z-index:-1;
-}
-
-@keyframes moveBg{
-  0%{transform:translate(0,0);}
-  100%{transform:translate(-200px,-200px);}
+/* LIGHT MODE REAL */
+body.light{
+  background:linear-gradient(135deg,#eef2ff,#dbeafe);
+  color:#0f172a;
 }
 
 /* APP */
@@ -57,10 +35,13 @@ body::before{
   width:95%;
   margin:auto;
   background:rgba(17,24,39,0.85);
-  backdrop-filter:blur(20px);
   border-radius:20px;
   padding:35px;
   position:relative;
+}
+
+body.light .app{
+  background:white;
 }
 
 /* BOTONES */
@@ -80,42 +61,39 @@ body::before{
   padding:8px 12px;
   border-radius:10px;
   cursor:pointer;
-  transition:0.2s;
 }
 
-.top-buttons button:hover{
-  transform:scale(1.1);
+body.light .top-buttons button{
+  background:#e2e8f0;
+  color:#0f172a;
 }
 
 /* HEADER */
 h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:25px;opacity:0.7;}
+.subtitle{text-align:center;margin-bottom:20px;opacity:0.7;}
 
 /* STATS */
-.stats{display:flex;gap:15px;margin-bottom:25px;}
-
-.stat{
-  flex:1;
-  padding:18px;
-  border-radius:12px;
-  text-align:center;
-  font-weight:bold;
-}
-
-.total{background:rgba(99,102,241,0.3);}
-.completed{background:rgba(34,197,94,0.3);}
-.active{background:rgba(245,158,11,0.3);}
+.stats{display:flex;gap:10px;margin-bottom:20px;}
+.stat{flex:1;padding:15px;border-radius:10px;text-align:center;font-weight:bold;}
+.total{background:#3b82f6;}
+.completed{background:#22c55e;}
+.active{background:#f59e0b;}
 
 /* INPUT */
 .input-group{display:flex;gap:10px;margin-bottom:20px;}
 
 input{
   flex:1;
-  padding:14px;
+  padding:12px;
   border-radius:10px;
   border:none;
   background:#1f2937;
   color:white;
+}
+
+body.light input{
+  background:#f1f5f9;
+  color:#0f172a;
 }
 
 .input-group button{
@@ -124,49 +102,24 @@ input{
   padding:0 20px;
   border-radius:10px;
   cursor:pointer;
-  transition:0.2s;
-}
-
-.input-group button:hover{
-  transform:scale(1.1);
-}
-
-/* FILTERS */
-.filters{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:20px;
-}
-
-.filters button{
-  background:none;
-  border:none;
-  color:var(--primary);
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.filters button:hover{
-  transform:scale(1.1);
 }
 
 /* TASK */
 .task{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  background:#1f2937;
-  padding:14px;
-  border-radius:12px;
+  background:#1e293b;
+  padding:12px;
+  border-radius:10px;
   margin-bottom:10px;
-  transition:0.2s;
 }
 
-.task:hover{
-  transform:scale(1.01);
+body.light .task{
+  background:white;
+  border:1px solid #ddd;
 }
 
-/* COLOR POR CATEGORÍA */
+/* COLORES POR CATEGORÍA */
 .task[data-cat="Compras"]{border-left:4px solid #22c55e;}
 .task[data-cat="Estudio"]{border-left:4px solid #3b82f6;}
 .task[data-cat="Trabajo"]{border-left:4px solid #f59e0b;}
@@ -178,7 +131,7 @@ input{
 .task-content{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:10px;
 }
 
 .task.completed span{
@@ -188,20 +141,14 @@ input{
 
 /* DELETE */
 .delete-btn{
-  background:transparent;
+  background:none;
   border:none;
   color:#94a3b8;
-  font-size:18px;
   cursor:pointer;
-  padding:6px;
-  border-radius:8px;
-  transition:0.2s;
 }
 
 .delete-btn:hover{
-  background:rgba(239,68,68,0.15);
   color:#ef4444;
-  transform:scale(1.2);
 }
 
 /* SELECT */
@@ -211,6 +158,11 @@ input{
   border:none;
   border-radius:8px;
   padding:5px;
+}
+
+body.light .category-select{
+  background:#e5e7eb;
+  color:#0f172a;
 }
 
 /* MODAL */
@@ -225,17 +177,12 @@ input{
 
 .modal-content{
   background:#1f2937;
-  padding:25px;
-  border-radius:12px;
+  padding:20px;
+  border-radius:10px;
 }
 
-.modal-content button{
-  background:var(--primary);
-  color:white;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
+body.light .modal-content{
+  background:white;
 }
 
 </style>
@@ -255,19 +202,14 @@ input{
 <p class="subtitle">Organiza tu día 🚀</p>
 
 <div class="stats">
-<div class="stat total">Total<br><span id="total">0</span></div>
-<div class="stat completed">Completadas<br><span id="done">0</span></div>
-<div class="stat active">Pendientes<br><span id="pending">0</span></div>
+<div class="stat total">Total <span id="total">0</span></div>
+<div class="stat completed">Completadas <span id="done">0</span></div>
+<div class="stat active">Pendientes <span id="pending">0</span></div>
 </div>
 
 <div class="input-group">
 <input id="taskInput" placeholder="Agregar tarea...">
 <button onclick="addTask()">+</button>
-</div>
-
-<div class="filters">
-<button onclick="sortTasks()">Ordenar</button>
-<button onclick="deleteCompleted()">Eliminar completadas</button>
 </div>
 
 <div id="taskList"></div>
@@ -278,9 +220,8 @@ input{
 <!-- MODAL -->
 <div class="modal" id="infoModal">
   <div class="modal-content">
-    <h2>TaskFlow</h2>
-    <p>Organiza tus tareas con inteligencia y claridad.</p>
-    <br>
+    <h3>TaskFlow</h3>
+    <p>Organiza tus tareas con inteligencia.</p>
     <button onclick="closeInfo()">Cerrar</button>
   </div>
 </div>
@@ -289,88 +230,85 @@ input{
 
 /* IA */
 function detectCategory(text){
-text=text.toLowerCase();
+  text = text.toLowerCase();
 
-if(text.includes("comprar")||text.includes("super")) return "Compras";
-if(text.includes("estudiar")||text.includes("curso")) return "Estudio";
-if(text.includes("trabajo")||text.includes("reunión")) return "Trabajo";
-if(text.includes("gym")||text.includes("entrenar")) return "Gym";
-if(text.includes("comer")||text.includes("cena")) return "Comida";
-if(text.includes("app")||text.includes("proyecto")) return "Proyectos";
+  if(/comprar|super|mercado/.test(text)) return "Compras";
+  if(/estudiar|examen|curso/.test(text)) return "Estudio";
+  if(/gym|entrenar/.test(text)) return "Gym";
+  if(/trabajo|reunion|email/.test(text)) return "Trabajo";
+  if(/comer|cena|almuerzo/.test(text)) return "Comida";
+  if(/app|codigo|proyecto/.test(text)) return "Proyectos";
 
-return "General";
+  return "General";
 }
 
-let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 /* ADD */
 function addTask(){
-if(!taskInput.value.trim())return;
+  if(!taskInput.value.trim()) return;
 
-const cat=detectCategory(taskInput.value);
+  const cat = detectCategory(taskInput.value);
 
-tasks.push({
-text:taskInput.value,
-completed:false,
-category:cat
-});
+  tasks.push({
+    text: taskInput.value,
+    completed: false,
+    category: cat
+  });
 
-taskInput.value="";
-save();
+  taskInput.value="";
+  taskInput.placeholder="Agregar tarea...";
+  save();
 }
 
 /* RENDER */
 function renderTasks(){
-taskList.innerHTML="";
+  taskList.innerHTML="";
 
-tasks.forEach((t,i)=>{
+  tasks.forEach((t,i)=>{
 
-taskList.innerHTML+=`
-<div class="task ${t.completed?"completed":""}" data-cat="${t.category}">
-<div class="task-content">
+    taskList.innerHTML+=`
+    <div class="task ${t.completed?"completed":""}" data-cat="${t.category}">
+      <div class="task-content">
+        <label style="display:flex;gap:10px;cursor:pointer;">
+          <input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
+          <span>${t.text}</span>
+        </label>
 
-<label style="display:flex;gap:10px;cursor:pointer;">
-<input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
-<span>${t.text}</span>
-</label>
+        <select class="category-select" onchange="changeCategory(${i},this.value)">
+          <option value="General" ${t.category==="General"?"selected":""}>General</option>
+          <option value="Compras" ${t.category==="Compras"?"selected":""}>Compras</option>
+          <option value="Estudio" ${t.category==="Estudio"?"selected":""}>Estudio</option>
+          <option value="Trabajo" ${t.category==="Trabajo"?"selected":""}>Trabajo</option>
+          <option value="Gym" ${t.category==="Gym"?"selected":""}>Gym</option>
+          <option value="Comida" ${t.category==="Comida"?"selected":""}>Comida</option>
+          <option value="Proyectos" ${t.category==="Proyectos"?"selected":""}>Proyectos</option>
+        </select>
+      </div>
 
-<select class="category-select" onchange="changeCategory(${i},this.value)">
-<option ${t.category==="General"?"selected":""}>General</option>
-<option ${t.category==="Compras"?"selected":""}>Compras</option>
-<option ${t.category==="Estudio"?"selected":""}>Estudio</option>
-<option ${t.category==="Trabajo"?"selected":""}>Trabajo</option>
-<option ${t.category==="Gym"?"selected":""}>Gym</option>
-<option ${t.category==="Comida"?"selected":""}>Comida</option>
-<option ${t.category==="Proyectos"?"selected":""}>Proyectos</option>
-</select>
+      <button class="delete-btn" onclick="deleteTask(${i})">✖</button>
+    </div>`;
+  });
 
-</div>
-
-<button class="delete-btn" onclick="deleteTask(${i})">✖</button>
-</div>`;
-});
-
-updateStats();
+  updateStats();
 }
 
 /* FUNCIONES */
 function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
 function deleteTask(i){tasks.splice(i,1);save();}
-function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
-function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
 function changeCategory(i,val){tasks[i].category=val;save();}
 
 /* STATS */
 function updateStats(){
-total.textContent=tasks.length;
-done.textContent=tasks.filter(t=>t.completed).length;
-pending.textContent=tasks.filter(t=>!t.completed).length;
+  total.textContent=tasks.length;
+  done.textContent=tasks.filter(t=>t.completed).length;
+  pending.textContent=tasks.filter(t=>!t.completed).length;
 }
 
 /* SAVE */
 function save(){
-localStorage.setItem("tasks",JSON.stringify(tasks));
-renderTasks();
+  localStorage.setItem("tasks",JSON.stringify(tasks));
+  renderTasks();
 }
 
 /* INFO */
@@ -379,13 +317,13 @@ function closeInfo(){infoModal.style.display="none";}
 
 /* MODE */
 function toggleMode(){
-document.body.classList.toggle("light");
+  document.body.classList.toggle("light");
 }
 
-/* IA EN TIEMPO REAL */
+/* IA TIEMPO REAL */
 taskInput.addEventListener("input",()=>{
-const cat=detectCategory(taskInput.value);
-taskInput.placeholder="Sugerencia: "+cat;
+  const cat=detectCategory(taskInput.value);
+  taskInput.placeholder="Sugerencia: "+cat;
 });
 
 renderTasks();
