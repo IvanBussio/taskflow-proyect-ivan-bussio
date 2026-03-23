@@ -11,40 +11,58 @@ button{all:unset;cursor:pointer;}
 
 :root{
   --violet:#7c3aed;
-  --violet-dark:#6d28d9;
 }
 
-/* DARK */
+/* 🌌 FONDO ANIMADO */
 body{
   font-family:Inter,sans-serif;
-  background:#0a0a0f;
   color:#e5e7eb;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   min-height:100vh;
+  overflow-x:hidden;
+  background:#0a0a0f;
 }
 
-/* LIGHT */
+body::before{
+  content:"";
+  position:fixed;
+  width:200%;
+  height:200%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(124,58,237,0.05),
+    rgba(124,58,237,0.05) 2px,
+    transparent 2px,
+    transparent 40px
+  );
+  animation: moveBg 20s linear infinite;
+  z-index:-1;
+}
+
+@keyframes moveBg{
+  from{transform:translate(0,0);}
+  to{transform:translate(-200px,-200px);}
+}
+
+/* ☀️ LIGHT */
 body.light{
   background:#f8fafc;
   color:#0f172a;
 }
 
-/* APP */
-.app{
-  width:95%;
-  max-width:1600px;
-  margin:auto;
-  background:rgba(17,24,39,0.7);
-  backdrop-filter:blur(20px);
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.6);
+body.light::before{
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(124,58,237,0.08),
+    rgba(124,58,237,0.08) 2px,
+    transparent 2px,
+    transparent 40px
+  );
 }
 
-body.light .app{
-  background:white;
+/* APP FULL */
+.app{
+  width:100%;
+  padding:30px;
 }
 
 /* HEADER */
@@ -56,22 +74,17 @@ body.light .app{
 
 .header button{
   background:#1f2937;
-  padding:8px 12px;
-  border-radius:10px;
-  transition:0.2s;
+  padding:10px;
+  border-radius:12px;
 }
 
 body.light .header button{
   background:#e2e8f0;
 }
 
-.header button:hover{
-  transform:scale(1.15);
-}
-
 /* TITLE */
 h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:20px;color:#94a3b8;}
+.subtitle{text-align:center;margin-bottom:20px;}
 
 /* STATS */
 .stats{
@@ -80,7 +93,7 @@ h1{text-align:center;font-size:2.5rem;}
   margin-bottom:15px;
   background:#1f2937;
   padding:10px;
-  border-radius:10px;
+  border-radius:12px;
 }
 
 body.light .stats{
@@ -113,36 +126,28 @@ input:focus{
   box-shadow:0 0 10px var(--violet);
 }
 
-/* BOTÓN + */
+/* ADD */
 .add-btn{
   background:var(--violet);
   padding:0 20px;
   border-radius:12px;
   color:white;
-  transition:0.2s;
 }
 
-.add-btn:hover{
-  background:var(--violet-dark);
-  transform:scale(1.1);
-  box-shadow:0 0 20px rgba(124,58,237,0.6);
-}
-
-/* TASK GRID */
+/* GRID */
 #taskList{
   display:grid;
   grid-template-columns:1fr;
-  gap:10px;
+  gap:12px;
 }
 
-/* 4K */
-@media (min-width:1400px){
+@media(min-width:1200px){
   #taskList{
     grid-template-columns:1fr 1fr;
   }
 }
 
-@media (min-width:2000px){
+@media(min-width:2000px){
   #taskList{
     grid-template-columns:1fr 1fr 1fr;
   }
@@ -156,7 +161,7 @@ input:focus{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  transition:0.3s;
+  transition:0.2s;
 }
 
 body.light .task{
@@ -165,8 +170,13 @@ body.light .task{
 }
 
 .task:hover{
-  transform:translateY(-3px);
-  box-shadow:0 0 20px rgba(124,58,237,0.2);
+  transform:scale(1.02);
+  box-shadow:0 0 15px rgba(124,58,237,0.2);
+}
+
+/* CLICK COMPLETAR */
+.task.clickable{
+  cursor:pointer;
 }
 
 /* LEFT */
@@ -174,7 +184,6 @@ body.light .task{
   display:flex;
   align-items:center;
   gap:10px;
-  flex-wrap:wrap;
 }
 
 /* BADGE */
@@ -188,23 +197,11 @@ body.light .task{
 
 /* DELETE */
 .delete{
-  appearance:none;
-  background:transparent;
   color:#9ca3af;
-  font-size:18px;
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:0.2s;
 }
 
 .delete:hover{
-  background:rgba(239,68,68,0.2);
   color:#ef4444;
-  transform:scale(1.2) rotate(90deg);
 }
 
 /* COMPLETED */
@@ -217,7 +214,7 @@ body.light .task{
 @media(max-width:768px){
   .input-group{flex-direction:column;}
   .add-btn{width:100%;text-align:center;padding:12px;}
-  .task{flex-direction:column;align-items:flex-start;gap:10px;}
+  .task{flex-direction:column;align-items:flex-start;}
 }
 
 </style>
@@ -229,7 +226,7 @@ body.light .task{
 
 <div class="header">
 <button onclick="toggleMode()">🌙</button>
-<button onclick="alert('TaskFlow PRO con IA')">ℹ️</button>
+<button onclick="showInfo()">ℹ️</button>
 </div>
 
 <h1>TaskFlow</h1>
@@ -252,15 +249,15 @@ body.light .task{
 
 <script>
 
-/* IA */
+/* IA MEJORADA */
 function detectCategory(text){
 text=text.toLowerCase();
 
-if(text.includes("comprar")) return "Compras";
-if(text.includes("estudiar")) return "Estudio";
-if(text.includes("gym")) return "Gym";
+if(text.includes("comprar")||text.includes("super")) return "Compras";
+if(text.includes("estudiar")||text.includes("curso")) return "Estudio";
+if(text.includes("gym")||text.includes("entrenar")) return "Gym";
 if(text.includes("trabajo")) return "Trabajo";
-if(text.includes("comer")) return "Comida";
+if(text.includes("comer")||text.includes("cena")) return "Comida";
 
 return "General";
 }
@@ -287,18 +284,16 @@ taskList.innerHTML="";
 
 tasks.forEach((t,i)=>{
 taskList.innerHTML+=`
-<div class="task ${t.completed?"completed":""}">
+<div class="task clickable ${t.completed?"completed":""}" onclick="toggle(${i})">
+
 <div class="left">
-
-<input type="checkbox" ${t.completed?"checked":""} onclick="toggle(${i})">
-
+<input type="checkbox" ${t.completed?"checked":""}>
 <span>${t.text}</span>
-
 <span class="badge">${t.category}</span>
-
 </div>
 
-<button class="delete" onclick="del(${i})">✖</button>
+<button class="delete" onclick="event.stopPropagation(); del(${i})">✖</button>
+
 </div>`;
 });
 
@@ -313,8 +308,15 @@ pending.textContent=tasks.filter(t=>!t.completed).length;
 }
 
 /* FUNCIONES */
-function toggle(i){tasks[i].completed=!tasks[i].completed;save();}
-function del(i){tasks.splice(i,1);save();}
+function toggle(i){
+tasks[i].completed=!tasks[i].completed;
+save();
+}
+
+function del(i){
+tasks.splice(i,1);
+save();
+}
 
 function save(){
 localStorage.setItem("tasks",JSON.stringify(tasks));
@@ -324,6 +326,18 @@ render();
 /* MODE */
 function toggleMode(){
 document.body.classList.toggle("light");
+}
+
+/* INFO PRO */
+function showInfo(){
+alert(`TaskFlow PRO 🚀
+
+✔ Click en tarea = completar
+✔ IA detecta categorías
+✔ Drag & Drop (próximo nivel)
+✔ Diseño responsive 4K
+
+Desarrollado por Ivan`);
 }
 
 /* IA realtime */
