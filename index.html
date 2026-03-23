@@ -18,7 +18,7 @@ body{
   transition:0.3s;
 }
 
-/* FONDO */
+/* FONDO ANIMADO */
 body::before{
   content:"";
   position:fixed;
@@ -35,30 +35,27 @@ body::before{
   100%{transform:translate(0,0);}
 }
 
-/* LIGHT */
+/* LIGHT MODE */
 body.light{
   background: linear-gradient(135deg,#e0f2ff,#bae6fd);
   color:#0f172a;
 }
 
 body.light .app{
-  background:rgba(255,255,255,0.85);
+  background:rgba(255,255,255,0.9);
 }
 
 /* CONTAINER */
-.container{
-  padding:40px;
-}
+.container{padding:40px;}
 
-/* 4K PRO */
 .app{
   max-width:1400px;
-  width:100%;
   margin:auto;
   background:rgba(30,41,59,0.6);
   backdrop-filter:blur(20px);
   border-radius:20px;
   padding:40px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
 }
 
 /* HEADER */
@@ -74,9 +71,9 @@ h1{text-align:center;font-size:2.5rem;}
   border-radius:15px;
   text-align:center;
   font-weight:bold;
+  backdrop-filter:blur(10px);
 }
 
-/* SUAVES */
 .total{background:rgba(59,130,246,0.15);color:#93c5fd;}
 .done{background:rgba(34,197,94,0.15);color:#86efac;}
 .pending{background:rgba(244,114,182,0.15);color:#f9a8d4;}
@@ -102,9 +99,6 @@ h1{text-align:center;font-size:2.5rem;}
   cursor:pointer;
   transition:all 0.25s ease;
 }
-
-/* HOVER BOTONES */
-button{transition:all 0.25s ease;}
 
 .input-group button:hover{
   transform:translateY(-2px) scale(1.05);
@@ -144,6 +138,11 @@ button{transition:all 0.25s ease;}
   padding:15px;
   border-radius:12px;
   margin-bottom:10px;
+  transition:0.2s;
+}
+
+.task:hover{
+  transform:scale(1.01);
 }
 
 .task-content{
@@ -159,7 +158,7 @@ button{transition:all 0.25s ease;}
   opacity:0.5;
 }
 
-/* BOTÓN DELETE */
+/* BOTÓN BORRAR */
 .delete-btn{
   background:transparent;
   border:none;
@@ -181,69 +180,79 @@ button{transition:all 0.25s ease;}
   border-radius:8px;
 }
 
-/* MODO */
+/* BOTONES SUPERIORES */
+.info-btn{
+  position:absolute;
+  top:20px;
+  left:20px;
+  border:none;
+  background:#334155;
+  color:white;
+  padding:10px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
 .mode-btn{
   position:absolute;
   top:20px;
   right:20px;
   border:none;
-  background:none;
-  font-size:1.2rem;
+  background:#334155;
+  color:white;
+  padding:10px;
+  border-radius:50%;
   cursor:pointer;
 }
 
-/* FOOTER */
-footer{
-  text-align:center;
-  margin-top:20px;
-  color:#94a3b8;
+/* MODAL */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  display:none;
 }
 
-/* 📱 MOBILE */
-@media (max-width:768px){
+.modal-content{
+  background:#1e293b;
+  padding:30px;
+  border-radius:15px;
+  text-align:center;
+  max-width:400px;
+}
+
+/* WELCOME */
+.welcome{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#22c55e;
+  padding:15px 25px;
+  border-radius:12px;
+  display:none;
+}
+
+/* MOBILE */
+@media(max-width:768px){
 
 .container{padding:15px;}
-
 .app{padding:20px;}
 
-.stats{
-  flex-direction:column;
-  gap:10px;
-}
+.stats{flex-direction:column;}
+.input-group{flex-direction:column;}
 
-.input-group{
-  flex-direction:column;
-}
+.filters{flex-direction:column;gap:10px;}
 
-.input-group button{
-  width:100%;
-  height:45px;
-}
+.task{flex-direction:column;align-items:flex-start;}
 
-.filters{
-  flex-direction:column;
-  gap:10px;
-}
-
-.task{
-  flex-direction:column;
-  align-items:flex-start;
-  gap:10px;
-}
-
-.task-content{
-  flex-wrap:wrap;
-  width:100%;
-}
-
-.category-select{
-  width:100%;
-}
-
-.delete-btn{
-  align-self:flex-end;
-}
-
+.category-select{width:100%;}
 }
 
 </style>
@@ -251,6 +260,7 @@ footer{
 
 <body>
 
+<button class="info-btn" onclick="openInfo()">ℹ️</button>
 <button class="mode-btn" onclick="toggleMode()" id="modeIcon">🌙</button>
 
 <div class="container">
@@ -278,15 +288,27 @@ footer{
 
 <div id="taskList"></div>
 
-<footer>© 2026 TaskFlow · Ivan Bussio</footer>
+</div>
+</div>
 
+<!-- MODAL -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <h2>Sobre TaskFlow</h2>
+    <p>App para organizar tus tareas con estilo 🚀</p>
+    <br>
+    <button onclick="closeInfo()">Cerrar</button>
+  </div>
 </div>
-</div>
+
+<!-- WELCOME -->
+<div class="welcome" id="welcomeMsg">Bienvenido a TaskFlow 👋</div>
 
 <script>
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+/* IA */
 function getCategory(text){
 text=text.toLowerCase();
 if(text.includes("comprar"))return "🛒 Compras";
@@ -294,6 +316,7 @@ if(text.includes("estudiar"))return "📚 Estudio";
 return "📌 General";
 }
 
+/* ADD */
 function addTask(){
 if(!taskInput.value.trim())return;
 tasks.push({text:taskInput.value,completed:false,category:getCategory(taskInput.value)});
@@ -301,6 +324,7 @@ taskInput.value="";
 save();
 }
 
+/* RENDER */
 function renderTasks(){
 taskList.innerHTML="";
 tasks.forEach((task,i)=>{
@@ -328,35 +352,45 @@ taskList.appendChild(div);
 updateStats();
 }
 
+/* FUNCIONES */
 function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
 function deleteTask(i){tasks.splice(i,1);save();}
 function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
 function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
 function changeCategory(i,val){tasks[i].category=val;save();}
 
+/* STATS */
 function updateStats(){
 total.textContent=tasks.length;
 done.textContent=tasks.filter(t=>t.completed).length;
 pending.textContent=tasks.filter(t=>!t.completed).length;
 }
 
+/* SAVE */
 function save(){
 localStorage.setItem("tasks",JSON.stringify(tasks));
 renderTasks();
 }
 
-if(localStorage.getItem("mode")==="light"){
-document.body.classList.add("light");
-modeIcon.textContent="☀️";
-}
-
+/* MODE */
 function toggleMode(){
 document.body.classList.toggle("light");
-const isLight=document.body.classList.contains("light");
-localStorage.setItem("mode",isLight?"light":"dark");
-modeIcon.textContent=isLight?"☀️":"🌙";
 }
 
+/* INFO */
+function openInfo(){infoModal.style.display="flex";}
+function closeInfo(){infoModal.style.display="none";}
+
+/* WELCOME */
+window.onload=()=>{
+if(!localStorage.getItem("visited")){
+welcomeMsg.style.display="block";
+setTimeout(()=>welcomeMsg.style.display="none",3000);
+localStorage.setItem("visited","true");
+}
+}
+
+/* ENTER */
 taskInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")addTask();
 });
