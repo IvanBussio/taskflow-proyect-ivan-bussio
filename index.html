@@ -6,239 +6,96 @@
 <title>TaskFlow</title>
 
 <style>
-
-/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
-
-/* 🎨 NUEVA PALETA PRO */
-:root{
-  --bg-dark:#0b1220;
-  --bg-light:#eef2ff;
-  --card:#111827;
-  --card-light:#ffffff;
-  --primary:#6366f1;
-  --success:#22c55e;
-  --warning:#f59e0b;
-  --danger:#ef4444;
-  --text:#e5e7eb;
-  --text-dark:#111827;
-}
+button{all:unset;cursor:pointer;}
 
 body{
   font-family:Inter,sans-serif;
-  background:var(--bg-dark);
-  color:var(--text);
-  overflow-x:hidden;
+  background:#0a0a0f;
+  color:#e5e7eb;
 }
 
-/* 🌊 FONDO ANIMADO SUAVE */
-body::before{
-  content:"";
-  position:fixed;
-  width:200%;
-  height:200%;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 1px,
-      transparent 1px,
-      transparent 40px
-    );
-  animation:moveBg 30s linear infinite;
-  z-index:-1;
-}
-
-@keyframes moveBg{
-  0%{transform:translate(0,0);}
-  100%{transform:translate(-200px,-200px);}
-}
-
-/* LIGHT */
-body.light{
-  background:var(--bg-light);
-  color:var(--text-dark);
+/* CONTAINER */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px;
 }
 
 /* APP */
-.container{padding:40px;}
-
 .app{
-  max-width:1400px;
-  width:95%;
-  margin:auto;
   background:rgba(17,24,39,0.8);
   backdrop-filter:blur(20px);
   border-radius:20px;
-  padding:35px;
-  position:relative;
-}
-
-body.light .app{
-  background:rgba(255,255,255,0.9);
-}
-
-/* BOTONES */
-.top-buttons{
-  position:absolute;
-  top:20px;
-  left:0;
-  right:0;
-  padding:0 25px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.top-buttons button{
-  background:rgba(255,255,255,0.1);
-  border:none;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.top-buttons button:hover{
-  transform:scale(1.1);
+  padding:30px;
 }
 
 /* HEADER */
-h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:25px;opacity:0.7;}
-
-/* STATS */
-.stats{display:flex;gap:15px;margin-bottom:25px;}
-
-.stat{
-  flex:1;
-  padding:18px;
-  border-radius:12px;
-  text-align:center;
-  font-weight:bold;
-}
-
-.total{background:rgba(99,102,241,0.3);}
-.completed{background:rgba(34,197,94,0.3);}
-.active{background:rgba(245,158,11,0.3);}
-
-/* INPUT */
-.input-group{display:flex;gap:10px;margin-bottom:20px;}
-
-input{
-  flex:1;
-  padding:14px;
-  border-radius:10px;
-  border:none;
-  background:#1f2937;
-  color:white;
-}
-
-body.light input{
-  background:#f1f5f9;
-  color:#111;
-}
-
-.input-group button{
-  background:var(--primary);
-  border:none;
-  padding:0 20px;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.input-group button:hover{
-  transform:scale(1.1);
-}
-
-/* FILTERS */
-.filters{
+.header{
   display:flex;
   justify-content:space-between;
   margin-bottom:20px;
 }
 
-.filters button{
-  background:none;
-  border:none;
-  color:var(--primary);
-  cursor:pointer;
-  transition:0.2s;
+.header button{
+  background:#1f2937;
+  padding:8px 12px;
+  border-radius:10px;
 }
 
-.filters button:hover{
-  transform:scale(1.1);
+/* INPUT */
+.input-group{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+input{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:#1f2937;
+  color:white;
+}
+
+.add-btn{
+  background:#7c3aed;
+  padding:0 20px;
+  border-radius:12px;
+  color:white;
 }
 
 /* TASK */
 .task{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
   background:#1f2937;
   padding:14px;
   border-radius:12px;
   margin-bottom:10px;
-}
-
-body.light .task{
-  background:white;
-  border:1px solid #ddd;
-}
-
-.task-content{
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  gap:12px;
+  transition:0.2s;
 }
 
-.task.completed span{
-  text-decoration:line-through;
+.task.dragging{
   opacity:0.5;
 }
 
-/* CATEGORY */
-.category-select{
-  border:none;
-  border-radius:8px;
-  padding:5px;
-  background:#374151;
-  color:white;
-}
-
-body.light .category-select{
-  background:#e5e7eb;
-  color:#111;
-}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
+.left{
+  display:flex;
   align-items:center;
+  gap:10px;
 }
 
-.modal-content{
-  background:#1f2937;
-  padding:25px;
-  border-radius:12px;
+/* DELETE */
+.delete{
+  color:#9ca3af;
+  font-size:18px;
 }
 
-body.light .modal-content{
-  background:white;
-}
-
-/* BOTÓN MODAL */
-.modal-content button{
-  background:var(--primary);
-  color:white;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  cursor:pointer;
+.delete:hover{
+  color:#ef4444;
 }
 
 </style>
@@ -249,28 +106,16 @@ body.light .modal-content{
 <div class="container">
 <div class="app">
 
-<div class="top-buttons">
-  <button onclick="openInfo()">ℹ️</button>
-  <button onclick="toggleMode()">🌙</button>
+<div class="header">
+<button onclick="toggleMode()">🌙</button>
+<button onclick="alert('TaskFlow PRO')">ℹ️</button>
 </div>
 
 <h1>TaskFlow</h1>
-<p class="subtitle">Organiza tu día 🚀</p>
-
-<div class="stats">
-<div class="stat total">Total<br><span id="total">0</span></div>
-<div class="stat completed">Completadas<br><span id="done">0</span></div>
-<div class="stat active">Pendientes<br><span id="pending">0</span></div>
-</div>
 
 <div class="input-group">
-<input id="taskInput" placeholder="Agregar tarea...">
-<button onclick="addTask()">+</button>
-</div>
-
-<div class="filters">
-<button onclick="sortTasks()">Ordenar</button>
-<button onclick="deleteCompleted()">Eliminar completadas</button>
+<input id="taskInput" placeholder="Escribe algo...">
+<button class="add-btn" onclick="addTask()">+</button>
 </div>
 
 <div id="taskList"></div>
@@ -278,45 +123,29 @@ body.light .modal-content{
 </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="infoModal">
-  <div class="modal-content">
-    <h2>TaskFlow</h2>
-    <p>
-    Sistema de productividad personal.<br><br>
-    ✔ Gestión de tareas<br>
-    ✔ Organización por categorías<br>
-    ✔ Interfaz rápida y clara<br>
-    </p>
-    <br>
-    <button onclick="closeInfo()">Cerrar</button>
-  </div>
-</div>
-
 <script>
 
-/* 🔥 MÁS CATEGORÍAS */
-const categories = [
-"📌 General",
-"🛒 Compras",
-"📚 Estudio",
-"💼 Trabajo",
-"🏋️ Gym",
-"🍔 Comida",
-"💻 Proyectos",
-"🎯 Objetivos"
-];
+/* IA */
+function detectCategory(text){
+text=text.toLowerCase();
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+if(text.includes("comprar")) return "Compras";
+if(text.includes("estudiar")) return "Estudio";
+if(text.includes("gym")) return "Gym";
+return "General";
+}
+
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+let dragIndex=null;
 
 /* ADD */
 function addTask(){
-if(!taskInput.value.trim())return;
+if(!taskInput.value.trim()) return;
 
 tasks.push({
 text:taskInput.value,
 completed:false,
-category:"📌 General"
+category:detectCategory(taskInput.value)
 });
 
 taskInput.value="";
@@ -324,72 +153,73 @@ save();
 }
 
 /* RENDER */
-function renderTasks(){
+function render(){
 taskList.innerHTML="";
 
 tasks.forEach((t,i)=>{
 
-const options = categories.map(c =>
-`<option ${t.category===c?"selected":""}>${c}</option>`
-).join("");
+const div=document.createElement("div");
+div.className="task";
+div.draggable=true;
+div.dataset.index=i;
 
-taskList.innerHTML += `
-<div class="task">
-<div class="task-content">
-
-<label style="display:flex;gap:10px;cursor:pointer;">
-<input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
+div.innerHTML=`
+<div class="left">
+<input type="checkbox" ${t.completed?"checked":""} onclick="toggle(${i})">
 <span>${t.text}</span>
-</label>
-
-<select class="category-select" onchange="changeCategory(${i},this.value)">
-${options}
-</select>
-
 </div>
+<button class="delete" onclick="del(${i})">✖</button>
+`;
 
-<button onclick="deleteTask(${i})">✖</button>
-</div>`;
+addDragEvents(div);
+
+taskList.appendChild(div);
+
+});
+}
+
+/* DRAG EVENTS */
+function addDragEvents(el){
+
+el.addEventListener("dragstart",()=>{
+dragIndex=+el.dataset.index;
+el.classList.add("dragging");
 });
 
-updateStats();
+el.addEventListener("dragend",()=>{
+el.classList.remove("dragging");
+});
+
+el.addEventListener("dragover",(e)=>{
+e.preventDefault();
+});
+
+el.addEventListener("drop",()=>{
+const dropIndex=+el.dataset.index;
+
+const item=tasks.splice(dragIndex,1)[0];
+tasks.splice(dropIndex,0,item);
+
+save();
+});
+
 }
 
 /* FUNCIONES */
-function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
-function deleteTask(i){tasks.splice(i,1);save();}
-function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
-function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
-function changeCategory(i,val){tasks[i].category=val;save();}
+function toggle(i){tasks[i].completed=!tasks[i].completed;save();}
+function del(i){tasks.splice(i,1);save();}
 
-/* STATS */
-function updateStats(){
-total.textContent=tasks.length;
-done.textContent=tasks.filter(t=>t.completed).length;
-pending.textContent=tasks.filter(t=>!t.completed).length;
-}
-
-/* SAVE */
 function save(){
 localStorage.setItem("tasks",JSON.stringify(tasks));
-renderTasks();
+render();
 }
-
-/* INFO */
-function openInfo(){infoModal.style.display="flex";}
-function closeInfo(){infoModal.style.display="none";}
 
 /* MODE */
 function toggleMode(){
 document.body.classList.toggle("light");
 }
 
-/* ENTER */
-taskInput.addEventListener("keypress",e=>{
-if(e.key==="Enter")addTask();
-});
-
-renderTasks();
+render();
 
 </script>
 
