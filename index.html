@@ -10,28 +10,23 @@
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
 
-/* 🎨 NUEVA PALETA PRO */
 :root{
-  --bg-dark:#0b1220;
-  --bg-light:#eef2ff;
+  --bg:#0b1220;
   --card:#111827;
-  --card-light:#ffffff;
   --primary:#6366f1;
   --success:#22c55e;
   --warning:#f59e0b;
   --danger:#ef4444;
-  --text:#e5e7eb;
-  --text-dark:#111827;
 }
 
 body{
   font-family:Inter,sans-serif;
-  background:var(--bg-dark);
-  color:var(--text);
+  background:var(--bg);
+  color:white;
   overflow-x:hidden;
 }
 
-/* 🌊 FONDO ANIMADO SUAVE */
+/* FONDO ANIMADO */
 body::before{
   content:"";
   position:fixed;
@@ -40,8 +35,8 @@ body::before{
   background:
     repeating-linear-gradient(
       45deg,
-      rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 1px,
+      rgba(255,255,255,0.02),
+      rgba(255,255,255,0.02) 1px,
       transparent 1px,
       transparent 40px
     );
@@ -54,12 +49,6 @@ body::before{
   100%{transform:translate(-200px,-200px);}
 }
 
-/* LIGHT */
-body.light{
-  background:var(--bg-light);
-  color:var(--text-dark);
-}
-
 /* APP */
 .container{padding:40px;}
 
@@ -67,15 +56,11 @@ body.light{
   max-width:1400px;
   width:95%;
   margin:auto;
-  background:rgba(17,24,39,0.8);
+  background:rgba(17,24,39,0.85);
   backdrop-filter:blur(20px);
   border-radius:20px;
   padding:35px;
   position:relative;
-}
-
-body.light .app{
-  background:rgba(255,255,255,0.9);
 }
 
 /* BOTONES */
@@ -90,7 +75,7 @@ body.light .app{
 }
 
 .top-buttons button{
-  background:rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.08);
   border:none;
   padding:8px 12px;
   border-radius:10px;
@@ -131,11 +116,6 @@ input{
   border:none;
   background:#1f2937;
   color:white;
-}
-
-body.light input{
-  background:#f1f5f9;
-  color:#111;
 }
 
 .input-group button{
@@ -179,12 +159,21 @@ body.light input{
   padding:14px;
   border-radius:12px;
   margin-bottom:10px;
+  transition:0.2s;
 }
 
-body.light .task{
-  background:white;
-  border:1px solid #ddd;
+.task:hover{
+  transform:scale(1.01);
 }
+
+/* COLOR POR CATEGORÍA */
+.task[data-cat="Compras"]{border-left:4px solid #22c55e;}
+.task[data-cat="Estudio"]{border-left:4px solid #3b82f6;}
+.task[data-cat="Trabajo"]{border-left:4px solid #f59e0b;}
+.task[data-cat="Gym"]{border-left:4px solid #ef4444;}
+.task[data-cat="Comida"]{border-left:4px solid #eab308;}
+.task[data-cat="Proyectos"]{border-left:4px solid #8b5cf6;}
+.task[data-cat="General"]{border-left:4px solid #6b7280;}
 
 .task-content{
   display:flex;
@@ -197,18 +186,31 @@ body.light .task{
   opacity:0.5;
 }
 
-/* CATEGORY */
+/* DELETE */
+.delete-btn{
+  background:transparent;
+  border:none;
+  color:#94a3b8;
+  font-size:18px;
+  cursor:pointer;
+  padding:6px;
+  border-radius:8px;
+  transition:0.2s;
+}
+
+.delete-btn:hover{
+  background:rgba(239,68,68,0.15);
+  color:#ef4444;
+  transform:scale(1.2);
+}
+
+/* SELECT */
 .category-select{
+  background:#374151;
+  color:white;
   border:none;
   border-radius:8px;
   padding:5px;
-  background:#374151;
-  color:white;
-}
-
-body.light .category-select{
-  background:#e5e7eb;
-  color:#111;
 }
 
 /* MODAL */
@@ -227,11 +229,6 @@ body.light .category-select{
   border-radius:12px;
 }
 
-body.light .modal-content{
-  background:white;
-}
-
-/* BOTÓN MODAL */
 .modal-content button{
   background:var(--primary);
   color:white;
@@ -282,12 +279,7 @@ body.light .modal-content{
 <div class="modal" id="infoModal">
   <div class="modal-content">
     <h2>TaskFlow</h2>
-    <p>
-    Sistema de productividad personal.<br><br>
-    ✔ Gestión de tareas<br>
-    ✔ Organización por categorías<br>
-    ✔ Interfaz rápida y clara<br>
-    </p>
+    <p>Organiza tus tareas con inteligencia y claridad.</p>
     <br>
     <button onclick="closeInfo()">Cerrar</button>
   </div>
@@ -295,28 +287,32 @@ body.light .modal-content{
 
 <script>
 
-/* 🔥 MÁS CATEGORÍAS */
-const categories = [
-"📌 General",
-"🛒 Compras",
-"📚 Estudio",
-"💼 Trabajo",
-"🏋️ Gym",
-"🍔 Comida",
-"💻 Proyectos",
-"🎯 Objetivos"
-];
+/* IA */
+function detectCategory(text){
+text=text.toLowerCase();
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+if(text.includes("comprar")||text.includes("super")) return "Compras";
+if(text.includes("estudiar")||text.includes("curso")) return "Estudio";
+if(text.includes("trabajo")||text.includes("reunión")) return "Trabajo";
+if(text.includes("gym")||text.includes("entrenar")) return "Gym";
+if(text.includes("comer")||text.includes("cena")) return "Comida";
+if(text.includes("app")||text.includes("proyecto")) return "Proyectos";
+
+return "General";
+}
+
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 
 /* ADD */
 function addTask(){
 if(!taskInput.value.trim())return;
 
+const cat=detectCategory(taskInput.value);
+
 tasks.push({
 text:taskInput.value,
 completed:false,
-category:"📌 General"
+category:cat
 });
 
 taskInput.value="";
@@ -329,12 +325,8 @@ taskList.innerHTML="";
 
 tasks.forEach((t,i)=>{
 
-const options = categories.map(c =>
-`<option ${t.category===c?"selected":""}>${c}</option>`
-).join("");
-
-taskList.innerHTML += `
-<div class="task">
+taskList.innerHTML+=`
+<div class="task ${t.completed?"completed":""}" data-cat="${t.category}">
 <div class="task-content">
 
 <label style="display:flex;gap:10px;cursor:pointer;">
@@ -343,12 +335,18 @@ taskList.innerHTML += `
 </label>
 
 <select class="category-select" onchange="changeCategory(${i},this.value)">
-${options}
+<option ${t.category==="General"?"selected":""}>General</option>
+<option ${t.category==="Compras"?"selected":""}>Compras</option>
+<option ${t.category==="Estudio"?"selected":""}>Estudio</option>
+<option ${t.category==="Trabajo"?"selected":""}>Trabajo</option>
+<option ${t.category==="Gym"?"selected":""}>Gym</option>
+<option ${t.category==="Comida"?"selected":""}>Comida</option>
+<option ${t.category==="Proyectos"?"selected":""}>Proyectos</option>
 </select>
 
 </div>
 
-<button onclick="deleteTask(${i})">✖</button>
+<button class="delete-btn" onclick="deleteTask(${i})">✖</button>
 </div>`;
 });
 
@@ -384,9 +382,10 @@ function toggleMode(){
 document.body.classList.toggle("light");
 }
 
-/* ENTER */
-taskInput.addEventListener("keypress",e=>{
-if(e.key==="Enter")addTask();
+/* IA EN TIEMPO REAL */
+taskInput.addEventListener("input",()=>{
+const cat=detectCategory(taskInput.value);
+taskInput.placeholder="Sugerencia: "+cat;
 });
 
 renderTasks();
