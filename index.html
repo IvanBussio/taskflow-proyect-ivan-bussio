@@ -10,28 +10,64 @@
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
 
+/* 🎨 NUEVA PALETA PRO */
+:root{
+  --bg-dark:#0b1220;
+  --bg-light:#eef2ff;
+  --card:#111827;
+  --card-light:#ffffff;
+  --primary:#6366f1;
+  --success:#22c55e;
+  --warning:#f59e0b;
+  --danger:#ef4444;
+  --text:#e5e7eb;
+  --text-dark:#111827;
+}
+
 body{
   font-family:Inter,sans-serif;
-  background: radial-gradient(circle at top,#0f172a,#020617);
-  color:white;
-  transition:0.3s;
+  background:var(--bg-dark);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* 🌊 FONDO ANIMADO SUAVE */
+body::before{
+  content:"";
+  position:fixed;
+  width:200%;
+  height:200%;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 40px
+    );
+  animation:moveBg 30s linear infinite;
+  z-index:-1;
+}
+
+@keyframes moveBg{
+  0%{transform:translate(0,0);}
+  100%{transform:translate(-200px,-200px);}
 }
 
 /* LIGHT */
 body.light{
-  background: linear-gradient(135deg,#dbeafe,#bfdbfe);
-  color:#0f172a;
+  background:var(--bg-light);
+  color:var(--text-dark);
 }
 
-/* CONTAINER */
+/* APP */
 .container{padding:40px;}
 
-/* APP */
 .app{
   max-width:1400px;
   width:95%;
   margin:auto;
-  background:rgba(30,41,59,0.7);
+  background:rgba(17,24,39,0.8);
   backdrop-filter:blur(20px);
   border-radius:20px;
   padding:35px;
@@ -39,16 +75,15 @@ body.light{
 }
 
 body.light .app{
-  background:rgba(255,255,255,0.95);
+  background:rgba(255,255,255,0.9);
 }
 
-/* BOTONES ARRIBA */
+/* BOTONES */
 .top-buttons{
   position:absolute;
   top:20px;
   left:0;
   right:0;
-  width:100%;
   padding:0 25px;
   display:flex;
   justify-content:space-between;
@@ -69,9 +104,7 @@ body.light .app{
 
 /* HEADER */
 h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:25px;color:#94a3b8;}
-
-body.light .subtitle{color:#475569;}
+.subtitle{text-align:center;margin-bottom:25px;opacity:0.7;}
 
 /* STATS */
 .stats{display:flex;gap:15px;margin-bottom:25px;}
@@ -84,9 +117,9 @@ body.light .subtitle{color:#475569;}
   font-weight:bold;
 }
 
-.total{background:#3b82f6;}
-.completed{background:#22c55e;}
-.active{background:#f59e0b;}
+.total{background:rgba(99,102,241,0.3);}
+.completed{background:rgba(34,197,94,0.3);}
+.active{background:rgba(245,158,11,0.3);}
 
 /* INPUT */
 .input-group{display:flex;gap:10px;margin-bottom:20px;}
@@ -96,17 +129,17 @@ input{
   padding:14px;
   border-radius:10px;
   border:none;
-  background:#334155;
+  background:#1f2937;
   color:white;
 }
 
 body.light input{
   background:#f1f5f9;
-  color:#0f172a;
+  color:#111;
 }
 
 .input-group button{
-  background:#22c55e;
+  background:var(--primary);
   border:none;
   padding:0 20px;
   border-radius:10px;
@@ -128,7 +161,7 @@ body.light input{
 .filters button{
   background:none;
   border:none;
-  color:#3b82f6;
+  color:var(--primary);
   cursor:pointer;
   transition:0.2s;
 }
@@ -142,29 +175,21 @@ body.light input{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:#1e293b;
-  padding:14px 16px;
+  background:#1f2937;
+  padding:14px;
   border-radius:12px;
   margin-bottom:10px;
-  transition:0.2s;
-}
-
-.task:hover{
-  transform:scale(1.01);
-  background:#253044;
 }
 
 body.light .task{
   background:white;
-  border:1px solid #e2e8f0;
+  border:1px solid #ddd;
 }
 
-/* TASK CONTENT */
 .task-content{
   display:flex;
   align-items:center;
   gap:12px;
-  flex:1;
 }
 
 .task.completed span{
@@ -172,26 +197,18 @@ body.light .task{
   opacity:0.5;
 }
 
-/* DELETE */
-.delete-btn{
-  background:none;
-  border:none;
-  cursor:pointer;
-  font-size:16px;
-}
-
-/* SELECT */
+/* CATEGORY */
 .category-select{
-  background:#334155;
-  color:white;
   border:none;
   border-radius:8px;
   padding:5px;
+  background:#374151;
+  color:white;
 }
 
 body.light .category-select{
-  background:#e2e8f0;
-  color:#0f172a;
+  background:#e5e7eb;
+  color:#111;
 }
 
 /* MODAL */
@@ -205,10 +222,9 @@ body.light .category-select{
 }
 
 .modal-content{
-  background:#1e293b;
+  background:#1f2937;
   padding:25px;
   border-radius:12px;
-  max-width:400px;
 }
 
 body.light .modal-content{
@@ -217,26 +233,12 @@ body.light .modal-content{
 
 /* BOTÓN MODAL */
 .modal-content button{
-  background:#3b82f6;
+  background:var(--primary);
   color:white;
   border:none;
   padding:10px 20px;
   border-radius:8px;
   cursor:pointer;
-  transition:0.2s;
-}
-
-.modal-content button:hover{
-  background:#2563eb;
-  transform:scale(1.05);
-}
-
-/* MOBILE */
-@media(max-width:768px){
-.container{padding:15px;}
-.stats{flex-direction:column;}
-.input-group{flex-direction:column;}
-.filters{flex-direction:column;gap:10px;}
 }
 
 </style>
@@ -281,12 +283,10 @@ body.light .modal-content{
   <div class="modal-content">
     <h2>TaskFlow</h2>
     <p>
-    Gestiona tus tareas de forma clara y eficiente.
-    <br><br>
-    ✔ Añade tareas  
-    ✔ Marca completadas  
-    ✔ Organiza con categorías  
-    ✔ Mantén foco diario  
+    Sistema de productividad personal.<br><br>
+    ✔ Gestión de tareas<br>
+    ✔ Organización por categorías<br>
+    ✔ Interfaz rápida y clara<br>
     </p>
     <br>
     <button onclick="closeInfo()">Cerrar</button>
@@ -295,7 +295,19 @@ body.light .modal-content{
 
 <script>
 
-let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+/* 🔥 MÁS CATEGORÍAS */
+const categories = [
+"📌 General",
+"🛒 Compras",
+"📚 Estudio",
+"💼 Trabajo",
+"🏋️ Gym",
+"🍔 Comida",
+"💻 Proyectos",
+"🎯 Objetivos"
+];
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 /* ADD */
 function addTask(){
@@ -317,60 +329,38 @@ taskList.innerHTML="";
 
 tasks.forEach((t,i)=>{
 
-const div=document.createElement("div");
-div.className="task"+(t.completed?" completed":"");
+const options = categories.map(c =>
+`<option ${t.category===c?"selected":""}>${c}</option>`
+).join("");
 
-div.innerHTML=`
+taskList.innerHTML += `
+<div class="task">
 <div class="task-content">
 
-<label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+<label style="display:flex;gap:10px;cursor:pointer;">
 <input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
 <span>${t.text}</span>
 </label>
 
 <select class="category-select" onchange="changeCategory(${i},this.value)">
-<option ${t.category==="📌 General"?"selected":""}>📌 General</option>
-<option ${t.category==="🛒 Compras"?"selected":""}>🛒 Compras</option>
-<option ${t.category==="📚 Estudio"?"selected":""}>📚 Estudio</option>
+${options}
 </select>
 
 </div>
 
-<button class="delete-btn" onclick="deleteTask(${i})">✖</button>
-`;
-
-taskList.appendChild(div);
-
+<button onclick="deleteTask(${i})">✖</button>
+</div>`;
 });
 
 updateStats();
 }
 
 /* FUNCIONES */
-function toggleTask(i){
-tasks[i].completed=!tasks[i].completed;
-save();
-}
-
-function deleteTask(i){
-tasks.splice(i,1);
-save();
-}
-
-function deleteCompleted(){
-tasks=tasks.filter(t=>!t.completed);
-save();
-}
-
-function sortTasks(){
-tasks.sort((a,b)=>a.text.localeCompare(b.text));
-save();
-}
-
-function changeCategory(i,val){
-tasks[i].category=val;
-save();
-}
+function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
+function deleteTask(i){tasks.splice(i,1);save();}
+function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
+function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
+function changeCategory(i,val){tasks[i].category=val;save();}
 
 /* STATS */
 function updateStats(){
