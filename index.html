@@ -14,21 +14,18 @@ body{
   font-family:Inter,sans-serif;
   background: radial-gradient(circle at top,#0f172a,#020617);
   color:white;
-  min-height:100vh;
   transition:0.3s;
 }
 
-/* LIGHT MODE */
 body.light{
   background: linear-gradient(135deg,#dbeafe,#bfdbfe);
   color:#0f172a;
 }
 
-/* CONTAINER */
+/* APP */
 .container{padding:40px;}
-
 .app{
-  max-width:1200px;
+  max-width:1100px;
   margin:auto;
   background:rgba(30,41,59,0.7);
   backdrop-filter:blur(20px);
@@ -37,13 +34,11 @@ body.light{
   position:relative;
 }
 
-/* LIGHT APP */
 body.light .app{
   background:rgba(255,255,255,0.95);
-  box-shadow:0 10px 40px rgba(0,0,0,0.1);
 }
 
-/* BOTONES */
+/* BOTONES ARRIBA */
 .top-buttons{
   position:absolute;
   top:15px;
@@ -54,28 +49,24 @@ body.light .app{
 }
 
 .top-buttons button{
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.1);
   border:none;
-  color:#cbd5f5;
-  padding:8px 10px;
+  padding:8px 12px;
   border-radius:10px;
   cursor:pointer;
+  transition:0.2s;
 }
 
-body.light .top-buttons button{
-  background:#f1f5f9;
-  color:#0f172a;
+.top-buttons button:hover{
+  transform:scale(1.1);
 }
 
 /* HEADER */
 h1{text-align:center;font-size:2.2rem;}
 .subtitle{text-align:center;margin-bottom:20px;color:#94a3b8;}
 
-body.light .subtitle{color:#475569;}
-
 /* STATS */
 .stats{display:flex;gap:10px;margin-bottom:20px;}
-
 .stat{
   flex:1;
   padding:15px;
@@ -84,14 +75,9 @@ body.light .subtitle{color:#475569;}
   font-weight:bold;
 }
 
-.total{background:rgba(59,130,246,0.2);}
-.done{background:rgba(34,197,94,0.2);}
-.pending{background:rgba(244,114,182,0.2);}
-
-/* LIGHT STATS */
-body.light .total{background:#dbeafe;color:#2563eb;}
-body.light .done{background:#dcfce7;color:#16a34a;}
-body.light .pending{background:#fce7f3;color:#db2777;}
+.total{background:#3b82f6;}
+.completed{background:#22c55e;}
+.active{background:#f59e0b;}
 
 /* INPUT */
 .input-group{display:flex;gap:10px;margin-bottom:20px;}
@@ -108,16 +94,19 @@ input{
 body.light input{
   background:#f1f5f9;
   color:#0f172a;
-  border:1px solid #e2e8f0;
 }
 
 .input-group button{
+  background:#22c55e;
+  border:none;
   padding:0 20px;
   border-radius:10px;
-  border:none;
-  background:#22c55e;
-  color:white;
   cursor:pointer;
+  transition:0.2s;
+}
+
+.input-group button:hover{
+  transform:scale(1.1);
 }
 
 /* FILTERS */
@@ -127,15 +116,16 @@ body.light input{
   margin-bottom:20px;
 }
 
-.filters input{
-  width:200px;
-}
-
 .filters button{
   background:none;
   border:none;
-  color:#60a5fa;
+  color:#3b82f6;
   cursor:pointer;
+  transition:0.2s;
+}
+
+.filters button:hover{
+  transform:scale(1.1);
 }
 
 /* TASK */
@@ -150,7 +140,7 @@ body.light input{
 }
 
 body.light .task{
-  background:#ffffff;
+  background:white;
   border:1px solid #e2e8f0;
 }
 
@@ -158,7 +148,7 @@ body.light .task{
   display:flex;
   align-items:center;
   gap:10px;
-  cursor:pointer;
+  flex:1;
 }
 
 .task.completed span{
@@ -169,7 +159,6 @@ body.light .task{
 .delete-btn{
   background:none;
   border:none;
-  color:#64748b;
   cursor:pointer;
 }
 
@@ -178,8 +167,8 @@ body.light .task{
   background:#334155;
   color:white;
   border:none;
-  padding:5px 10px;
   border-radius:8px;
+  padding:5px;
 }
 
 body.light .category-select{
@@ -199,32 +188,13 @@ body.light .category-select{
 
 .modal-content{
   background:#1e293b;
-  padding:20px;
+  padding:25px;
   border-radius:10px;
+  max-width:400px;
 }
 
 body.light .modal-content{
   background:white;
-}
-
-/* WELCOME */
-.welcome{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#22c55e;
-  padding:12px 20px;
-  border-radius:10px;
-  display:none;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-.container{padding:15px;}
-.stats{flex-direction:column;}
-.input-group{flex-direction:column;}
-.filters{flex-direction:column;gap:10px;}
 }
 
 </style>
@@ -244,9 +214,9 @@ body.light .modal-content{
 <p class="subtitle">Organiza tu día 🚀</p>
 
 <div class="stats">
-<div class="stat total">TOTAL <span id="total">0</span></div>
-<div class="stat done">OK <span id="done">0</span></div>
-<div class="stat pending">PEND <span id="pending">0</span></div>
+<div class="stat total">Total<br><span id="total">0</span></div>
+<div class="stat completed">Completadas<br><span id="done">0</span></div>
+<div class="stat active">Pendientes<br><span id="pending">0</span></div>
 </div>
 
 <div class="input-group">
@@ -255,7 +225,6 @@ body.light .modal-content{
 </div>
 
 <div class="filters">
-<input id="search" placeholder="Buscar..." oninput="renderTasks()">
 <button onclick="sortTasks()">Ordenar</button>
 <button onclick="deleteCompleted()">Eliminar completadas</button>
 </div>
@@ -265,18 +234,24 @@ body.light .modal-content{
 </div>
 </div>
 
-<!-- MODAL -->
+<!-- INFO -->
 <div class="modal" id="infoModal">
   <div class="modal-content">
-    <h3>TaskFlow</h3>
-    <p>Organizá tu día fácil 🚀</p>
+    <h2>TaskFlow</h2>
+    <p>
+    Organiza tus tareas de forma simple y rápida.
+    <br><br>
+    ✔ Añade tareas  
+    ✔ Márcalas como completadas  
+    ✔ Filtra y ordena  
+    ✔ Gestiona categorías  
+    <br><br>
+    Diseñado para productividad diaria.
+    </p>
     <br>
     <button onclick="closeInfo()">Cerrar</button>
   </div>
 </div>
-
-<!-- WELCOME -->
-<div class="welcome" id="welcomeMsg">Bienvenido 👋</div>
 
 <script>
 
@@ -285,7 +260,13 @@ let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 /* ADD */
 function addTask(){
 if(!taskInput.value.trim())return;
-tasks.push({text:taskInput.value,completed:false,category:"📌 General"});
+
+tasks.push({
+text:taskInput.value,
+completed:false,
+category:"📌 General"
+});
+
 taskInput.value="";
 save();
 }
@@ -293,30 +274,59 @@ save();
 /* RENDER */
 function renderTasks(){
 taskList.innerHTML="";
+
 tasks.forEach((t,i)=>{
-taskList.innerHTML+=`
-<div class="task">
-<div class="task-content" onclick="toggleTask(${i})">
-<input type="checkbox" ${t.completed?"checked":""}>
+
+const div=document.createElement("div");
+div.className="task"+(t.completed?" completed":"");
+
+div.innerHTML=`
+<div class="task-content">
+<input type="checkbox" ${t.completed?"checked":""} onclick="toggleTask(${i})">
 <span>${t.text}</span>
+
 <select class="category-select" onchange="changeCategory(${i},this.value)">
-<option>📌 General</option>
-<option>🛒 Compras</option>
-<option>📚 Estudio</option>
+<option ${t.category==="📌 General"?"selected":""}>📌 General</option>
+<option ${t.category==="🛒 Compras"?"selected":""}>🛒 Compras</option>
+<option ${t.category==="📚 Estudio"?"selected":""}>📚 Estudio</option>
 </select>
 </div>
+
 <button class="delete-btn" onclick="deleteTask(${i})">✖</button>
-</div>`;
+`;
+
+taskList.appendChild(div);
+
 });
+
 updateStats();
 }
 
 /* FUNCIONES */
-function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
-function deleteTask(i){tasks.splice(i,1);save();}
-function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
-function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
-function changeCategory(i,val){tasks[i].category=val;save();}
+function toggleTask(i){
+tasks[i].completed=!tasks[i].completed;
+save();
+}
+
+function deleteTask(i){
+tasks.splice(i,1);
+save();
+}
+
+function deleteCompleted(){
+tasks=tasks.filter(t=>!t.completed);
+save();
+}
+
+function sortTasks(){
+tasks.sort((a,b)=>a.text.localeCompare(b.text));
+save();
+}
+
+function changeCategory(i,val){
+tasks[i].category=val;
+save();
+}
 
 /* STATS */
 function updateStats(){
@@ -336,16 +346,9 @@ function openInfo(){infoModal.style.display="flex";}
 function closeInfo(){infoModal.style.display="none";}
 
 /* MODE */
-function toggleMode(){document.body.classList.toggle("light");}
-
-/* WELCOME */
-window.addEventListener("load",()=>{
-if(!localStorage.getItem("visited")){
-welcomeMsg.style.display="block";
-setTimeout(()=>welcomeMsg.style.display="none",3000);
-localStorage.setItem("visited","true");
+function toggleMode(){
+document.body.classList.toggle("light");
 }
-});
 
 taskInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")addTask();
