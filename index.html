@@ -15,10 +15,9 @@ body{
   background: radial-gradient(circle at top,#0f172a,#020617);
   color:white;
   min-height:100vh;
-  transition:0.3s;
 }
 
-/* FONDO ANIMADO */
+/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -35,7 +34,7 @@ body::before{
   100%{transform:translate(0,0);}
 }
 
-/* LIGHT MODE */
+/* LIGHT */
 body.light{
   background: linear-gradient(135deg,#e0f2ff,#bae6fd);
   color:#0f172a;
@@ -46,7 +45,10 @@ body.light .app{
 }
 
 /* CONTAINER */
-.container{padding:40px;}
+.container{
+  padding:40px;
+  position:relative;
+}
 
 .app{
   max-width:1400px;
@@ -55,7 +57,34 @@ body.light .app{
   backdrop-filter:blur(20px);
   border-radius:20px;
   padding:40px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* BOTONES ARRIBA */
+.top-buttons{
+  position:absolute;
+  top:20px;
+  left:0;
+  right:0;
+  max-width:1400px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  padding:0 10px;
+}
+
+.top-buttons button{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  color:#cbd5f5;
+  padding:10px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.top-buttons button:hover{
+  transform:scale(1.1);
+  background:rgba(255,255,255,0.15);
 }
 
 /* HEADER */
@@ -71,7 +100,6 @@ h1{text-align:center;font-size:2.5rem;}
   border-radius:15px;
   text-align:center;
   font-weight:bold;
-  backdrop-filter:blur(10px);
 }
 
 .total{background:rgba(59,130,246,0.15);color:#93c5fd;}
@@ -97,12 +125,6 @@ h1{text-align:center;font-size:2.5rem;}
   background:#22c55e;
   color:white;
   cursor:pointer;
-  transition:all 0.25s ease;
-}
-
-.input-group button:hover{
-  transform:translateY(-2px) scale(1.05);
-  background:#16a34a;
 }
 
 /* FILTERS */
@@ -132,17 +154,12 @@ h1{text-align:center;font-size:2.5rem;}
 /* TASK */
 .task{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   background:#1e293b;
   padding:15px;
   border-radius:12px;
   margin-bottom:10px;
-  transition:0.2s;
-}
-
-.task:hover{
-  transform:scale(1.01);
 }
 
 .task-content{
@@ -158,9 +175,8 @@ h1{text-align:center;font-size:2.5rem;}
   opacity:0.5;
 }
 
-/* BOTÓN BORRAR */
 .delete-btn{
-  background:transparent;
+  background:none;
   border:none;
   color:#64748b;
   cursor:pointer;
@@ -168,41 +184,14 @@ h1{text-align:center;font-size:2.5rem;}
 
 .delete-btn:hover{
   color:#ef4444;
-  transform:scale(1.2);
 }
 
-/* SELECT */
 .category-select{
   background:#334155;
   color:white;
   border:none;
-  padding:6px 10px;
+  padding:5px 10px;
   border-radius:8px;
-}
-
-/* BOTONES SUPERIORES */
-.info-btn{
-  position:absolute;
-  top:20px;
-  left:20px;
-  border:none;
-  background:#334155;
-  color:white;
-  padding:10px;
-  border-radius:50%;
-  cursor:pointer;
-}
-
-.mode-btn{
-  position:absolute;
-  top:20px;
-  right:20px;
-  border:none;
-  background:#334155;
-  color:white;
-  padding:10px;
-  border-radius:50%;
-  cursor:pointer;
 }
 
 /* MODAL */
@@ -213,18 +202,15 @@ h1{text-align:center;font-size:2.5rem;}
   width:100%;
   height:100%;
   background:rgba(0,0,0,0.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
   display:none;
+  justify-content:center;
+  align-items:center;
 }
 
 .modal-content{
   background:#1e293b;
   padding:30px;
   border-radius:15px;
-  text-align:center;
-  max-width:400px;
 }
 
 /* WELCOME */
@@ -246,6 +232,7 @@ h1{text-align:center;font-size:2.5rem;}
 .app{padding:20px;}
 
 .stats{flex-direction:column;}
+
 .input-group{flex-direction:column;}
 
 .filters{flex-direction:column;gap:10px;}
@@ -260,8 +247,10 @@ h1{text-align:center;font-size:2.5rem;}
 
 <body>
 
-<button class="info-btn" onclick="openInfo()">ℹ️</button>
-<button class="mode-btn" onclick="toggleMode()" id="modeIcon">🌙</button>
+<div class="top-buttons">
+  <button onclick="openInfo()">ℹ️</button>
+  <button onclick="toggleMode()" id="modeIcon">🌙</button>
+</div>
 
 <div class="container">
 <div class="app">
@@ -294,94 +283,68 @@ h1{text-align:center;font-size:2.5rem;}
 <!-- MODAL -->
 <div class="modal" id="infoModal">
   <div class="modal-content">
-    <h2>Sobre TaskFlow</h2>
-    <p>App para organizar tus tareas con estilo 🚀</p>
+    <h2>Info</h2>
+    <p>TaskFlow te ayuda a organizar tu día 🚀</p>
     <br>
     <button onclick="closeInfo()">Cerrar</button>
   </div>
 </div>
 
-<!-- WELCOME -->
-<div class="welcome" id="welcomeMsg">Bienvenido a TaskFlow 👋</div>
+<div class="welcome" id="welcomeMsg">Bienvenido 👋</div>
 
 <script>
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 
-/* IA */
-function getCategory(text){
-text=text.toLowerCase();
-if(text.includes("comprar"))return "🛒 Compras";
-if(text.includes("estudiar"))return "📚 Estudio";
-return "📌 General";
-}
-
-/* ADD */
 function addTask(){
 if(!taskInput.value.trim())return;
-tasks.push({text:taskInput.value,completed:false,category:getCategory(taskInput.value)});
+tasks.push({text:taskInput.value,completed:false,category:"📌 General"});
 taskInput.value="";
 save();
 }
 
-/* RENDER */
 function renderTasks(){
 taskList.innerHTML="";
-tasks.forEach((task,i)=>{
-
-const div=document.createElement("div");
-div.className="task"+(task.completed?" completed":"");
-
-div.innerHTML=`
+tasks.forEach((t,i)=>{
+taskList.innerHTML+=`
+<div class="task">
 <div class="task-content" onclick="toggleTask(${i})">
-<input type="checkbox" ${task.completed?"checked":""} onclick="event.stopPropagation(); toggleTask(${i})">
-<span>${task.text}</span>
-<select class="category-select" onchange="changeCategory(${i}, this.value)" onclick="event.stopPropagation()">
-<option ${task.category==="🛒 Compras"?"selected":""}>🛒 Compras</option>
-<option ${task.category==="📚 Estudio"?"selected":""}>📚 Estudio</option>
-<option ${task.category==="📌 General"?"selected":""}>📌 General</option>
+<input type="checkbox" ${t.completed?"checked":""}>
+<span>${t.text}</span>
+<select class="category-select" onchange="changeCategory(${i},this.value)">
+<option>📌 General</option>
+<option>🛒 Compras</option>
+<option>📚 Estudio</option>
 </select>
 </div>
-
-<button class="delete-btn" onclick="event.stopPropagation(); deleteTask(${i})">✖</button>
-`;
-
-taskList.appendChild(div);
+<button class="delete-btn" onclick="deleteTask(${i})">✖</button>
+</div>`;
 });
-
 updateStats();
 }
 
-/* FUNCIONES */
 function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
 function deleteTask(i){tasks.splice(i,1);save();}
 function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
 function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
 function changeCategory(i,val){tasks[i].category=val;save();}
 
-/* STATS */
 function updateStats(){
 total.textContent=tasks.length;
 done.textContent=tasks.filter(t=>t.completed).length;
 pending.textContent=tasks.filter(t=>!t.completed).length;
 }
 
-/* SAVE */
 function save(){
 localStorage.setItem("tasks",JSON.stringify(tasks));
 renderTasks();
 }
 
-/* MODE */
-function toggleMode(){
-document.body.classList.toggle("light");
-}
+function toggleMode(){document.body.classList.toggle("light");}
 
-/* INFO */
 function openInfo(){infoModal.style.display="flex";}
 function closeInfo(){infoModal.style.display="none";}
 
-/* WELCOME */
 window.onload=()=>{
 if(!localStorage.getItem("visited")){
 welcomeMsg.style.display="block";
@@ -389,11 +352,6 @@ setTimeout(()=>welcomeMsg.style.display="none",3000);
 localStorage.setItem("visited","true");
 }
 }
-
-/* ENTER */
-taskInput.addEventListener("keypress",e=>{
-if(e.key==="Enter")addTask();
-});
 
 renderTasks();
 
