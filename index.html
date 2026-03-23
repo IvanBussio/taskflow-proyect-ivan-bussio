@@ -18,7 +18,7 @@ body{
   transition:0.3s;
 }
 
-/* FONDO ANIMADO */
+/* FONDO */
 body::before{
   content:"";
   position:fixed;
@@ -35,7 +35,7 @@ body::before{
   100%{transform:translate(0,0);}
 }
 
-/* MODO CLARO */
+/* LIGHT */
 body.light{
   background: linear-gradient(135deg,#e0f2ff,#bae6fd);
   color:#0f172a;
@@ -43,13 +43,17 @@ body.light{
 
 body.light .app{
   background:rgba(255,255,255,0.85);
-  box-shadow:0 10px 40px rgba(0,0,0,0.1);
 }
 
-/* LAYOUT */
-.container{padding:40px;}
+/* CONTAINER */
+.container{
+  padding:40px;
+}
+
+/* 4K PRO */
 .app{
-  max-width:1200px;
+  max-width:1400px;
+  width:100%;
   margin:auto;
   background:rgba(30,41,59,0.6);
   backdrop-filter:blur(20px);
@@ -61,7 +65,7 @@ body.light .app{
 h1{text-align:center;font-size:2.5rem;}
 .subtitle{text-align:center;margin-bottom:30px;color:#94a3b8;}
 
-/* STATS SUAVES */
+/* STATS */
 .stats{display:flex;gap:20px;margin-bottom:20px;}
 
 .stat{
@@ -72,15 +76,10 @@ h1{text-align:center;font-size:2.5rem;}
   font-weight:bold;
 }
 
-/* OSCURO */
+/* SUAVES */
 .total{background:rgba(59,130,246,0.15);color:#93c5fd;}
 .done{background:rgba(34,197,94,0.15);color:#86efac;}
 .pending{background:rgba(244,114,182,0.15);color:#f9a8d4;}
-
-/* CLARO */
-body.light .total{background:#dbeafe;color:#2563eb;}
-body.light .done{background:#dcfce7;color:#16a34a;}
-body.light .pending{background:#fce7f3;color:#db2777;}
 
 /* INPUT */
 .input-group{display:flex;gap:10px;margin-bottom:20px;}
@@ -94,12 +93,6 @@ body.light .pending{background:#fce7f3;color:#db2777;}
   color:white;
 }
 
-body.light .input-group input{
-  background:#f1f5f9;
-  color:black;
-  border:1px solid #e2e8f0;
-}
-
 .input-group button{
   padding:0 20px;
   border-radius:12px;
@@ -110,31 +103,20 @@ body.light .input-group input{
   transition:all 0.25s ease;
 }
 
-/* BOTONES ANIMADOS */
+/* HOVER BOTONES */
 button{transition:all 0.25s ease;}
 
 .input-group button:hover{
   transform:translateY(-2px) scale(1.05);
   background:#16a34a;
-  box-shadow:0 5px 15px rgba(34,197,94,0.4);
-}
-
-.filters button:hover{
-  transform:scale(1.08);
-  color:#3b82f6;
-}
-
-.delete-btn:hover{
-  transform:scale(1.25) rotate(5deg);
-  color:#ef4444;
-}
-
-button:active{
-  transform:scale(0.95);
 }
 
 /* FILTERS */
-.filters{display:flex;justify-content:space-between;margin-bottom:20px;}
+.filters{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
 
 .filters input{
   padding:10px;
@@ -144,12 +126,13 @@ button:active{
   color:white;
 }
 
-body.light .filters input{
-  background:#f1f5f9;
-  color:black;
+.filters button{
+  background:none;
+  border:none;
+  color:#60a5fa;
+  cursor:pointer;
 }
 
-.filters button{background:none;border:none;color:#60a5fa;cursor:pointer;}
 .delete{color:#ef4444;}
 
 /* TASK */
@@ -161,11 +144,6 @@ body.light .filters input{
   padding:15px;
   border-radius:12px;
   margin-bottom:10px;
-}
-
-body.light .task{
-  background:white;
-  border:1px solid #e2e8f0;
 }
 
 .task-content{
@@ -181,12 +159,17 @@ body.light .task{
   opacity:0.5;
 }
 
-/* BOTÓN BORRAR */
+/* BOTÓN DELETE */
 .delete-btn{
   background:transparent;
   border:none;
   color:#64748b;
   cursor:pointer;
+}
+
+.delete-btn:hover{
+  color:#ef4444;
+  transform:scale(1.2);
 }
 
 /* SELECT */
@@ -196,16 +179,9 @@ body.light .task{
   border:none;
   padding:6px 10px;
   border-radius:8px;
-  font-size:0.8rem;
-  cursor:pointer;
 }
 
-body.light .category-select{
-  background:#e2e8f0;
-  color:black;
-}
-
-/* BOTÓN MODO */
+/* MODO */
 .mode-btn{
   position:absolute;
   top:20px;
@@ -221,6 +197,53 @@ footer{
   text-align:center;
   margin-top:20px;
   color:#94a3b8;
+}
+
+/* 📱 MOBILE */
+@media (max-width:768px){
+
+.container{padding:15px;}
+
+.app{padding:20px;}
+
+.stats{
+  flex-direction:column;
+  gap:10px;
+}
+
+.input-group{
+  flex-direction:column;
+}
+
+.input-group button{
+  width:100%;
+  height:45px;
+}
+
+.filters{
+  flex-direction:column;
+  gap:10px;
+}
+
+.task{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.task-content{
+  flex-wrap:wrap;
+  width:100%;
+}
+
+.category-select{
+  width:100%;
+}
+
+.delete-btn{
+  align-self:flex-end;
+}
+
 }
 
 </style>
@@ -255,9 +278,7 @@ footer{
 
 <div id="taskList"></div>
 
-<footer>
-© 2026 TaskFlow · Project by Ivan Bussio
-</footer>
+<footer>© 2026 TaskFlow · Ivan Bussio</footer>
 
 </div>
 </div>
@@ -270,8 +291,6 @@ function getCategory(text){
 text=text.toLowerCase();
 if(text.includes("comprar"))return "🛒 Compras";
 if(text.includes("estudiar"))return "📚 Estudio";
-if(text.includes("trabajo"))return "💼 Trabajo";
-if(text.includes("gym"))return "🏋️ Fitness";
 return "📌 General";
 }
 
@@ -283,12 +302,8 @@ save();
 }
 
 function renderTasks(){
-const list=taskList;
-const search=document.getElementById("search").value.toLowerCase();
-list.innerHTML="";
-
-tasks.filter(t=>t.text.toLowerCase().includes(search))
-.forEach((task,i)=>{
+taskList.innerHTML="";
+tasks.forEach((task,i)=>{
 
 const div=document.createElement("div");
 div.className="task"+(task.completed?" completed":"");
@@ -297,12 +312,9 @@ div.innerHTML=`
 <div class="task-content" onclick="toggleTask(${i})">
 <input type="checkbox" ${task.completed?"checked":""} onclick="event.stopPropagation(); toggleTask(${i})">
 <span>${task.text}</span>
-
 <select class="category-select" onchange="changeCategory(${i}, this.value)" onclick="event.stopPropagation()">
 <option ${task.category==="🛒 Compras"?"selected":""}>🛒 Compras</option>
 <option ${task.category==="📚 Estudio"?"selected":""}>📚 Estudio</option>
-<option ${task.category==="💼 Trabajo"?"selected":""}>💼 Trabajo</option>
-<option ${task.category==="🏋️ Fitness"?"selected":""}>🏋️ Fitness</option>
 <option ${task.category==="📌 General"?"selected":""}>📌 General</option>
 </select>
 </div>
@@ -310,7 +322,7 @@ div.innerHTML=`
 <button class="delete-btn" onclick="event.stopPropagation(); deleteTask(${i})">✖</button>
 `;
 
-list.appendChild(div);
+taskList.appendChild(div);
 });
 
 updateStats();
