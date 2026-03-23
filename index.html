@@ -12,46 +12,42 @@ body{
   font-family:Inter,sans-serif;
   background:#0b1220;
   color:#e5e7eb;
-  transition:0.3s;
 }
 
-/* LIGHT MODE (BIEN HECHO) */
-body.light{
-  background:#f1f5f9;
-  color:#0f172a;
-}
-
-.container{padding:30px;}
-
-.app{
-  max-width:1200px;
+/* CONTAINER */
+.container{
+  max-width:1100px;
   margin:auto;
+  padding:40px 20px;
+}
+
+/* CARD */
+.app{
   background:#111827;
+  border-radius:20px;
   padding:30px;
-  border-radius:16px;
-}
-
-body.light .app{
-  background:#ffffff;
-}
-
-/* BOTONES */
-.top{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:15px;
-}
-
-button{
-  cursor:pointer;
-  border:none;
-  border-radius:8px;
-  padding:8px 12px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
 }
 
 /* HEADER */
-h1{text-align:center;margin-bottom:10px;}
-.subtitle{text-align:center;margin-bottom:20px;opacity:0.6;}
+.header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.header button{
+  background:#1f2937;
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  color:white;
+  cursor:pointer;
+}
+
+/* TITLE */
+h1{text-align:center;font-size:2.5rem;}
+.subtitle{text-align:center;margin-bottom:25px;color:#94a3b8;}
 
 /* INPUT */
 .input-group{
@@ -62,61 +58,65 @@ h1{text-align:center;margin-bottom:10px;}
 
 input{
   flex:1;
-  padding:10px;
-  border-radius:8px;
+  padding:14px;
+  border-radius:12px;
   border:none;
   background:#1f2937;
   color:white;
+  font-size:16px;
 }
 
-body.light input{
-  background:#f1f5f9;
-  color:#0f172a;
-}
-
-.add{
+.add-btn{
   background:#6366f1;
+  border:none;
+  padding:0 20px;
+  border-radius:12px;
   color:white;
+  cursor:pointer;
 }
 
 /* TASK */
 .task{
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  padding:10px;
   background:#1f2937;
-  margin-bottom:8px;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:12px;
+  transition:0.2s;
+}
+
+.task:hover{
+  background:#263041;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* CATEGORY */
+select{
+  background:#374151;
+  border:none;
   border-radius:8px;
-}
-
-body.light .task{
-  background:#f8fafc;
-}
-
-.task.completed span{
-  text-decoration:line-through;
-  opacity:0.5;
+  padding:6px;
+  color:white;
 }
 
 /* DELETE */
 .delete{
-  background:none;
   color:#ef4444;
+  cursor:pointer;
+  font-size:18px;
 }
 
-/* SELECT */
-select{
-  background:#374151;
-  color:white;
-  border:none;
-  border-radius:6px;
+.completed span{
+  text-decoration:line-through;
+  opacity:0.5;
 }
-
-body.light select{
-  background:#e2e8f0;
-  color:#0f172a;
-}
-
 </style>
 </head>
 
@@ -125,17 +125,17 @@ body.light select{
 <div class="container">
 <div class="app">
 
-<div class="top">
+<div class="header">
 <button onclick="toggleMode()">🌙</button>
-<button onclick="openInfo()">ℹ️</button>
+<button onclick="alert('TaskFlow: organiza tareas con IA')">ℹ️</button>
 </div>
 
 <h1>TaskFlow</h1>
 <p class="subtitle">Organiza tu día</p>
 
 <div class="input-group">
-<input id="taskInput" placeholder="Agregar tarea...">
-<button class="add" onclick="addTask()">+</button>
+<input id="taskInput" placeholder="Escribe algo...">
+<button class="add-btn" onclick="addTask()">+</button>
 </div>
 
 <div id="taskList"></div>
@@ -143,36 +143,26 @@ body.light select{
 </div>
 </div>
 
-<!-- MODAL -->
-<div id="infoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
-<div style="background:white;padding:20px;border-radius:10px;">
-<h3>TaskFlow</h3>
-<p>App para organizar tareas con IA básica.</p>
-<button onclick="closeInfo()">Cerrar</button>
-</div>
-</div>
-
 <script>
 
-/* IA REAL SIMPLE */
+/* IA */
 function detectCategory(text){
 text=text.toLowerCase();
 
 if(text.includes("comprar")) return "Compras";
 if(text.includes("estudiar")) return "Estudio";
 if(text.includes("gym")) return "Gym";
-if(text.includes("trabajo")) return "Trabajo";
-if(text.includes("comer")) return "Comida";
 
 return "General";
 }
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 
+/* ADD */
 function addTask(){
 if(!taskInput.value.trim()) return;
 
-const cat = detectCategory(taskInput.value);
+const cat=detectCategory(taskInput.value);
 
 tasks.push({
 text:taskInput.value,
@@ -184,54 +174,52 @@ taskInput.value="";
 save();
 }
 
-/* IA EN TIEMPO REAL */
-taskInput.addEventListener("input",()=>{
-const cat=detectCategory(taskInput.value);
-taskInput.placeholder="→ "+cat;
-});
-
+/* RENDER */
 function render(){
 taskList.innerHTML="";
 
 tasks.forEach((t,i)=>{
 taskList.innerHTML+=`
 <div class="task ${t.completed?"completed":""}">
-<span onclick="toggleTask(${i})">${t.text}</span>
+<div class="left">
 
-<select onchange="changeCat(${i},this.value)">
+<input type="checkbox" ${t.completed?"checked":""} onclick="toggle(${i})">
+
+<span>${t.text}</span>
+
+<select onchange="change(${i},this.value)">
 <option ${t.category==="General"?"selected":""}>General</option>
 <option ${t.category==="Compras"?"selected":""}>Compras</option>
 <option ${t.category==="Estudio"?"selected":""}>Estudio</option>
-<option ${t.category==="Trabajo"?"selected":""}>Trabajo</option>
 <option ${t.category==="Gym"?"selected":""}>Gym</option>
-<option ${t.category==="Comida"?"selected":""}>Comida</option>
 </select>
 
-<button class="delete" onclick="deleteTask(${i})">✖</button>
+</div>
+
+<div class="delete" onclick="del(${i})">✖</div>
 </div>`;
 });
 }
 
-function toggleTask(i){tasks[i].completed=!tasks[i].completed;save();}
-function deleteTask(i){tasks.splice(i,1);save();}
-function changeCat(i,val){tasks[i].category=val;save();}
+/* FUNCIONES */
+function toggle(i){tasks[i].completed=!tasks[i].completed;save();}
+function del(i){tasks.splice(i,1);save();}
+function change(i,v){tasks[i].category=v;save();}
 
 function save(){
 localStorage.setItem("tasks",JSON.stringify(tasks));
 render();
 }
 
+/* IA TIEMPO REAL */
+taskInput.addEventListener("input",()=>{
+const cat=detectCategory(taskInput.value);
+taskInput.placeholder="→ "+cat;
+});
+
 /* MODE */
 function toggleMode(){
 document.body.classList.toggle("light");
-}
-
-/* INFO */
-function openInfo(){
-infoModal.style.display="flex";
-}
-function closeInfo(){
-infoModal.style.display="none";
 }
 
 render();
