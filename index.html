@@ -3,38 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>TaskFlow</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;transition:all 0.2s;}
+*{margin:0;padding:0;box-sizing:border-box;}
 button{all:unset;cursor:pointer;}
 
 :root{
   --violet:#7c3aed;
 }
 
-/* 🌌 FONDO */
+/* 🌌 FONDO ANIMADO */
 body{
   font-family:Inter,sans-serif;
   color:#e5e7eb;
   min-height:100vh;
-  background: radial-gradient(circle at 20% 20%, #1a1a2e, #0a0a0f 60%);
+  background:#0a0a0f;
+  overflow-x:hidden;
 }
 
-/* LIGHT MODE */
+body::before{
+  content:"";
+  position:fixed;
+  width:200%;
+  height:200%;
+  background:
+    repeating-linear-gradient(
+      60deg,
+      rgba(124,58,237,0.06),
+      rgba(124,58,237,0.06) 2px,
+      transparent 2px,
+      transparent 60px
+    );
+  animation:moveBg 25s linear infinite;
+  z-index:-1;
+}
+
+@keyframes moveBg{
+  from{transform:translate(0,0);}
+  to{transform:translate(-300px,-300px);}
+}
+
+/* ☀️ LIGHT MODE */
 body.light{
   background:#f8fafc;
   color:#0f172a;
 }
 
-/* APP */
+/* 👋 BIENVENIDA */
+.welcome{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--violet);
+  padding:12px 20px;
+  border-radius:20px;
+  color:white;
+  z-index:10;
+  animation:fadeOut 3s forwards;
+}
+
+@keyframes fadeOut{
+  0%{opacity:1;}
+  80%{opacity:1;}
+  100%{opacity:0;}
+}
+
+/* 🧱 APP */
 .app{
-  max-width:900px;
+  width:100%;
+  max-width:1400px;
   margin:auto;
-  padding:30px;
+  padding:40px;
+}
+
+@media(min-width:1800px){
+  .app{
+    max-width:1800px;
+  }
 }
 
 /* HEADER */
@@ -45,8 +94,8 @@ body.light{
 }
 
 .header button{
-  background:rgba(31,41,55,0.6);
-  backdrop-filter:blur(10px);
+  background:linear-gradient(135deg,#7c3aed,#9333ea);
+  color:white;
   padding:10px;
   border-radius:12px;
 }
@@ -60,10 +109,11 @@ h1{text-align:center;font-size:2.5rem;}
   display:flex;
   justify-content:space-between;
   margin-bottom:10px;
-  background:rgba(31,41,55,0.6);
-  backdrop-filter:blur(10px);
+  background:rgba(20,20,30,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(124,58,237,0.1);
   padding:12px;
-  border-radius:14px;
+  border-radius:16px;
 }
 
 /* PROGRESS */
@@ -79,6 +129,7 @@ h1{text-align:center;font-size:2.5rem;}
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#7c3aed,#9333ea);
+  transition:0.3s;
 }
 
 /* INPUT */
@@ -92,18 +143,18 @@ input{
   flex:1;
   padding:16px;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,0.05);
-  background:rgba(31,41,55,0.6);
+  border:none;
+  background:rgba(20,20,30,0.6);
   backdrop-filter:blur(8px);
   color:white;
 }
 
 input:focus{
   outline:none;
-  box-shadow:0 0 15px rgba(124,58,237,0.5);
+  box-shadow:0 0 10px var(--violet);
 }
 
-/* ADD BTN */
+/* BOTON */
 .add-btn{
   background:linear-gradient(135deg,#7c3aed,#9333ea);
   padding:0 22px;
@@ -115,18 +166,20 @@ input:focus{
 /* GRID */
 #taskList{
   display:grid;
-  gap:12px;
+  gap:16px;
 }
 
 /* TASK */
 .task{
-  background:rgba(31,41,55,0.6);
-  backdrop-filter:blur(10px);
-  padding:14px;
-  border-radius:14px;
+  background:rgba(20,20,30,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(124,58,237,0.1);
+  padding:16px;
+  border-radius:16px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  transition:0.2s;
 }
 
 .task:hover{
@@ -162,6 +215,23 @@ input:focus{
   opacity:0.5;
 }
 
+/* FOOTER */
+.footer{
+  margin-top:40px;
+  text-align:center;
+  font-size:14px;
+  opacity:0.6;
+}
+
+.footer a{
+  color:#a78bfa;
+  text-decoration:none;
+}
+
+.footer a:hover{
+  text-decoration:underline;
+}
+
 /* MOBILE */
 @media(max-width:768px){
   .input-group{flex-direction:column;}
@@ -170,6 +240,10 @@ input:focus{
 </head>
 
 <body>
+
+<div id="welcome" class="welcome">
+  Bienvenido a TaskFlow 🚀
+</div>
 
 <div class="app">
 
@@ -198,6 +272,13 @@ input:focus{
 
 <div id="taskList"></div>
 
+<footer class="footer">
+  Made by Ivan — 
+  <a href="https://cornerestudios.com" target="_blank">
+    Corner Estudios
+  </a>
+</footer>
+
 </div>
 
 <script>
@@ -225,7 +306,6 @@ category:detectCategory(taskInput.value)
 
 taskInput.value="";
 taskInput.focus();
-
 save();
 }
 
@@ -237,8 +317,10 @@ save();
 
 /* DELETE */
 function del(i){
+if(confirm("¿Eliminar tarea?")){
 tasks.splice(i,1);
 save();
+}
 }
 
 /* SAVE */
@@ -296,7 +378,7 @@ done.textContent=doneTasks;
 pending.textContent=totalTasks-doneTasks;
 
 const percent=totalTasks?(doneTasks/totalTasks)*100:0;
-document.getElementById("progressBar").style.width=percent+"%";
+progressBar.style.width=percent+"%";
 }
 
 /* MODE */
@@ -306,7 +388,13 @@ document.body.classList.toggle("light");
 
 /* INFO */
 function showInfo(){
-alert("TaskFlow PRO 🚀");
+alert(`TaskFlow 🚀
+
+✔ Organización inteligente
+✔ IA de categorías
+✔ Diseño 4K
+
+Creado por Ivan`);
 }
 
 /* ENTER */
