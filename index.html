@@ -3,65 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TaskFlow</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;transition:all 0.2s;}
 button{all:unset;cursor:pointer;}
 
 :root{
   --violet:#7c3aed;
 }
 
-/* 🌌 FONDO ANIMADO */
+/* 🌌 FONDO */
 body{
   font-family:Inter,sans-serif;
   color:#e5e7eb;
   min-height:100vh;
-  overflow-x:hidden;
-  background:#0a0a0f;
+  background: radial-gradient(circle at 20% 20%, #1a1a2e, #0a0a0f 60%);
 }
 
-body::before{
-  content:"";
-  position:fixed;
-  width:200%;
-  height:200%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(124,58,237,0.05),
-    rgba(124,58,237,0.05) 2px,
-    transparent 2px,
-    transparent 40px
-  );
-  animation: moveBg 20s linear infinite;
-  z-index:-1;
-}
-
-@keyframes moveBg{
-  from{transform:translate(0,0);}
-  to{transform:translate(-200px,-200px);}
-}
-
-/* ☀️ LIGHT */
+/* LIGHT MODE */
 body.light{
   background:#f8fafc;
   color:#0f172a;
 }
 
-body.light::before{
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(124,58,237,0.08),
-    rgba(124,58,237,0.08) 2px,
-    transparent 2px,
-    transparent 40px
-  );
-}
-
-/* APP FULL */
+/* APP */
 .app{
-  width:100%;
+  max-width:900px;
+  margin:auto;
   padding:30px;
 }
 
@@ -73,31 +45,40 @@ body.light::before{
 }
 
 .header button{
-  background:#1f2937;
+  background:rgba(31,41,55,0.6);
+  backdrop-filter:blur(10px);
   padding:10px;
   border-radius:12px;
 }
 
-body.light .header button{
-  background:#e2e8f0;
-}
-
-/* TITLE */
+/* TITULO */
 h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:20px;}
+.subtitle{text-align:center;margin-bottom:20px;opacity:0.7;}
 
 /* STATS */
 .stats{
   display:flex;
   justify-content:space-between;
-  margin-bottom:15px;
-  background:#1f2937;
-  padding:10px;
-  border-radius:12px;
+  margin-bottom:10px;
+  background:rgba(31,41,55,0.6);
+  backdrop-filter:blur(10px);
+  padding:12px;
+  border-radius:14px;
 }
 
-body.light .stats{
-  background:#e2e8f0;
+/* PROGRESS */
+.progress{
+  height:8px;
+  background:#1f2937;
+  border-radius:10px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+
+#progressBar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#7c3aed,#9333ea);
 }
 
 /* INPUT */
@@ -109,93 +90,65 @@ body.light .stats{
 
 input{
   flex:1;
-  padding:14px;
-  border-radius:12px;
-  border:none;
-  background:#1f2937;
+  padding:16px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.05);
+  background:rgba(31,41,55,0.6);
+  backdrop-filter:blur(8px);
   color:white;
-}
-
-body.light input{
-  background:#f1f5f9;
-  color:#0f172a;
 }
 
 input:focus{
   outline:none;
-  box-shadow:0 0 10px var(--violet);
+  box-shadow:0 0 15px rgba(124,58,237,0.5);
 }
 
-/* ADD */
+/* ADD BTN */
 .add-btn{
-  background:var(--violet);
-  padding:0 20px;
-  border-radius:12px;
+  background:linear-gradient(135deg,#7c3aed,#9333ea);
+  padding:0 22px;
+  border-radius:14px;
   color:white;
+  font-weight:bold;
 }
 
 /* GRID */
 #taskList{
   display:grid;
-  grid-template-columns:1fr;
   gap:12px;
-}
-
-@media(min-width:1200px){
-  #taskList{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(min-width:2000px){
-  #taskList{
-    grid-template-columns:1fr 1fr 1fr;
-  }
 }
 
 /* TASK */
 .task{
-  background:#1f2937;
+  background:rgba(31,41,55,0.6);
+  backdrop-filter:blur(10px);
   padding:14px;
-  border-radius:12px;
+  border-radius:14px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  transition:0.2s;
-}
-
-body.light .task{
-  background:white;
-  border:1px solid #e2e8f0;
 }
 
 .task:hover{
-  transform:scale(1.02);
-  box-shadow:0 0 15px rgba(124,58,237,0.2);
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(124,58,237,0.2);
 }
 
-/* CLICK COMPLETAR */
-.task.clickable{
-  cursor:pointer;
-}
-
-/* LEFT */
 .left{
   display:flex;
   align-items:center;
   gap:10px;
 }
 
-/* BADGE */
 .badge{
-  padding:4px 8px;
-  border-radius:8px;
-  font-size:12px;
-  background:var(--violet);
-  color:white;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  background:rgba(124,58,237,0.2);
+  border:1px solid rgba(124,58,237,0.4);
+  color:#c4b5fd;
 }
 
-/* DELETE */
 .delete{
   color:#9ca3af;
 }
@@ -204,7 +157,6 @@ body.light .task{
   color:#ef4444;
 }
 
-/* COMPLETED */
 .completed span{
   text-decoration:line-through;
   opacity:0.5;
@@ -213,10 +165,7 @@ body.light .task{
 /* MOBILE */
 @media(max-width:768px){
   .input-group{flex-direction:column;}
-  .add-btn{width:100%;text-align:center;padding:12px;}
-  .task{flex-direction:column;align-items:flex-start;}
 }
-
 </style>
 </head>
 
@@ -238,8 +187,12 @@ body.light .task{
 <div>⏳: <span id="pending">0</span></div>
 </div>
 
+<div class="progress">
+<div id="progressBar"></div>
+</div>
+
 <div class="input-group">
-<input id="taskInput" placeholder="Escribe algo...">
+<input id="taskInput" placeholder="Añadir tarea + Enter">
 <button class="add-btn" onclick="addTask()">+</button>
 </div>
 
@@ -249,16 +202,12 @@ body.light .task{
 
 <script>
 
-/* IA MEJORADA */
+/* IA */
 function detectCategory(text){
 text=text.toLowerCase();
-
-if(text.includes("comprar")||text.includes("super")) return "Compras";
-if(text.includes("estudiar")||text.includes("curso")) return "Estudio";
-if(text.includes("gym")||text.includes("entrenar")) return "Gym";
-if(text.includes("trabajo")) return "Trabajo";
-if(text.includes("comer")||text.includes("cena")) return "Comida";
-
+if(text.includes("comprar")) return "Compras";
+if(text.includes("estudiar")) return "Estudio";
+if(text.includes("gym")) return "Gym";
 return "General";
 }
 
@@ -268,14 +217,34 @@ let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 function addTask(){
 if(!taskInput.value.trim()) return;
 
-tasks.push({
+tasks.unshift({
 text:taskInput.value,
 completed:false,
 category:detectCategory(taskInput.value)
 });
 
 taskInput.value="";
+taskInput.focus();
+
 save();
+}
+
+/* TOGGLE */
+function toggle(i){
+tasks[i].completed=!tasks[i].completed;
+save();
+}
+
+/* DELETE */
+function del(i){
+tasks.splice(i,1);
+save();
+}
+
+/* SAVE */
+function save(){
+localStorage.setItem("tasks",JSON.stringify(tasks));
+render();
 }
 
 /* RENDER */
@@ -283,18 +252,35 @@ function render(){
 taskList.innerHTML="";
 
 tasks.forEach((t,i)=>{
-taskList.innerHTML+=`
-<div class="task clickable ${t.completed?"completed":""}" onclick="toggle(${i})">
+const div=document.createElement("div");
 
+div.className=`task ${t.completed?"completed":""}`;
+
+div.innerHTML=`
 <div class="left">
 <input type="checkbox" ${t.completed?"checked":""}>
 <span>${t.text}</span>
 <span class="badge">${t.category}</span>
 </div>
+<button class="delete">✖</button>
+`;
 
-<button class="delete" onclick="event.stopPropagation(); del(${i})">✖</button>
+div.onclick=()=>toggle(i);
 
-</div>`;
+div.querySelector(".delete").onclick=(e)=>{
+e.stopPropagation();
+del(i);
+};
+
+/* animación */
+div.style.opacity="0";
+div.style.transform="translateY(10px)";
+setTimeout(()=>{
+div.style.opacity="1";
+div.style.transform="translateY(0)";
+},50);
+
+taskList.appendChild(div);
 });
 
 updateStats();
@@ -302,25 +288,15 @@ updateStats();
 
 /* STATS */
 function updateStats(){
-total.textContent=tasks.length;
-done.textContent=tasks.filter(t=>t.completed).length;
-pending.textContent=tasks.filter(t=>!t.completed).length;
-}
+const totalTasks=tasks.length;
+const doneTasks=tasks.filter(t=>t.completed).length;
 
-/* FUNCIONES */
-function toggle(i){
-tasks[i].completed=!tasks[i].completed;
-save();
-}
+total.textContent=totalTasks;
+done.textContent=doneTasks;
+pending.textContent=totalTasks-doneTasks;
 
-function del(i){
-tasks.splice(i,1);
-save();
-}
-
-function save(){
-localStorage.setItem("tasks",JSON.stringify(tasks));
-render();
+const percent=totalTasks?(doneTasks/totalTasks)*100:0;
+document.getElementById("progressBar").style.width=percent+"%";
 }
 
 /* MODE */
@@ -328,21 +304,14 @@ function toggleMode(){
 document.body.classList.toggle("light");
 }
 
-/* INFO PRO */
+/* INFO */
 function showInfo(){
-alert(`TaskFlow PRO 🚀
-
-✔ Click en tarea = completar
-✔ IA detecta categorías
-✔ Drag & Drop (próximo nivel)
-✔ Diseño responsive 4K
-
-Desarrollado por Ivan`);
+alert("TaskFlow PRO 🚀");
 }
 
-/* IA realtime */
-taskInput.addEventListener("input",()=>{
-taskInput.placeholder="→ "+detectCategory(taskInput.value);
+/* ENTER */
+taskInput.addEventListener("keypress",e=>{
+if(e.key==="Enter") addTask();
 });
 
 render();
