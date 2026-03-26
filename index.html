@@ -51,7 +51,7 @@ transition:0.2s;
 .btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(124,58,237,0.4);}
 
 /* inputs */
-.input-group{display:flex;gap:10px;margin:20px 0;}
+.input-group{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap;}
 
 input, select{
 padding:14px;
@@ -68,6 +68,7 @@ background-clip:padding-box;
 
 input{flex:1;}
 
+/* select */
 select{
 padding-right:35px;
 background-image:url("data:image/svg+xml;utf8,<svg fill='%237c3aed' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
@@ -151,7 +152,7 @@ color:#ef4444;
 transform:scale(1.2);
 }
 
-/* checkbox limpio */
+/* checkbox */
 .checkbox{
 display:flex;
 align-items:center;
@@ -159,10 +160,7 @@ justify-content:center;
 width:20px;
 height:20px;
 }
-
-.checkbox input{
-display:none;
-}
+.checkbox input{display:none;}
 
 .checkmark{
 width:20px;
@@ -187,7 +185,6 @@ display:none;
 .checkbox input:checked + .checkmark{
 background:var(--violet);
 }
-
 .checkbox input:checked + .checkmark::after{
 display:block;
 }
@@ -221,6 +218,13 @@ display:block;
 <option>Comida</option>
 <option>Viaje</option>
 <option>Social</option>
+</select>
+
+<select id="prioritySelect">
+<option value="">Auto</option>
+<option>Alta</option>
+<option>Media</option>
+<option>Baja</option>
 </select>
 
 <button class="btn" onclick="addTask()">+</button>
@@ -264,14 +268,12 @@ if(r.keys.some(k=>text.includes(k))) return r.cat;
 return "General";
 }
 
-/* IA PRIORIDAD MEJORADA */
+/* IA PRIORIDAD */
 function detectPriority(text){
 text=text.toLowerCase();
 
 if(text.includes("urgente")||text.includes("ya")||text.includes("hoy")) return "Alta";
 if(text.includes("mañana")||text.includes("luego")) return "Baja";
-
-if(text.includes("comprar")||text.includes("pagar")||text.includes("medicamentos")) return "Alta";
 
 return "Media";
 }
@@ -281,18 +283,20 @@ function addTask(){
 if(!taskInput.value.trim()) return;
 
 let text=taskInput.value.trim();
-let manual=categorySelect.value;
+let manualCat=categorySelect.value;
+let manualPriority=prioritySelect.value;
 
 tasks.unshift({
 id:Date.now(),
 text:text,
 completed:false,
-category:manual||detectCategory(text),
-priority:detectPriority(text)
+category:manualCat || detectCategory(text),
+priority:manualPriority || detectPriority(text)
 });
 
 taskInput.value="";
 categorySelect.value="";
+prioritySelect.value="";
 save();
 }
 
