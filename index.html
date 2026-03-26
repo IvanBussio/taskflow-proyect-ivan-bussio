@@ -15,26 +15,26 @@ button{all:unset;cursor:pointer;}
   --violet:#7c3aed;
 }
 
-/* 🌌 FONDO ANIMADO MEJORADO */
+/* 🌌 BASE */
 body{
   font-family:Inter,sans-serif;
   min-height:100vh;
   transition:0.3s;
 }
 
-/* DARK */
+/* 🌙 DARK */
 body.dark{
   background:#0a0a0f;
   color:#e5e7eb;
 }
 
-/* LIGHT */
+/* ☀️ LIGHT */
 body.light{
-  background:#f8fafc;
-  color:#0f172a;
+  background:linear-gradient(135deg,#f5f3ff,#eef2ff);
+  color:#1e293b;
 }
 
-/* fondo dinámico */
+/* 🌌 FONDO ANIMADO */
 body::before{
   content:"";
   position:fixed;
@@ -53,13 +53,12 @@ body::before{
   100%{transform:translate(0,0);}
 }
 
-/* 🖥️ 4K FULL */
+/* 🖥️ LAYOUT */
 .app{
-  width:100%;
   max-width:1800px;
-  min-height:100vh;
   margin:auto;
   padding:40px;
+  min-height:100vh;
   display:flex;
   flex-direction:column;
 }
@@ -71,12 +70,11 @@ body::before{
   align-items:center;
 }
 
-/* TÍTULO PRO */
+/* TITULO */
 h1{
   font-size:2.8rem;
   border-bottom:3px solid var(--violet);
   display:inline-block;
-  padding-bottom:5px;
 }
 
 /* BOTONES */
@@ -93,6 +91,12 @@ h1{
   box-shadow:0 5px 15px rgba(124,58,237,0.4);
 }
 
+/* LIGHT BOTONES */
+body.light .btn{
+  background:rgba(124,58,237,0.1);
+  color:#4c1d95;
+}
+
 /* INPUT */
 input{
   padding:14px;
@@ -101,6 +105,11 @@ input{
   width:100%;
   background:rgba(20,20,30,0.6);
   color:inherit;
+}
+
+body.light input{
+  background:white;
+  border:1px solid rgba(124,58,237,0.2);
 }
 
 /* TASK */
@@ -113,6 +122,12 @@ input{
   align-items:center;
   background:rgba(20,20,30,0.6);
   transition:0.2s;
+}
+
+body.light .task{
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(124,58,237,0.15);
 }
 
 .task:hover{
@@ -131,6 +146,49 @@ input{
   text-align:center;
   opacity:0.6;
 }
+
+/* ✅ CHECKBOX CUSTOM */
+.checkbox{
+  position:relative;
+  width:20px;
+  height:20px;
+}
+
+.checkbox input{
+  opacity:0;
+}
+
+.checkmark{
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-radius:6px;
+  border:2px solid #7c3aed;
+}
+
+.checkbox input:checked + .checkmark{
+  background:#7c3aed;
+}
+
+.checkmark::after{
+  content:"";
+  position:absolute;
+  display:none;
+}
+
+.checkbox input:checked + .checkmark::after{
+  display:block;
+}
+
+.checkbox .checkmark::after{
+  left:6px;
+  top:2px;
+  width:5px;
+  height:10px;
+  border:solid white;
+  border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
 </style>
 </head>
 
@@ -142,12 +200,11 @@ input{
 <h1>TaskFlow</h1>
 
 <div style="display:flex; gap:10px;">
-<button class="btn" onclick="toggleMode()">🌙/☀️</button>
-<button class="btn" onclick="sortTasks()">A-Z</button>
+<button class="btn" onclick="toggleMode()" id="modeBtn">🌙</button>
 </div>
 </div>
 
-<div style="margin:20px 0;">
+<div style="margin:20px 0; display:flex; gap:10px;">
 <input id="taskInput" placeholder="Añadir tarea...">
 <button class="btn" onclick="addTask()">+</button>
 </div>
@@ -155,6 +212,7 @@ input{
 <div style="display:flex; gap:10px; margin-bottom:20px;">
 <button class="btn" onclick="selectAll()">Seleccionar todas</button>
 <button class="btn" onclick="deleteCompleted()">Borrar completadas</button>
+<button class="btn" onclick="sortTasks()">Ordenar</button>
 <button class="btn" onclick="deleteAll()">Borrar todo</button>
 </div>
 
@@ -183,6 +241,11 @@ completed:false
 taskInput.value="";
 save();
 }
+
+/* ENTER */
+taskInput.addEventListener("keypress",e=>{
+if(e.key==="Enter") addTask();
+});
 
 /* TOGGLE */
 function toggle(id){
@@ -226,6 +289,10 @@ save();
 function toggleMode(){
 document.body.classList.toggle("light");
 document.body.classList.toggle("dark");
+
+const btn=document.getElementById("modeBtn");
+
+btn.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 }
 
 /* SAVE */
@@ -244,10 +311,15 @@ const div=document.createElement("div");
 div.className=`task ${t.completed?"completed":""}`;
 
 div.innerHTML=`
-<div>
+<div style="display:flex; gap:10px; align-items:center;">
+<label class="checkbox">
 <input type="checkbox" ${t.completed?"checked":""}>
+<span class="checkmark"></span>
+</label>
+
 <span>${t.text}</span>
 </div>
+
 <button onclick="del(${t.id})">✖</button>
 `;
 
