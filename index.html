@@ -10,174 +10,116 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 button{all:unset;cursor:pointer;}
-
 :root{--violet:#7c3aed;}
 
-body{
-  font-family:Inter,sans-serif;
-  min-height:100vh;
-  transition:0.3s;
-}
-
-/* DARK / LIGHT */
+body{font-family:Inter;transition:0.3s;}
 body.dark{background:#0a0a0f;color:#e5e7eb;}
 body.light{background:linear-gradient(135deg,#f5f3ff,#eef2ff);color:#1e293b;}
 
-/* fondo animado */
+/* fondo */
 body::before{
-  content:"";
-  position:fixed;
-  width:200%;
-  height:200%;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(124,58,237,0.2), transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(124,58,237,0.2), transparent 40%);
-  animation:moveBg 20s linear infinite;
-  z-index:-1;
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:
+radial-gradient(circle at 20% 20%, rgba(124,58,237,0.2), transparent 40%),
+radial-gradient(circle at 80% 80%, rgba(124,58,237,0.2), transparent 40%);
+animation:moveBg 20s linear infinite;
+z-index:-1;
 }
 @keyframes moveBg{
-  0%{transform:translate(0,0);}
-  50%{transform:translate(-200px,-200px);}
-  100%{transform:translate(0,0);}
+0%{transform:translate(0,0);}
+50%{transform:translate(-200px,-200px);}
+100%{transform:translate(0,0);}
 }
 
 /* layout */
-.app{
-  max-width:1800px;
-  margin:auto;
-  padding:40px;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-}
+.app{max-width:1800px;margin:auto;padding:40px;display:flex;flex-direction:column;min-height:100vh;}
+.header{display:flex;justify-content:space-between;align-items:center;}
 
-/* header */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+h1{font-size:2.8rem;border-bottom:3px solid var(--violet);}
 
-h1{
-  font-size:2.8rem;
-  border-bottom:3px solid var(--violet);
-}
-
-/* botones */
 .btn{
-  padding:10px 14px;
-  border-radius:12px;
-  background:rgba(124,58,237,0.2);
-  border:1px solid rgba(124,58,237,0.4);
-  transition:0.2s;
+padding:10px 14px;
+border-radius:12px;
+background:rgba(124,58,237,0.2);
+border:1px solid rgba(124,58,237,0.4);
+transition:0.2s;
 }
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 5px 15px rgba(124,58,237,0.4);
-}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(124,58,237,0.4);}
 
-/* input */
-.input-group{
-  display:flex;
-  gap:10px;
-  margin:20px 0;
+.input-group{display:flex;gap:10px;margin:20px 0;}
+
+input,select{
+padding:14px;
+border-radius:12px;
+border:none;
+background:rgba(20,20,30,0.6);
+color:inherit;
 }
-input{
-  flex:1;
-  padding:14px;
-  border-radius:12px;
-  border:none;
-  background:rgba(20,20,30,0.6);
-  color:inherit;
-}
-body.light input{
-  background:white;
+input{flex:1;}
+
+body.light input,body.light select{
+background:white;
+border:1px solid rgba(124,58,237,0.2);
 }
 
 /* tareas */
 .task{
-  margin-top:10px;
-  padding:14px;
-  border-radius:14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:rgba(20,20,30,0.6);
+margin-top:10px;
+padding:14px;
+border-radius:14px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(20,20,30,0.6);
+}
+body.light .task{background:rgba(255,255,255,0.7);}
+
+.completed .task-text{
+text-decoration:line-through;
+color:#22c55e;
 }
 
-body.light .task{
-  background:rgba(255,255,255,0.7);
-}
-
-.completed span{
-  text-decoration:line-through;
-  color:#22c55e;
-}
-
-/* badge */
+/* badges */
 .badge{
-  margin-left:10px;
-  padding:4px 8px;
-  border-radius:8px;
-  font-size:12px;
-  background:rgba(124,58,237,0.2);
+margin-left:8px;
+padding:4px 10px;
+border-radius:999px;
+font-size:11px;
+background:rgba(124,58,237,0.2);
 }
+
+.priority-Alta{background:#ef4444;color:white;}
+.priority-Media{background:#f59e0b;color:white;}
+.priority-Baja{background:#22c55e;color:white;}
 
 /* checkbox */
-.checkbox{
-  position:relative;
-  width:20px;height:20px;
-}
+.checkbox{position:relative;width:20px;height:20px;}
 .checkbox input{opacity:0;}
 .checkmark{
-  position:absolute;
-  width:20px;height:20px;
-  border-radius:6px;
-  border:2px solid #7c3aed;
+position:absolute;
+width:20px;height:20px;
+border-radius:6px;
+border:2px solid #7c3aed;
 }
 .checkbox input:checked + .checkmark{background:#7c3aed;}
 .checkmark::after{
-  content:"";
-  position:absolute;
-  display:none;
+content:"";position:absolute;display:none;
 }
 .checkbox input:checked + .checkmark::after{display:block;}
 .checkmark::after{
-  left:6px;top:2px;width:5px;height:10px;
-  border:solid white;border-width:0 2px 2px 0;
-  transform:rotate(45deg);
+left:6px;top:2px;width:5px;height:10px;
+border:solid white;border-width:0 2px 2px 0;
+transform:rotate(45deg);
 }
 
-/* bienvenida */
-.welcome{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--violet);
-  padding:12px 20px;
-  border-radius:20px;
-  color:white;
-  z-index:10;
-  animation:fadeOut 3s forwards;
-}
-@keyframes fadeOut{
-  0%{opacity:1;}
-  80%{opacity:1;}
-  100%{opacity:0;}
-}
-
-.footer{
-  margin-top:auto;
-  text-align:center;
-  opacity:0.6;
-}
+.footer{margin-top:auto;text-align:center;opacity:0.6;}
 </style>
 </head>
 
 <body class="dark">
-
-<div class="welcome">Bienvenido a TaskFlow 🚀</div>
 
 <div class="app">
 
@@ -192,6 +134,18 @@ body.light .task{
 
 <div class="input-group">
 <input id="taskInput" placeholder="Añadir tarea...">
+
+<select id="categorySelect">
+<option value="">Auto</option>
+<option>Compras</option>
+<option>Trabajo</option>
+<option>Estudio</option>
+<option>Fitness</option>
+<option>Comida</option>
+<option>Viaje</option>
+<option>Social</option>
+</select>
+
 <button class="btn" onclick="addTask()">+</button>
 </div>
 
@@ -205,7 +159,7 @@ body.light .task{
 <div id="taskList"></div>
 
 <footer class="footer">
-  Designed & Built by Ivan
+Designed & Built by Ivan
 </footer>
 
 </div>
@@ -214,38 +168,74 @@ body.light .task{
 
 let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 
-/* IA CATEGORÍAS */
+/* IA CATEGORIA */
 function detectCategory(text){
 text=text.toLowerCase();
 
-if(text.includes("comprar")||text.includes("super")) return "Compras";
-if(text.includes("estudiar")||text.includes("curso")) return "Estudio";
-if(text.includes("gym")||text.includes("entrenar")) return "Fitness";
-if(text.includes("trabajo")||text.includes("reunion")) return "Trabajo";
-if(text.includes("comer")||text.includes("cena")) return "Comida";
-if(text.includes("viaje")||text.includes("hotel")) return "Viaje";
+const rules=[
+{cat:"Compras",keys:["comprar","super","pan","leche"]},
+{cat:"Estudio",keys:["estudiar","curso","ingles"]},
+{cat:"Trabajo",keys:["trabajo","email","reunion"]},
+{cat:"Fitness",keys:["gym","entrenar"]},
+{cat:"Comida",keys:["comer","cena"]},
+{cat:"Viaje",keys:["viaje","hotel"]},
+];
 
+for(let r of rules){
+if(r.keys.some(k=>text.includes(k))) return r.cat;
+}
 return "General";
+}
+
+/* IA PRIORIDAD */
+function detectPriority(text){
+text=text.toLowerCase();
+
+if(text.includes("urgente")||text.includes("ya")) return "Alta";
+if(text.includes("luego")) return "Baja";
+return "Media";
 }
 
 /* ADD */
 function addTask(){
 if(!taskInput.value.trim()) return;
 
+let text=taskInput.value.trim();
+let manual=categorySelect.value;
+
+if(text.length<3){
+alert("💡 Describe mejor la tarea");
+return;
+}
+
 tasks.unshift({
 id:Date.now(),
-text:taskInput.value,
+text:text,
 completed:false,
-category:detectCategory(taskInput.value)
+category:manual||detectCategory(text),
+priority:detectPriority(text)
 });
 
 taskInput.value="";
+categorySelect.value="";
 save();
 }
 
 /* ENTER */
 taskInput.addEventListener("keypress",e=>{
 if(e.key==="Enter") addTask();
+});
+
+/* IA SUGERENCIA */
+taskInput.addEventListener("input",()=>{
+let t=taskInput.value.toLowerCase();
+
+if(t.includes("comprar"))
+taskInput.placeholder="💡 Comprar pan, leche...";
+else if(t.includes("estudiar"))
+taskInput.placeholder="💡 Estudiar 1h...";
+else
+taskInput.placeholder="Añadir tarea...";
 });
 
 /* TOGGLE */
@@ -270,12 +260,12 @@ function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
 function toggleMode(){
 document.body.classList.toggle("light");
 document.body.classList.toggle("dark");
-modeBtn.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+modeBtn.textContent=document.body.classList.contains("light")?"☀️":"🌙";
 }
 
 /* INFO */
 function showInfo(){
-alert("TaskFlow\n\nOrganiza tu día de forma simple.\n\nDesarrollado por Ivan");
+alert("TaskFlow IA Nivel 2 🚀\n\nOrganiza tu día inteligentemente.");
 }
 
 /* SAVE */
@@ -294,14 +284,16 @@ const div=document.createElement("div");
 div.className=`task ${t.completed?"completed":""}`;
 
 div.innerHTML=`
-<div style="display:flex; align-items:center; gap:10px;">
+<div style="display:flex; gap:10px; align-items:center;">
 <label class="checkbox">
 <input type="checkbox" ${t.completed?"checked":""}>
 <span class="checkmark"></span>
 </label>
 
-<span>${t.text}</span>
+<span class="task-text">${t.text}</span>
+
 <span class="badge">${t.category}</span>
+<span class="badge priority-${t.priority}">${t.priority}</span>
 </div>
 
 <button onclick="del(${t.id})">✖</button>
