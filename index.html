@@ -1,407 +1,218 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TaskFlow</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-button{all:unset;cursor:pointer;}
-
-:root{
-  --violet:#7c3aed;
+<script>
+tailwind.config = {
+  darkMode: 'class',
 }
+</script>
 
-/* 🌌 FONDO ANIMADO */
-body{
-  font-family:Inter,sans-serif;
-  color:#e5e7eb;
-  min-height:100vh;
-  background:#0a0a0f;
-  overflow-x:hidden;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  width:200%;
-  height:200%;
-  background:
-    repeating-linear-gradient(
-      60deg,
-      rgba(124,58,237,0.06),
-      rgba(124,58,237,0.06) 2px,
-      transparent 2px,
-      transparent 60px
-    );
-  animation:moveBg 25s linear infinite;
-  z-index:-1;
-}
-
-@keyframes moveBg{
-  from{transform:translate(0,0);}
-  to{transform:translate(-300px,-300px);}
-}
-
-/* ☀️ LIGHT MODE */
-body.light{
-  background:#f8fafc;
-  color:#0f172a;
-}
-
-/* 👋 BIENVENIDA */
-.welcome{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--violet);
-  padding:12px 20px;
-  border-radius:20px;
-  color:white;
-  z-index:10;
-  animation:fadeOut 3s forwards;
-}
-
-@keyframes fadeOut{
-  0%{opacity:1;}
-  80%{opacity:1;}
-  100%{opacity:0;}
-}
-
-/* 🧱 APP */
-.app{
-  width:100%;
-  max-width:1400px;
-  margin:auto;
-  padding:40px;
-}
-
-@media(min-width:1800px){
-  .app{
-    max-width:1800px;
-  }
-}
-
-/* HEADER */
-.header{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:20px;
-}
-
-.header button{
-  background:linear-gradient(135deg,#7c3aed,#9333ea);
-  color:white;
-  padding:10px;
-  border-radius:12px;
-}
-
-/* TITULO */
-h1{text-align:center;font-size:2.5rem;}
-.subtitle{text-align:center;margin-bottom:20px;opacity:0.7;}
-
-/* STATS */
-.stats{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:10px;
-  background:rgba(20,20,30,0.6);
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(124,58,237,0.1);
-  padding:12px;
-  border-radius:16px;
-}
-
-/* PROGRESS */
-.progress{
-  height:8px;
-  background:#1f2937;
-  border-radius:10px;
-  margin-bottom:20px;
-  overflow:hidden;
-}
-
-#progressBar{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#7c3aed,#9333ea);
-  transition:0.3s;
-}
-
-/* INPUT */
-.input-group{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-input{
-  flex:1;
-  padding:16px;
-  border-radius:14px;
-  border:none;
-  background:rgba(20,20,30,0.6);
-  backdrop-filter:blur(8px);
-  color:white;
-}
-
-input:focus{
-  outline:none;
-  box-shadow:0 0 10px var(--violet);
-}
-
-/* BOTON */
-.add-btn{
-  background:linear-gradient(135deg,#7c3aed,#9333ea);
-  padding:0 22px;
-  border-radius:14px;
-  color:white;
-  font-weight:bold;
-}
-
-/* GRID */
-#taskList{
-  display:grid;
-  gap:16px;
-}
-
-/* TASK */
-.task{
-  background:rgba(20,20,30,0.6);
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(124,58,237,0.1);
-  padding:16px;
-  border-radius:16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  transition:0.2s;
-}
-
-.task:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(124,58,237,0.2);
-}
-
-.left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.badge{
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:11px;
-  background:rgba(124,58,237,0.2);
-  border:1px solid rgba(124,58,237,0.4);
-  color:#c4b5fd;
-}
-
-.delete{
-  color:#9ca3af;
-}
-
-.delete:hover{
-  color:#ef4444;
-}
-
-.completed span{
-  text-decoration:line-through;
-  opacity:0.5;
-}
-
-/* FOOTER */
-.footer{
-  margin-top:40px;
-  text-align:center;
-  font-size:14px;
-  opacity:0.6;
-}
-
-.footer a{
-  color:#a78bfa;
-  text-decoration:none;
-}
-
-.footer a:hover{
-  text-decoration:underline;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .input-group{flex-direction:column;}
-}
-</style>
 </head>
 
-<body>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
 
-<div id="welcome" class="welcome">
-  Bienvenido a TaskFlow 🚀
-</div>
+<!-- HEADER -->
+<header class="p-4 flex justify-between items-center max-w-5xl mx-auto">
+  <h1 class="text-3xl font-bold">TaskFlow</h1>
+  <button onclick="toggleMode()" class="px-3 py-1 rounded bg-purple-600 text-white">🌙</button>
+</header>
 
-<div class="app">
+<!-- MAIN -->
+<main class="max-w-5xl mx-auto p-4 grid md:grid-cols-3 gap-6">
 
-<div class="header">
-<button onclick="toggleMode()">🌙</button>
-<button onclick="showInfo()">ℹ️</button>
-</div>
+  <!-- LEFT -->
+  <section class="md:col-span-2">
 
-<h1>TaskFlow</h1>
-<p class="subtitle">Organiza tu día</p>
+    <!-- FORM -->
+    <div class="flex gap-2 mb-4">
+      <input id="taskInput" placeholder="Añadir tarea..."
+        class="flex-1 p-3 rounded border dark:bg-gray-800">
+      <button onclick="addTask()" class="bg-purple-600 text-white px-4 rounded">+</button>
+    </div>
 
-<div class="stats">
-<div>Total: <span id="total">0</span></div>
-<div>✔: <span id="done">0</span></div>
-<div>⏳: <span id="pending">0</span></div>
-</div>
+    <!-- SEARCH -->
+    <input id="searchInput" placeholder="Buscar..."
+      class="w-full p-2 mb-4 rounded border dark:bg-gray-800">
 
-<div class="progress">
-<div id="progressBar"></div>
-</div>
+    <!-- FILTERS -->
+    <div class="flex gap-2 mb-4">
+      <button onclick="setFilter('all')" class="px-3 py-1 bg-gray-300 dark:bg-gray-700 rounded">Todas</button>
+      <button onclick="setFilter('pending')" class="px-3 py-1 bg-gray-300 dark:bg-gray-700 rounded">Pendientes</button>
+      <button onclick="setFilter('done')" class="px-3 py-1 bg-gray-300 dark:bg-gray-700 rounded">Completadas</button>
+    </div>
 
-<div class="input-group">
-<input id="taskInput" placeholder="Añadir tarea + Enter">
-<button class="add-btn" onclick="addTask()">+</button>
-</div>
+    <!-- ACTIONS -->
+    <div class="flex gap-2 mb-4">
+      <button onclick="completeAll()" class="px-3 py-1 bg-green-600 text-white rounded">Completar todo</button>
+      <button onclick="deleteCompleted()" class="px-3 py-1 bg-red-600 text-white rounded">Borrar completadas</button>
+    </div>
 
-<div id="taskList"></div>
+    <!-- TASK LIST -->
+    <div id="taskList" class="space-y-3"></div>
 
-<footer class="footer">
-  Made by Ivan — 
-  <a href="https://cornerestudios.com" target="_blank">
-    Corner Estudios
-  </a>
+  </section>
+
+  <!-- ASIDE -->
+  <aside class="bg-white dark:bg-gray-800 p-4 rounded shadow h-fit">
+    <h2 class="font-bold mb-2">Estadísticas</h2>
+    <p>Total: <span id="total">0</span></p>
+    <p>Completadas: <span id="done">0</span></p>
+    <p>Pendientes: <span id="pending">0</span></p>
+  </aside>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="text-center mt-10 p-4 opacity-60">
+  Made by Ivan — <a href="https://cornerestudios.com" class="text-purple-500">Corner Estudios</a>
 </footer>
-
-</div>
 
 <script>
 
-/* IA */
-function detectCategory(text){
-text=text.toLowerCase();
-if(text.includes("comprar")) return "Compras";
-if(text.includes("estudiar")) return "Estudio";
-if(text.includes("gym")) return "Gym";
-return "General";
-}
-
-let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+/* STATE */
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let filter = "all";
 
 /* ADD */
 function addTask(){
-if(!taskInput.value.trim()) return;
+  const input = document.getElementById("taskInput");
+  if(!input.value.trim()) return;
 
-tasks.unshift({
-text:taskInput.value,
-completed:false,
-category:detectCategory(taskInput.value)
-});
+  tasks.unshift({
+    id: Date.now(),
+    title: input.value,
+    completed:false,
+    createdAt: new Date()
+  });
 
-taskInput.value="";
-taskInput.focus();
-save();
+  input.value="";
+  save();
 }
 
 /* TOGGLE */
-function toggle(i){
-tasks[i].completed=!tasks[i].completed;
-save();
+function toggle(id){
+  tasks = tasks.map(t => t.id===id ? {...t, completed:!t.completed} : t);
+  save();
 }
 
 /* DELETE */
-function del(i){
-if(confirm("¿Eliminar tarea?")){
-tasks.splice(i,1);
-save();
+function del(id){
+  tasks = tasks.filter(t => t.id !== id);
+  save();
 }
+
+/* EDIT */
+function editTask(id){
+  const newText = prompt("Editar tarea:");
+  if(!newText) return;
+
+  tasks = tasks.map(t => t.id===id ? {...t, title:newText} : t);
+  save();
+}
+
+/* FILTER */
+function setFilter(type){
+  filter = type;
+  render();
+}
+
+/* ACTIONS */
+function completeAll(){
+  tasks = tasks.map(t => ({...t, completed:true}));
+  save();
+}
+
+function deleteCompleted(){
+  tasks = tasks.filter(t => !t.completed);
+  save();
 }
 
 /* SAVE */
 function save(){
-localStorage.setItem("tasks",JSON.stringify(tasks));
-render();
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  render();
 }
 
 /* RENDER */
 function render(){
-taskList.innerHTML="";
+  const list = document.getElementById("taskList");
+  const search = document.getElementById("searchInput").value.toLowerCase();
 
-tasks.forEach((t,i)=>{
-const div=document.createElement("div");
+  list.innerHTML="";
 
-div.className=`task ${t.completed?"completed":""}`;
+  let filtered = tasks.filter(t=>{
+    if(filter==="pending") return !t.completed;
+    if(filter==="done") return t.completed;
+    return true;
+  });
 
-div.innerHTML=`
-<div class="left">
-<input type="checkbox" ${t.completed?"checked":""}>
-<span>${t.text}</span>
-<span class="badge">${t.category}</span>
-</div>
-<button class="delete">✖</button>
-`;
+  filtered = filtered.filter(t=> t.title.toLowerCase().includes(search));
 
-div.onclick=()=>toggle(i);
+  filtered.forEach(t=>{
+    const div = document.createElement("div");
 
-div.querySelector(".delete").onclick=(e)=>{
-e.stopPropagation();
-del(i);
-};
+    div.className = "flex justify-between items-center p-3 rounded bg-white dark:bg-gray-800 shadow";
 
-/* animación */
-div.style.opacity="0";
-div.style.transform="translateY(10px)";
-setTimeout(()=>{
-div.style.opacity="1";
-div.style.transform="translateY(0)";
-},50);
+    div.innerHTML = `
+      <div class="flex gap-2 items-center">
+        <input type="checkbox" ${t.completed?"checked":""}>
+        <span class="${t.completed?"line-through opacity-50":""}">
+          ${t.title}
+        </span>
+      </div>
 
-taskList.appendChild(div);
-});
+      <div class="flex gap-2">
+        <button class="text-blue-500">✏️</button>
+        <button class="text-red-500">✖</button>
+      </div>
+    `;
 
-updateStats();
+    div.querySelector("input").onclick = ()=>toggle(t.id);
+    div.querySelector(".text-red-500").onclick = ()=>del(t.id);
+    div.querySelector(".text-blue-500").onclick = ()=>editTask(t.id);
+
+    list.appendChild(div);
+  });
+
+  updateStats();
 }
 
 /* STATS */
 function updateStats(){
-const totalTasks=tasks.length;
-const doneTasks=tasks.filter(t=>t.completed).length;
-
-total.textContent=totalTasks;
-done.textContent=doneTasks;
-pending.textContent=totalTasks-doneTasks;
-
-const percent=totalTasks?(doneTasks/totalTasks)*100:0;
-progressBar.style.width=percent+"%";
+  total.textContent = tasks.length;
+  done.textContent = tasks.filter(t=>t.completed).length;
+  pending.textContent = tasks.filter(t=>!t.completed).length;
 }
 
-/* MODE */
+/* DARK MODE */
 function toggleMode(){
-document.body.classList.toggle("light");
+  document.documentElement.classList.toggle("dark");
+  localStorage.setItem("theme",
+    document.documentElement.classList.contains("dark")
+  );
 }
 
-/* INFO */
-function showInfo(){
-alert(`TaskFlow 🚀
-
-✔ Organización inteligente
-✔ IA de categorías
-✔ Diseño 4K
-
-Creado por Ivan`);
+/* LOAD THEME */
+if(localStorage.getItem("theme")==="true"){
+  document.documentElement.classList.add("dark");
 }
+
+/* SEARCH */
+document.getElementById("searchInput").addEventListener("input", render);
 
 /* ENTER */
-taskInput.addEventListener("keypress",e=>{
-if(e.key==="Enter") addTask();
+document.getElementById("taskInput").addEventListener("keypress", e=>{
+  if(e.key==="Enter") addTask();
 });
 
+/* INIT */
 render();
 
 </script>
