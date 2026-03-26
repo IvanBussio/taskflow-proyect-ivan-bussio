@@ -12,35 +12,17 @@
 button{all:unset;cursor:pointer;}
 :root{--violet:#7c3aed;}
 
-body{font-family:Inter;transition:0.3s;}
-body.dark{background:#0a0a0f;color:#e5e7eb;}
-body.light{background:linear-gradient(135deg,#f5f3ff,#eef2ff);color:#1e293b;}
-
-/* fondo */
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-background:
-radial-gradient(circle at 20% 20%, rgba(124,58,237,0.2), transparent 40%),
-radial-gradient(circle at 80% 80%, rgba(124,58,237,0.2), transparent 40%);
-animation:moveBg 20s linear infinite;
-z-index:-1;
-}
-@keyframes moveBg{
-0%{transform:translate(0,0);}
-50%{transform:translate(-200px,-200px);}
-100%{transform:translate(0,0);}
+body{
+font-family:Inter;
+background:linear-gradient(135deg,#f5f3ff,#ede9fe,#fdf4ff);
+color:#1e293b;
 }
 
-/* layout principal */
+/* layout */
 .app{
 max-width:1800px;
 margin:auto;
 padding:20px 40px;
-display:flex;
-flex-direction:column;
 min-height:100vh;
 }
 
@@ -53,14 +35,14 @@ margin-bottom:20px;
 
 h1{font-size:2.5rem;border-bottom:3px solid var(--violet);}
 
-/* GRID DESKTOP */
+/* grid */
 .main{
 display:grid;
 grid-template-columns: 400px 1fr;
 gap:30px;
 }
 
-/* panel izquierdo */
+/* panel */
 .panel{
 display:flex;
 flex-direction:column;
@@ -69,23 +51,26 @@ gap:15px;
 
 /* botones */
 .btn{
-padding:10px 14px;
+padding:12px;
 border-radius:12px;
-background:rgba(124,58,237,0.2);
-border:1px solid rgba(124,58,237,0.4);
-transition:0.2s;
+background:rgba(124,58,237,0.15);
+border:1px solid rgba(124,58,237,0.3);
 text-align:center;
+transition:0.2s;
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(124,58,237,0.4);}
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 15px rgba(124,58,237,0.3);
+}
 
 /* inputs */
 input, select{
 padding:14px;
 border-radius:12px;
-border:1px solid transparent;
-background:rgba(20,20,30,0.8);
-color:inherit;
-appearance:none;
+border:1px solid rgba(124,58,237,0.2);
+background:white;
+color:#1e293b;
+font-size:14px;
 }
 
 select{
@@ -98,7 +83,7 @@ background-position:right 10px center;
 input:focus, select:focus{
 outline:none;
 border:1px solid var(--violet);
-box-shadow:0 0 0 2px rgba(124,58,237,0.3);
+box-shadow:0 0 0 2px rgba(124,58,237,0.2);
 }
 
 /* tareas */
@@ -109,25 +94,32 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:10px;
-background:rgba(20,20,30,0.6);
+background:white;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
 
 .task > div{
 display:flex;
 gap:10px;
 flex-wrap:wrap;
+align-items:center;
 }
 
 .task[data-priority="Alta"]{border-left:4px solid #ef4444;}
 .task[data-priority="Media"]{border-left:4px solid #f59e0b;}
 .task[data-priority="Baja"]{border-left:4px solid #22c55e;}
 
-.task-text{max-width:400px;word-break:break-word;}
+.task-text{
+max-width:400px;
+word-break:break-word;
+}
 
+/* badges */
 .badge{
 padding:4px 10px;
 border-radius:999px;
 font-size:11px;
+background:#eee;
 }
 
 .priority-Alta{background:#ef4444;color:white;}
@@ -136,53 +128,73 @@ font-size:11px;
 
 /* checkbox */
 .checkbox input{display:none;}
+
 .checkmark{
 width:20px;height:20px;
 border:2px solid var(--violet);
 border-radius:6px;
-display:flex;align-items:center;justify-content:center;
+display:flex;
+align-items:center;
+justify-content:center;
 }
-.checkbox input:checked + .checkmark{background:var(--violet);}
+
+.checkbox input:checked + .checkmark{
+background:var(--violet);
+}
+
 .checkmark::after{
 content:"";
 width:5px;height:10px;
-border:solid white;border-width:0 2px 2px 0;
+border:solid white;
+border-width:0 2px 2px 0;
 transform:rotate(45deg);
 display:none;
 }
-.checkbox input:checked + .checkmark::after{display:block;}
+
+.checkbox input:checked + .checkmark::after{
+display:block;
+}
 
 /* delete */
-.delete-btn{color:#9ca3af;transition:0.2s;}
-.delete-btn:hover{color:#ef4444;transform:scale(1.2);}
+.delete-btn{
+color:#9ca3af;
+transition:0.2s;
+}
+.delete-btn:hover{
+color:#ef4444;
+transform:scale(1.2);
+}
 
-/* MOBILE */
+/* mobile */
 @media (max-width:768px){
 .main{
 grid-template-columns:1fr;
 }
+
 .task{
 flex-direction:column;
 align-items:flex-start;
 }
+
 .delete-btn{
 align-self:flex-end;
 }
 }
 
-.footer{text-align:center;margin-top:auto;opacity:0.6;}
+.footer{
+text-align:center;
+margin-top:20px;
+opacity:0.6;
+}
 </style>
 </head>
 
-<body class="dark">
+<body>
 
 <div class="app">
 
 <div class="header">
 <h1>TaskFlow</h1>
-<div style="display:flex; gap:10px;">
-<button class="btn" onclick="toggleMode()" id="modeBtn">🌙</button>
-</div>
 </div>
 
 <div class="main">
@@ -245,6 +257,11 @@ taskInput.value="";
 render();
 }
 
+/* ENTER */
+taskInput.addEventListener("keydown",(e)=>{
+if(e.key==="Enter") addTask();
+});
+
 /* TOGGLE */
 function toggle(id){
 tasks=tasks.map(t=>t.id===id?{...t,completed:!t.completed}:t);
@@ -294,11 +311,6 @@ div.querySelector("input").onclick=()=>toggle(t.id);
 
 taskList.appendChild(div);
 });
-}
-
-function toggleMode(){
-document.body.classList.toggle("light");
-document.body.classList.toggle("dark");
 }
 
 render();
