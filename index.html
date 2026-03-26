@@ -5,11 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TaskFlow</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-/* 🌌 Fondo animado */
+*{margin:0;padding:0;box-sizing:border-box;}
+button{all:unset;cursor:pointer;}
+
+:root{
+  --violet:#7c3aed;
+}
+
+/* 🌌 FONDO ANIMADO */
 body{
+  font-family:Inter,sans-serif;
+  color:#e5e7eb;
+  min-height:100vh;
   background:#0a0a0f;
   overflow-x:hidden;
 }
@@ -22,8 +32,8 @@ body::before{
   background:
     repeating-linear-gradient(
       60deg,
-      rgba(124,58,237,0.08),
-      rgba(124,58,237,0.08) 2px,
+      rgba(124,58,237,0.06),
+      rgba(124,58,237,0.06) 2px,
       transparent 2px,
       transparent 60px
     );
@@ -36,35 +46,104 @@ body::before{
   to{transform:translate(-300px,-300px);}
 }
 
-/* 🖥️ 4K */
-.container{
-  max-width:1600px;
+/* APP */
+.app{
+  width:100%;
+  max-width:1400px;
   margin:auto;
+  padding:40px;
 }
 
-/* ✨ tarjetas */
-.card{
-  background:rgba(30,30,40,0.6);
-  backdrop-filter:blur(10px);
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.header button{
+  background:linear-gradient(135deg,#7c3aed,#9333ea);
+  color:white;
+  padding:10px;
+  border-radius:12px;
+}
+
+/* TITULO */
+h1{text-align:center;font-size:2.5rem;}
+.subtitle{text-align:center;margin-bottom:20px;opacity:0.7;}
+
+/* STATS */
+.stats{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  background:rgba(20,20,30,0.6);
+  backdrop-filter:blur(12px);
   border:1px solid rgba(124,58,237,0.1);
+  padding:12px;
+  border-radius:16px;
 }
 
-/* ✨ botones */
-.btn{
-  padding:8px 14px;
+/* PROGRESS */
+.progress{
+  height:8px;
+  background:#1f2937;
   border-radius:10px;
-  background:rgba(124,58,237,0.2);
-  border:1px solid rgba(124,58,237,0.4);
-  transition:0.2s;
+  margin-bottom:20px;
+  overflow:hidden;
 }
 
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 5px 15px rgba(124,58,237,0.4);
+#progressBar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#7c3aed,#9333ea);
 }
 
-/* ✨ tareas */
+/* INPUT */
+.input-group{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+input{
+  flex:1;
+  padding:16px;
+  border-radius:14px;
+  border:none;
+  background:rgba(20,20,30,0.6);
+  color:white;
+}
+
+input:focus{
+  outline:none;
+  box-shadow:0 0 10px var(--violet);
+}
+
+/* BOTON */
+.add-btn{
+  background:linear-gradient(135deg,#7c3aed,#9333ea);
+  padding:0 22px;
+  border-radius:14px;
+  color:white;
+  font-weight:bold;
+}
+
+/* TASK */
+#taskList{
+  display:grid;
+  gap:16px;
+}
+
 .task{
+  background:rgba(20,20,30,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(124,58,237,0.1);
+  padding:16px;
+  border-radius:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   transition:0.2s;
 }
 
@@ -72,112 +151,105 @@ body::before{
   transform:translateY(-2px);
   box-shadow:0 10px 25px rgba(124,58,237,0.2);
 }
-</style>
 
+.left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.badge{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  background:rgba(124,58,237,0.2);
+  border:1px solid rgba(124,58,237,0.4);
+  color:#c4b5fd;
+}
+
+.delete{
+  color:#9ca3af;
+}
+
+.delete:hover{
+  color:#ef4444;
+}
+
+.completed span{
+  text-decoration:line-through;
+  opacity:0.5;
+}
+</style>
 </head>
 
-<body class="text-gray-200 min-h-screen">
+<body>
 
-<header class="p-6 flex justify-between container">
-<h1 class="text-3xl font-bold">TaskFlow</h1>
-</header>
+<div class="app">
 
-<main class="container p-6 grid md:grid-cols-3 gap-6">
-
-<section class="md:col-span-2">
-
-<label for="taskInput" class="block mb-1">Nueva tarea</label>
-
-<div class="flex gap-2 mb-4">
-<input id="taskInput" class="flex-1 p-3 rounded bg-gray-800 text-white">
-<button onclick="addTask()" class="btn">+</button>
+<div class="header">
+<button onclick="showInfo()">ℹ️</button>
 </div>
 
-<input id="searchInput" placeholder="Buscar..." class="w-full p-2 mb-4 rounded bg-gray-800">
+<h1>TaskFlow</h1>
+<p class="subtitle">Organiza tu día</p>
 
-<div class="flex gap-2 mb-4">
-<button onclick="setFilter('all')" class="btn">Todas</button>
-<button onclick="setFilter('pending')" class="btn">Pendientes</button>
-<button onclick="setFilter('done')" class="btn">Completadas</button>
+<div class="stats">
+<div>Total: <span id="total">0</span></div>
+<div>✔: <span id="done">0</span></div>
+<div>⏳: <span id="pending">0</span></div>
 </div>
 
-<div class="flex gap-2 mb-4">
-<button onclick="completeAll()" class="btn">Completar todo</button>
-<button onclick="deleteCompleted()" class="btn">Borrar completadas</button>
+<div class="progress">
+<div id="progressBar"></div>
 </div>
 
-<div id="taskList" class="space-y-3"></div>
+<div class="input-group">
+<input id="taskInput" placeholder="Añadir tarea + Enter">
+<button class="add-btn" onclick="addTask()">+</button>
+</div>
 
-</section>
+<div id="taskList"></div>
 
-<aside class="card p-4 rounded h-fit">
-<h2 class="font-bold mb-2">Estadísticas</h2>
-<p>Total: <span id="total">0</span></p>
-<p>Completadas: <span id="done">0</span></p>
-<p>Pendientes: <span id="pending">0</span></p>
-</aside>
-
-</main>
-
-<footer class="text-center mt-10 p-4 opacity-60">
-Made by Ivan — 
-<a href="https://cornerestudios.com" class="text-purple-400">Corner Estudios</a>
+<footer style="text-align:center; margin-top:40px; opacity:0.6;">
+  Ivan — TaskFlow
 </footer>
+
+</div>
 
 <script>
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let filter = "all";
+function detectCategory(text){
+text=text.toLowerCase();
+if(text.includes("comprar")) return "Compras";
+if(text.includes("estudiar")) return "Estudio";
+return "General";
+}
+
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 
 /* ADD */
 function addTask(){
-const input=document.getElementById("taskInput");
-if(!input.value.trim()) return;
+if(!taskInput.value.trim()) return;
 
 tasks.unshift({
-id:Date.now(),
-title:input.value,
-completed:false
+text:taskInput.value,
+completed:false,
+category:detectCategory(taskInput.value)
 });
 
-input.value="";
+taskInput.value="";
 save();
 }
 
 /* TOGGLE */
-function toggle(id){
-tasks=tasks.map(t=>t.id===id?{...t,completed:!t.completed}:t);
+function toggle(i){
+tasks[i].completed=!tasks[i].completed;
 save();
 }
 
 /* DELETE */
-function del(id){
-tasks=tasks.filter(t=>t.id!==id);
-save();
-}
-
-/* EDIT */
-function editTask(id){
-const txt=prompt("Editar tarea:");
-if(!txt) return;
-tasks=tasks.map(t=>t.id===id?{...t,title:txt}:t);
-save();
-}
-
-/* FILTER */
-function setFilter(type){
-filter=type;
-render();
-}
-
-/* ACTIONS */
-function completeAll(){
-tasks=tasks.map(t=>({...t,completed:true}));
-save();
-}
-
-function deleteCompleted(){
-tasks=tasks.filter(t=>!t.completed);
+function del(i){
+tasks.splice(i,1);
 save();
 }
 
@@ -189,43 +261,30 @@ render();
 
 /* RENDER */
 function render(){
-const list=document.getElementById("taskList");
-const search=document.getElementById("searchInput").value.toLowerCase();
+taskList.innerHTML="";
 
-list.innerHTML="";
-
-let filtered=tasks.filter(t=>{
-if(filter==="pending") return !t.completed;
-if(filter==="done") return t.completed;
-return true;
-});
-
-filtered=filtered.filter(t=>t.title.toLowerCase().includes(search));
-
-filtered.forEach(t=>{
+tasks.forEach((t,i)=>{
 const div=document.createElement("div");
 
-div.className="task card p-3 rounded flex justify-between items-center";
+div.className=`task ${t.completed?"completed":""}`;
 
 div.innerHTML=`
-<div class="flex gap-2 items-center">
+<div class="left">
 <input type="checkbox" ${t.completed?"checked":""}>
-<span class="${t.completed?"line-through opacity-50":""}">
-${t.title}
-</span>
+<span>${t.text}</span>
+<span class="badge">${t.category}</span>
 </div>
-
-<div class="flex gap-2">
-<button class="btn">✏️</button>
-<button class="btn">✖</button>
-</div>
+<button class="delete">✖</button>
 `;
 
-div.querySelector("input").onclick=()=>toggle(t.id);
-div.querySelectorAll(".btn")[0].onclick=()=>editTask(t.id);
-div.querySelectorAll(".btn")[1].onclick=()=>del(t.id);
+div.onclick=()=>toggle(i);
 
-list.appendChild(div);
+div.querySelector(".delete").onclick=(e)=>{
+e.stopPropagation();
+del(i);
+};
+
+taskList.appendChild(div);
 });
 
 updateStats();
@@ -233,16 +292,24 @@ updateStats();
 
 /* STATS */
 function updateStats(){
-total.textContent=tasks.length;
-done.textContent=tasks.filter(t=>t.completed).length;
-pending.textContent=tasks.filter(t=>!t.completed).length;
+const totalTasks=tasks.length;
+const doneTasks=tasks.filter(t=>t.completed).length;
+
+total.textContent=totalTasks;
+done.textContent=doneTasks;
+pending.textContent=totalTasks-doneTasks;
+
+const percent=totalTasks?(doneTasks/totalTasks)*100:0;
+progressBar.style.width=percent+"%";
 }
 
-/* SEARCH */
-document.getElementById("searchInput").addEventListener("input",render);
+/* INFO */
+function showInfo(){
+alert("TaskFlow 🚀");
+}
 
 /* ENTER */
-document.getElementById("taskInput").addEventListener("keypress",e=>{
+taskInput.addEventListener("keypress",e=>{
 if(e.key==="Enter") addTask();
 });
 
