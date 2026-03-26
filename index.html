@@ -11,30 +11,19 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 button{all:unset;cursor:pointer;}
 
-:root{
-  --violet:#7c3aed;
-}
+:root{--violet:#7c3aed;}
 
-/* 🌌 BASE */
 body{
   font-family:Inter,sans-serif;
   min-height:100vh;
   transition:0.3s;
 }
 
-/* 🌙 DARK */
-body.dark{
-  background:#0a0a0f;
-  color:#e5e7eb;
-}
+/* DARK / LIGHT */
+body.dark{background:#0a0a0f;color:#e5e7eb;}
+body.light{background:linear-gradient(135deg,#f5f3ff,#eef2ff);color:#1e293b;}
 
-/* ☀️ LIGHT */
-body.light{
-  background:linear-gradient(135deg,#f5f3ff,#eef2ff);
-  color:#1e293b;
-}
-
-/* 🌌 FONDO ANIMADO */
+/* fondo animado */
 body::before{
   content:"";
   position:fixed;
@@ -46,14 +35,13 @@ body::before{
   animation:moveBg 20s linear infinite;
   z-index:-1;
 }
-
 @keyframes moveBg{
   0%{transform:translate(0,0);}
   50%{transform:translate(-200px,-200px);}
   100%{transform:translate(0,0);}
 }
 
-/* 🖥️ LAYOUT */
+/* layout */
 .app{
   max-width:1800px;
   margin:auto;
@@ -63,21 +51,19 @@ body::before{
   flex-direction:column;
 }
 
-/* HEADER */
+/* header */
 .header{
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 
-/* TITULO */
 h1{
   font-size:2.8rem;
   border-bottom:3px solid var(--violet);
-  display:inline-block;
 }
 
-/* BOTONES */
+/* botones */
 .btn{
   padding:10px 14px;
   border-radius:12px;
@@ -85,34 +71,30 @@ h1{
   border:1px solid rgba(124,58,237,0.4);
   transition:0.2s;
 }
-
 .btn:hover{
   transform:translateY(-2px);
   box-shadow:0 5px 15px rgba(124,58,237,0.4);
 }
 
-/* LIGHT BOTONES */
-body.light .btn{
-  background:rgba(124,58,237,0.1);
-  color:#4c1d95;
+/* input */
+.input-group{
+  display:flex;
+  gap:10px;
+  margin:20px 0;
 }
-
-/* INPUT */
 input{
+  flex:1;
   padding:14px;
   border-radius:12px;
   border:none;
-  width:100%;
   background:rgba(20,20,30,0.6);
   color:inherit;
 }
-
 body.light input{
   background:white;
-  border:1px solid rgba(124,58,237,0.2);
 }
 
-/* TASK */
+/* tareas */
 .task{
   margin-top:10px;
   padding:14px;
@@ -121,78 +103,81 @@ body.light input{
   justify-content:space-between;
   align-items:center;
   background:rgba(20,20,30,0.6);
-  transition:0.2s;
 }
 
 body.light .task{
   background:rgba(255,255,255,0.7);
-  backdrop-filter:blur(10px);
-  border:1px solid rgba(124,58,237,0.15);
 }
 
-.task:hover{
-  transform:translateY(-2px);
-}
-
-/* COMPLETADO */
 .completed span{
   text-decoration:line-through;
   color:#22c55e;
 }
 
-/* FOOTER */
-.footer{
-  margin-top:auto;
-  text-align:center;
-  opacity:0.6;
+/* badge */
+.badge{
+  margin-left:10px;
+  padding:4px 8px;
+  border-radius:8px;
+  font-size:12px;
+  background:rgba(124,58,237,0.2);
 }
 
-/* ✅ CHECKBOX CUSTOM */
+/* checkbox */
 .checkbox{
   position:relative;
-  width:20px;
-  height:20px;
+  width:20px;height:20px;
 }
-
-.checkbox input{
-  opacity:0;
-}
-
+.checkbox input{opacity:0;}
 .checkmark{
   position:absolute;
-  width:20px;
-  height:20px;
+  width:20px;height:20px;
   border-radius:6px;
   border:2px solid #7c3aed;
 }
-
-.checkbox input:checked + .checkmark{
-  background:#7c3aed;
-}
-
+.checkbox input:checked + .checkmark{background:#7c3aed;}
 .checkmark::after{
   content:"";
   position:absolute;
   display:none;
 }
-
-.checkbox input:checked + .checkmark::after{
-  display:block;
+.checkbox input:checked + .checkmark::after{display:block;}
+.checkmark::after{
+  left:6px;top:2px;width:5px;height:10px;
+  border:solid white;border-width:0 2px 2px 0;
+  transform:rotate(45deg);
 }
 
-.checkbox .checkmark::after{
-  left:6px;
-  top:2px;
-  width:5px;
-  height:10px;
-  border:solid white;
-  border-width:0 2px 2px 0;
-  transform:rotate(45deg);
+/* bienvenida */
+.welcome{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--violet);
+  padding:12px 20px;
+  border-radius:20px;
+  color:white;
+  z-index:10;
+  animation:fadeOut 3s forwards;
+}
+@keyframes fadeOut{
+  0%{opacity:1;}
+  80%{opacity:1;}
+  100%{opacity:0;}
+}
+
+.footer{
+  margin-top:auto;
+  text-align:center;
+  opacity:0.6;
 }
 </style>
 </head>
 
 <body class="dark">
+
+<div class="welcome">Bienvenido a TaskFlow 🚀</div>
 
 <div class="app">
 
@@ -201,10 +186,11 @@ body.light .task{
 
 <div style="display:flex; gap:10px;">
 <button class="btn" onclick="toggleMode()" id="modeBtn">🌙</button>
+<button class="btn" onclick="showInfo()">ℹ️</button>
 </div>
 </div>
 
-<div style="margin:20px 0; display:flex; gap:10px;">
+<div class="input-group">
 <input id="taskInput" placeholder="Añadir tarea...">
 <button class="btn" onclick="addTask()">+</button>
 </div>
@@ -228,6 +214,20 @@ body.light .task{
 
 let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
 
+/* IA CATEGORÍAS */
+function detectCategory(text){
+text=text.toLowerCase();
+
+if(text.includes("comprar")||text.includes("super")) return "Compras";
+if(text.includes("estudiar")||text.includes("curso")) return "Estudio";
+if(text.includes("gym")||text.includes("entrenar")) return "Fitness";
+if(text.includes("trabajo")||text.includes("reunion")) return "Trabajo";
+if(text.includes("comer")||text.includes("cena")) return "Comida";
+if(text.includes("viaje")||text.includes("hotel")) return "Viaje";
+
+return "General";
+}
+
 /* ADD */
 function addTask(){
 if(!taskInput.value.trim()) return;
@@ -235,7 +235,8 @@ if(!taskInput.value.trim()) return;
 tasks.unshift({
 id:Date.now(),
 text:taskInput.value,
-completed:false
+completed:false,
+category:detectCategory(taskInput.value)
 });
 
 taskInput.value="";
@@ -259,40 +260,22 @@ tasks=tasks.filter(t=>t.id!==id);
 save();
 }
 
-/* DELETE ALL */
-function deleteAll(){
-if(confirm("¿Borrar todo?")){
-tasks=[];
-save();
-}
-}
-
-/* SELECT ALL */
-function selectAll(){
-tasks=tasks.map(t=>({...t,completed:true}));
-save();
-}
-
-/* DELETE COMPLETED */
-function deleteCompleted(){
-tasks=tasks.filter(t=>!t.completed);
-save();
-}
-
-/* SORT */
-function sortTasks(){
-tasks.sort((a,b)=>a.text.localeCompare(b.text));
-save();
-}
+/* ACTIONS */
+function deleteAll(){tasks=[];save();}
+function selectAll(){tasks=tasks.map(t=>({...t,completed:true}));save();}
+function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
+function sortTasks(){tasks.sort((a,b)=>a.text.localeCompare(b.text));save();}
 
 /* MODE */
 function toggleMode(){
 document.body.classList.toggle("light");
 document.body.classList.toggle("dark");
+modeBtn.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+}
 
-const btn=document.getElementById("modeBtn");
-
-btn.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+/* INFO */
+function showInfo(){
+alert("TaskFlow\n\nOrganiza tu día de forma simple.\n\nDesarrollado por Ivan");
 }
 
 /* SAVE */
@@ -311,13 +294,14 @@ const div=document.createElement("div");
 div.className=`task ${t.completed?"completed":""}`;
 
 div.innerHTML=`
-<div style="display:flex; gap:10px; align-items:center;">
+<div style="display:flex; align-items:center; gap:10px;">
 <label class="checkbox">
 <input type="checkbox" ${t.completed?"checked":""}>
 <span class="checkmark"></span>
 </label>
 
 <span>${t.text}</span>
+<span class="badge">${t.category}</span>
 </div>
 
 <button onclick="del(${t.id})">✖</button>
