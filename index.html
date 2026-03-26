@@ -10,12 +10,26 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 button{all:unset;cursor:pointer;}
-:root{--violet:#7c3aed;}
+:root{
+--violet:#7c3aed;
+--bg-light:#f5f3ff;
+--bg-dark:#0a0a0f;
+}
 
 body{
 font-family:Inter;
+transition:0.3s;
+}
+
+/* MODOS */
+body.light{
 background:linear-gradient(135deg,#f5f3ff,#ede9fe,#fdf4ff);
 color:#1e293b;
+}
+
+body.dark{
+background:#0a0a0f;
+color:#e5e7eb;
 }
 
 /* layout */
@@ -24,6 +38,8 @@ max-width:1800px;
 margin:auto;
 padding:20px 40px;
 min-height:100vh;
+display:flex;
+flex-direction:column;
 }
 
 .header{
@@ -33,20 +49,9 @@ align-items:center;
 margin-bottom:20px;
 }
 
-h1{font-size:2.5rem;border-bottom:3px solid var(--violet);}
-
-/* grid */
-.main{
-display:grid;
-grid-template-columns: 400px 1fr;
-gap:30px;
-}
-
-/* panel */
-.panel{
-display:flex;
-flex-direction:column;
-gap:15px;
+h1{
+font-size:2.5rem;
+border-bottom:3px solid var(--violet);
 }
 
 /* botones */
@@ -55,12 +60,26 @@ padding:12px;
 border-radius:12px;
 background:rgba(124,58,237,0.15);
 border:1px solid rgba(124,58,237,0.3);
-text-align:center;
 transition:0.2s;
+text-align:center;
 }
 .btn:hover{
 transform:translateY(-2px);
-box-shadow:0 5px 15px rgba(124,58,237,0.3);
+box-shadow:0 5px 20px rgba(124,58,237,0.3);
+}
+
+/* GRID */
+.main{
+display:grid;
+grid-template-columns:400px 1fr;
+gap:30px;
+}
+
+/* panel */
+.panel{
+display:flex;
+flex-direction:column;
+gap:12px;
 }
 
 /* inputs */
@@ -69,21 +88,17 @@ padding:14px;
 border-radius:12px;
 border:1px solid rgba(124,58,237,0.2);
 background:white;
-color:#1e293b;
-font-size:14px;
 }
 
-select{
-padding-right:35px;
-background-image:url("data:image/svg+xml;utf8,<svg fill='%237c3aed' height='20' viewBox='0 0 20 20' width='20'><path d='M5 7l5 5 5-5z'/></svg>");
-background-repeat:no-repeat;
-background-position:right 10px center;
+body.dark input,
+body.dark select{
+background:#1a1a22;
+color:white;
 }
 
 input:focus, select:focus{
 outline:none;
-border:1px solid var(--violet);
-box-shadow:0 0 0 2px rgba(124,58,237,0.2);
+box-shadow:0 0 0 2px rgba(124,58,237,0.3);
 }
 
 /* tareas */
@@ -95,31 +110,26 @@ justify-content:space-between;
 align-items:center;
 margin-bottom:10px;
 background:white;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
+animation:fadeIn 0.3s ease;
 }
 
-.task > div{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-align-items:center;
+body.dark .task{
+background:#1a1a22;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
 }
 
 .task[data-priority="Alta"]{border-left:4px solid #ef4444;}
 .task[data-priority="Media"]{border-left:4px solid #f59e0b;}
 .task[data-priority="Baja"]{border-left:4px solid #22c55e;}
 
-.task-text{
-max-width:400px;
-word-break:break-word;
-}
-
-/* badges */
 .badge{
 padding:4px 10px;
 border-radius:999px;
 font-size:11px;
-background:#eee;
 }
 
 .priority-Alta{background:#ef4444;color:white;}
@@ -128,92 +138,94 @@ background:#eee;
 
 /* checkbox */
 .checkbox input{display:none;}
-
 .checkmark{
 width:20px;height:20px;
 border:2px solid var(--violet);
 border-radius:6px;
-display:flex;
+display:flex;align-items:center;justify-content:center;
+}
+.checkbox input:checked + .checkmark{background:var(--violet);}
+.checkmark::after{
+content:"";
+width:5px;height:10px;
+border:solid white;border-width:0 2px 2px 0;
+transform:rotate(45deg);
+display:none;
+}
+.checkbox input:checked + .checkmark::after{display:block;}
+
+/* delete */
+.delete-btn{color:#aaa;transition:0.2s;}
+.delete-btn:hover{color:#ef4444;transform:scale(1.2);}
+
+/* MODAL INFO */
+.modal{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
 align-items:center;
 justify-content:center;
 }
 
-.checkbox input:checked + .checkmark{
-background:var(--violet);
+.modal-content{
+background:white;
+padding:30px;
+border-radius:16px;
+max-width:500px;
+text-align:center;
 }
 
-.checkmark::after{
-content:"";
-width:5px;height:10px;
-border:solid white;
-border-width:0 2px 2px 0;
-transform:rotate(45deg);
-display:none;
+body.dark .modal-content{
+background:#1a1a22;
+color:white;
 }
 
-.checkbox input:checked + .checkmark::after{
-display:block;
-}
-
-/* delete */
-.delete-btn{
-color:#9ca3af;
-transition:0.2s;
-}
-.delete-btn:hover{
-color:#ef4444;
-transform:scale(1.2);
+/* footer */
+.footer{
+margin-top:auto;
+text-align:center;
+padding:20px;
+opacity:0.6;
+font-size:14px;
 }
 
 /* mobile */
-@media (max-width:768px){
-.main{
-grid-template-columns:1fr;
-}
-
-.task{
-flex-direction:column;
-align-items:flex-start;
-}
-
-.delete-btn{
-align-self:flex-end;
-}
-}
-
-.footer{
-text-align:center;
-margin-top:20px;
-opacity:0.6;
+@media(max-width:768px){
+.main{grid-template-columns:1fr;}
 }
 </style>
 </head>
 
-<body>
+<body class="light">
 
 <div class="app">
 
 <div class="header">
 <h1>TaskFlow</h1>
+
+<div style="display:flex; gap:10px;">
+<button class="btn" onclick="toggleMode()">🌙</button>
+<button class="btn" onclick="openInfo()">ℹ️</button>
+</div>
 </div>
 
 <div class="main">
 
-<!-- PANEL -->
 <div class="panel">
 
 <input id="taskInput" placeholder="Añadir tarea...">
 
 <select id="categorySelect">
-<option value="">Categoría (Auto)</option>
+<option value="">Categoría</option>
 <option>Compras</option>
 <option>Trabajo</option>
 <option>Estudio</option>
-<option>Fitness</option>
 </select>
 
 <select id="prioritySelect">
-<option value="">Prioridad (Auto)</option>
+<option value="">Prioridad</option>
 <option>Alta</option>
 <option>Media</option>
 <option>Baja</option>
@@ -227,20 +239,38 @@ opacity:0.6;
 
 </div>
 
-<!-- LISTA -->
 <div id="taskList"></div>
 
 </div>
 
-<footer class="footer">TaskFlow PRO</footer>
+<footer class="footer">
+TaskFlow PRO · Productividad inteligente · Diseñado para rendimiento y enfoque
+</footer>
 
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h2>TaskFlow</h2>
+<p>
+TaskFlow es una herramienta de productividad diseñada para optimizar la gestión de tareas 
+con un enfoque minimalista, eficiente y adaptable.
+<br><br>
+• Priorización inteligente<br>
+• Organización clara<br>
+• Flujo de trabajo sin fricción<br><br>
+Construido para rendimiento, claridad y consistencia diaria.
+</p>
+<br>
+<button class="btn" onclick="closeInfo()">Cerrar</button>
+</div>
 </div>
 
 <script>
 
 let tasks=[];
 
-/* ADD */
 function addTask(){
 let text=taskInput.value.trim();
 if(!text) return;
@@ -257,36 +287,36 @@ taskInput.value="";
 render();
 }
 
-/* ENTER */
 taskInput.addEventListener("keydown",(e)=>{
 if(e.key==="Enter") addTask();
 });
 
-/* TOGGLE */
 function toggle(id){
 tasks=tasks.map(t=>t.id===id?{...t,completed:!t.completed}:t);
 render();
 }
 
-/* DELETE */
 function del(id){
 tasks=tasks.filter(t=>t.id!==id);
 render();
 }
 
-/* ACTIONS */
 function selectAll(){tasks=tasks.map(t=>({...t,completed:true}));render();}
 function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);render();}
+
 function sortTasks(){
 const order={Alta:1,Media:2,Baja:3};
 tasks.sort((a,b)=>order[a.priority]-order[b.priority]);
 render();
 }
 
-/* RENDER */
+function toggleMode(){
+document.body.classList.toggle("dark");
+document.body.classList.toggle("light");
+}
+
 function render(){
 taskList.innerHTML="";
-
 tasks.forEach(t=>{
 const div=document.createElement("div");
 div.className="task";
@@ -298,20 +328,21 @@ div.innerHTML=`
 <input type="checkbox" ${t.completed?"checked":""}>
 <span class="checkmark"></span>
 </label>
-
-<span class="task-text">${t.text}</span>
+<span>${t.text}</span>
 <span class="badge">${t.category}</span>
 <span class="badge priority-${t.priority}">${t.priority}</span>
 </div>
-
 <button class="delete-btn" onclick="del(${t.id})">✖</button>
 `;
 
 div.querySelector("input").onclick=()=>toggle(t.id);
-
 taskList.appendChild(div);
 });
 }
+
+/* MODAL */
+function openInfo(){modal.style.display="flex";}
+function closeInfo(){modal.style.display="none";}
 
 render();
 
