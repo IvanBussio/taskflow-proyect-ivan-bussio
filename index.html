@@ -35,7 +35,7 @@ z-index:-1;
 }
 
 /* layout */
-.app{max-width:1200px;margin:auto;padding:40px;display:flex;flex-direction:column;min-height:100vh;}
+.app{max-width:1100px;margin:auto;padding:40px;display:flex;flex-direction:column;min-height:100vh;}
 .header{display:flex;justify-content:space-between;align-items:center;}
 
 h1{font-size:2.5rem;border-bottom:3px solid var(--violet);}
@@ -99,6 +99,7 @@ justify-content:space-between;
 align-items:center;
 gap:10px;
 background:rgba(20,20,30,0.6);
+transition:0.2s;
 }
 
 .task > div{
@@ -121,6 +122,11 @@ text-decoration:line-through;
 color:#22c55e;
 }
 
+/* prioridad visual */
+.task[data-priority="Alta"]{border-left:4px solid #ef4444;}
+.task[data-priority="Media"]{border-left:4px solid #f59e0b;}
+.task[data-priority="Baja"]{border-left:4px solid #22c55e;}
+
 /* badges */
 .badge{
 margin-left:8px;
@@ -134,7 +140,7 @@ background:rgba(124,58,237,0.2);
 .priority-Media{background:#f59e0b;color:white;}
 .priority-Baja{background:#22c55e;color:white;}
 
-/* delete button */
+/* delete */
 .delete-btn{
 transition:0.2s;
 color:#9ca3af;
@@ -145,24 +151,45 @@ color:#ef4444;
 transform:scale(1.2);
 }
 
-/* checkbox */
-.checkbox{position:relative;width:20px;height:20px;}
-.checkbox input{opacity:0;}
+/* checkbox limpio */
+.checkbox{
+display:flex;
+align-items:center;
+justify-content:center;
+width:20px;
+height:20px;
+}
+
+.checkbox input{
+display:none;
+}
+
 .checkmark{
-position:absolute;
-width:20px;height:20px;
+width:20px;
+height:20px;
 border-radius:6px;
-border:2px solid #7c3aed;
+border:2px solid var(--violet);
+display:flex;
+align-items:center;
+justify-content:center;
 }
-.checkbox input:checked + .checkmark{background:#7c3aed;}
+
 .checkmark::after{
-content:"";position:absolute;display:none;
-}
-.checkbox input:checked + .checkmark::after{display:block;}
-.checkmark::after{
-left:6px;top:2px;width:5px;height:10px;
-border:solid white;border-width:0 2px 2px 0;
+content:"";
+width:5px;
+height:10px;
+border:solid white;
+border-width:0 2px 2px 0;
 transform:rotate(45deg);
+display:none;
+}
+
+.checkbox input:checked + .checkmark{
+background:var(--violet);
+}
+
+.checkbox input:checked + .checkmark::after{
+display:block;
 }
 
 .footer{margin-top:auto;text-align:center;opacity:0.6;}
@@ -237,18 +264,15 @@ if(r.keys.some(k=>text.includes(k))) return r.cat;
 return "General";
 }
 
-/* IA PRIORIDAD */
+/* IA PRIORIDAD MEJORADA */
 function detectPriority(text){
 text=text.toLowerCase();
 
-if(text.includes("urgente") || text.includes("ya") || text.includes("importante")) return "Alta";
-if(text.includes("luego") || text.includes("despues") || text.includes("tranqui")) return "Baja";
+if(text.includes("urgente")||text.includes("ya")||text.includes("hoy")) return "Alta";
+if(text.includes("mañana")||text.includes("luego")) return "Baja";
 
-return "Media";
-}
+if(text.includes("comprar")||text.includes("pagar")||text.includes("medicamentos")) return "Alta";
 
-function normalizePriority(p){
-if(p==="Alta"||p==="Media"||p==="Baja") return p;
 return "Media";
 }
 
@@ -258,11 +282,6 @@ if(!taskInput.value.trim()) return;
 
 let text=taskInput.value.trim();
 let manual=categorySelect.value;
-
-if(text.length<3){
-alert("💡 Describe mejor la tarea");
-return;
-}
 
 tasks.unshift({
 id:Date.now(),
@@ -299,7 +318,7 @@ function deleteAll(){tasks=[];save();}
 function selectAll(){tasks=tasks.map(t=>({...t,completed:true}));save();}
 function deleteCompleted(){tasks=tasks.filter(t=>!t.completed);save();}
 
-/* ORDENAR POR PRIORIDAD */
+/* ORDENAR */
 function sortTasks(){
 const order={Alta:1,Media:2,Baja:3};
 tasks.sort((a,b)=>order[a.priority]-order[b.priority]);
@@ -315,7 +334,7 @@ modeBtn.textContent=document.body.classList.contains("light")?"☀️":"🌙";
 
 /* INFO */
 function showInfo(){
-alert("TaskFlow IA Nivel 2 🚀\n\nOrganiza tu día inteligentemente.");
+alert("TaskFlow IA Nivel 2 🚀");
 }
 
 /* SAVE */
@@ -330,8 +349,8 @@ taskList.innerHTML="";
 
 tasks.forEach(t=>{
 const div=document.createElement("div");
-
 div.className=`task ${t.completed?"completed":""}`;
+div.setAttribute("data-priority",t.priority);
 
 div.innerHTML=`
 <div>
@@ -343,7 +362,7 @@ div.innerHTML=`
 <span class="task-text">${t.text}</span>
 
 <span class="badge">${t.category}</span>
-<span class="badge priority-${normalizePriority(t.priority)}">${normalizePriority(t.priority)}</span>
+<span class="badge priority-${t.priority}">${t.priority}</span>
 </div>
 
 <button class="delete-btn" onclick="del(${t.id})">✖</button>
