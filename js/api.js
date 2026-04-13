@@ -1,25 +1,57 @@
-const API_URL = "http://localhost:3000/api/v1/tasks";
-// luego → https://tu-backend.onrender.com/api/v1/tasks
+// js/api.js
+const API_URL = 'http://localhost:3000/api/v1/tasks';
 
-export async function getTasks() {
-  const res = await fetch(API_URL);
-  return await res.json();
-}
+// Obtener todas las tareas
+export const getTasks = async () => {
+  const response = await fetch(API_URL);
+  if (!response.ok) {
+    throw new Error('Error al obtener las tareas');
+  }
+  return response.json();
+};
 
-export async function createTask(titulo) {
-  const res = await fetch(API_URL, {
-    method: "POST",
+// Crear una nueva tarea
+export const createTask = async (task) => {
+  const response = await fetch(API_URL, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ titulo })
+    body: JSON.stringify(task),
   });
 
-  return await res.json();
-}
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Error al crear la tarea');
+  }
 
-export async function deleteTask(id) {
-  await fetch(`${API_URL}/${id}`, {
-    method: "DELETE"
+  return response.json();
+};
+
+// Actualizar una tarea
+export const updateTask = async (id, data) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
   });
-}
+
+  if (!response.ok) {
+    throw new Error('Error al actualizar la tarea');
+  }
+
+  return response.json();
+};
+
+// Eliminar una tarea
+export const deleteTask = async (id) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al eliminar la tarea');
+  }
+};
