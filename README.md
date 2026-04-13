@@ -1,50 +1,34 @@
-# TaskFlow
+# 🚀 TaskFlow
 
-TaskFlow es una aplicación web para gestionar tareas.
+TaskFlow es una aplicación de gestión de tareas que combina un **frontend interactivo** con un **backend RESTful** desarrollado con Node.js y Express. Permite crear, editar, completar y eliminar tareas con categorías inteligentes.
 
-Permite:
+## 🧠 Características
 
-- Crear tareas
-- Marcar tareas como completadas
-- Eliminar tareas
-- Filtrar tareas
-- Buscar tareas
-- Guardar tareas usando LocalStorage
+- ✅ Gestión completa de tareas (CRUD)
+- 🧩 Arquitectura por capas (Routes, Controllers, Services)
+- 🌐 API RESTful con Express
+- 🔐 Variables de entorno con dotenv
+- ⚙️ Manejo global de errores
+- 🎨 Interfaz moderna con TailwindCSS
+- 🤖 Categorización automática de tareas
+- 🔄 Comunicación frontend-backend mediante Fetch API
 
-La aplicación fue desarrollada con:
-
-- HTML
-- JavaScript
-- Tailwind CSS
-
-## Diseño de la aplicación
-
-La interfaz incluye:
-
-- Cabecera con el título de la aplicación
-- Formulario para crear tareas
-- Lista de tareas
-- Panel con estadísticas
-
-El diseño inicial puede verse en:
-
-docs/design/wireframe.png
-
-## Testing manual
-
-Se realizaron las siguientes pruebas:
-
-- Aplicación con lista vacía
-- Intentar añadir tarea sin título
-- Añadir tarea con título largo
-- Marcar varias tareas como completadas
-- Eliminar tareas
-- Recargar la página para comprobar persistencia en LocalStorage
-
-Todas las pruebas funcionan correctamente.
-
-## Aplicación desplegada
-
-La aplicación está disponible en:
-
-https://taskflow-proyect-ivan-bussio.vercel.app/
+## 📁 Estructura del Proyecto
+taskflow-project/
+├── docs/
+│   └── backend-api.md
+├── js/
+│   └── app.js
+├── server/
+│   ├── src/
+│   │   ├── config/env.js
+│   │   ├── controllers/task.controller.js
+│   │   ├── routes/task.routes.js
+│   │   ├── services/task.service.js
+│   │   └── index.js
+│   ├── package.json
+│   └── .env
+├── index.html
+├── style.css
+├── tailwind.config.js
+└── README.md
