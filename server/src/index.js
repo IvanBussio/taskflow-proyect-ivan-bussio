@@ -1,6 +1,31 @@
-const express = require("express");
+const express = require('express');
+const cors = require('cors');
+const { PORT } = require('./config/env');
+const taskRoutes = require('./routes/task.routes');
+
 const app = express();
 
-app.listen(3000, () => {
-  console.log("Servidor corriendo");
+app.use(cors());
+app.use(express.json());
+
+// Ruta de verificación
+app.get('/', (req, res) => {
+  res.send('API TaskFlow funcionando 🚀');
+});
+
+// Registro de rutas de tareas
+app.use('/api/v1/tasks', taskRoutes);
+
+// Middleware global de manejo de errores
+app.use((err, req, res, next) => {
+  if (err.message === 'NOT_FOUND') {
+    return res.status(404).json({ error: 'Recurso no encontrado' });
+  }
+
+  console.error(err);
+  return res.status(500).json({ error: 'Error interno del servidor' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
